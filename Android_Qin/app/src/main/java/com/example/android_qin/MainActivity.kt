@@ -1,29 +1,56 @@
 package com.example.android_qin
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Toast
 import com.amap.api.maps2d.AMap
 import com.amap.api.maps2d.MapView
 import com.amap.api.maps2d.model.MyLocationStyle
+import com.xuexiang.xui.XUI
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        XUI.init(this.application) // 初始化UI框架
+        XUI.debug(true)  // 开启UI框架调试日志
+        checkLocalAccount()
         setContentView(R.layout.activity_main)
-        var mMapView = findViewById<MapView>(R.id.map)
-        //在activity执行onCreate时执行mMapView.onCreate(savedInstanceState)，创建地图
-        var aMap: AMap?=null
-        if (aMap == null) {
-            aMap = mMapView.map
-        }
-        var myLocationStyle: MyLocationStyle = MyLocationStyle() //初始化定位蓝点样式类//连续定位、且将视角移动到地图中心点，定位点依照设备方向旋转，并且会跟随设备移动。（1秒1次定位）如果不设置myLocationType，默认也会执行此种模式。
-        myLocationStyle.interval(2000) //设置连续定位模式下的定位间隔，只在连续定位模式下生效，单次定位模式下不会生效。单位为毫秒。
-        myLocationStyle.showMyLocation(true)
-        aMap!!.setMyLocationStyle(myLocationStyle) //设置定位蓝点的Style
-        aMap.uiSettings.isMyLocationButtonEnabled = true//设置默认定位按钮是否显示，非必需设置。
-        aMap!!.isMyLocationEnabled = true // 设置为true表示启动显示定位蓝点，false表示隐藏定位蓝点并不进行定位，默认是false。
-        myLocationStyle.myLocationType(MyLocationStyle.LOCATION_TYPE_FOLLOW) //连续定位、且将视角移动到地图中心点，定位蓝点跟随设备移动。（1秒1次定位）
-        mMapView.onCreate(savedInstanceState)
+        configLoginBtn()
+    }
+    private fun checkLocalAccount(){
+        // valid day 5
+        // "username":"","password":"","role":"","loginDate":""
 
+        val intent = Intent(this, StudentActivity::class.java).apply {}
+        startActivity(intent)
+    }
+    private fun configLoginBtn(){
+        val loginBtn=findViewById<com.xuexiang.xui.widget.button.ButtonView>(R.id.login_btn)
+        loginBtn.setOnClickListener {
+            when (val loginState=login()) {
+                1 -> toStudentPage()
+                2 -> toTeacherPage()
+                else -> errorTip(loginState)
+            }
+        }
+    }
+    private fun errorTip(loginState:Int){
+        when(loginState){
+            3 -> Toast.makeText(this,"用户名不存在",Toast.LENGTH_LONG).show()
+            4 -> Toast.makeText(this,"密码错误",Toast.LENGTH_LONG).show()
+            else -> Toast.makeText(this,"未知错误",Toast.LENGTH_LONG).show()
+        }
+    }
+    private fun toTeacherPage(){
+        val intent = Intent(this, TeacherActivity::class.java).apply {}
+        startActivity(intent)
+    }
+    private fun toStudentPage(){
+        val intent = Intent(this, StudentActivity::class.java).apply {}
+        startActivity(intent)
+    }
+    private fun login(): Int {
+        return 2
     }
 }

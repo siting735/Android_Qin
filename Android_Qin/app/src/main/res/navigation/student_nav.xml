@@ -3,20 +3,21 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/student_nav"
-    app:startDestination="@id/locationFragment">
+    app:startDestination="@id/locationFragmentForStudent">
 
     <fragment
-        android:id="@+id/locationFragment"
-        android:name="com.example.android_qin.LocationFragment"
+        android:id="@+id/locationFragmentForStudent"
+        android:name="com.example.android_qin.LocationFragmentForStudent"
         android:label="fragment_location"
-        tools:layout="@layout/fragment_location" >
-        <action
-            android:id="@+id/action_locationFragment_to_signDataForStudent"
-            app:destination="@id/signDataForStudent" />
-    </fragment>
+        tools:layout="@layout/fragment_location_for_student" />
     <fragment
         android:id="@+id/signDataForStudent"
         android:name="com.example.android_qin.SignDataForStudent"
         android:label="fragment_sign_data_for_student"
         tools:layout="@layout/fragment_sign_data_for_student" />
+    <fragment
+        android:id="@+id/mineForStudent"
+        android:name="com.example.android_qin.MineForStudent"
+        android:label="fragment_mine_for_student"
+        tools:layout="@layout/fragment_mine_for_student" />
 </navigation>

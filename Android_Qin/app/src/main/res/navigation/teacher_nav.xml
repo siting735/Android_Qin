@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/teacher_nav"
+    app:startDestination="@id/locationFragmentForTeacher">
+
+    <fragment
+        android:id="@+id/locationFragmentForTeacher"
+        android:name="com.example.android_qin.LocationFragmentForTeacher"
+        android:label="fragment_location_for_teacher"
+        tools:layout="@layout/fragment_location_for_teacher" />
+    <fragment
+        android:id="@+id/signDataForTeacher"
+        android:name="com.example.android_qin.SignDataForTeacher"
+        android:label="fragment_sign_data_for_teacher"
+        tools:layout="@layout/fragment_sign_data_for_teacher" />
+    <fragment
+        android:id="@+id/mineForTeacher"
+        android:name="com.example.android_qin.MineForTeacher"
+        android:label="fragment_mine_for_teacher"
+        tools:layout="@layout/fragment_mine_for_teacher" />
+</navigation>

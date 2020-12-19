@@ -21,8 +21,9 @@ class MainActivity : AppCompatActivity() {
     private fun checkLocalAccount(){
         // valid day 5
         // "username":"","password":"","role":"","loginDate":""
-
-        val intent = Intent(this, StudentActivity::class.java).apply {}
+//        val intent = Intent(this, StudentActivity::class.java).apply {}
+//        startActivity(intent)
+        val intent = Intent(this, TeacherActivity::class.java).apply {}
         startActivity(intent)
     }
     private fun configLoginBtn(){

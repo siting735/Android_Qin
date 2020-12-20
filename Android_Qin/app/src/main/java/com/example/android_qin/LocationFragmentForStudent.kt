@@ -1,10 +1,12 @@
 package com.example.android_qin
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import com.amap.api.maps2d.AMap
 import com.amap.api.maps2d.MapView
 import com.amap.api.maps2d.model.MyLocationStyle
@@ -30,7 +32,6 @@ class LocationFragmentForStudent : Fragment() {
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
         }
-
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -75,5 +76,20 @@ class LocationFragmentForStudent : Fragment() {
         aMap!!.isMyLocationEnabled = true // 设置为true表示启动显示定位蓝点，false表示隐藏定位蓝点并不进行定位，默认是false。
         myLocationStyle.myLocationType(MyLocationStyle.LOCATION_TYPE_FOLLOW) //连续定位、且将视角移动到地图中心点，定位蓝点跟随设备移动。（1秒1次定位）
         mMapView?.onCreate(savedInstanceState)
+        configSignBtn()
+        configSwipeRefresh()
+    }
+    private fun configSwipeRefresh(){
+        val swipe= view?.findViewById<androidx.swiperefreshlayout.widget.SwipeRefreshLayout>(R.id.location_swipe)
+        swipe?.setOnRefreshListener {
+            Log.i("swipe","location")
+            swipe.isRefreshing=false
+        }
+    }
+    private fun configSignBtn(){
+        val signBtn= view?.findViewById<Button>(R.id.sign_btn)
+        signBtn?.setOnClickListener {
+            Log.i("btn","sign")
+        }
     }
 }

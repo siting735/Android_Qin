@@ -2,6 +2,8 @@ package com.example.android_qin
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
+import android.widget.Button
 import androidx.navigation.fragment.NavHostFragment
 import com.xuexiang.xui.widget.tabbar.TabSegment
 
@@ -11,6 +13,7 @@ class StudentActivity : AppCompatActivity() {
         setContentView(R.layout.activity_student)
         configTabBar()
     }
+
     private fun configTabBar(){
         var tabSegment=findViewById<TabSegment>(R.id.student_tab_bar)
         tabSegment.mode = TabSegment.MODE_FIXED

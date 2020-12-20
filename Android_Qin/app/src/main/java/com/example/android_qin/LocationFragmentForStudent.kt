@@ -1,5 +1,6 @@
 package com.example.android_qin
 
+import android.app.AlertDialog
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -7,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.Toast
 import com.amap.api.maps2d.AMap
 import com.amap.api.maps2d.MapView
 import com.amap.api.maps2d.model.MyLocationStyle
@@ -90,6 +92,22 @@ class LocationFragmentForStudent : Fragment() {
         val signBtn= view?.findViewById<Button>(R.id.sign_btn)
         signBtn?.setOnClickListener {
             Log.i("btn","sign")
+
         }
+    }
+    fun show_dialog(view: View) {
+        var dialog = AlertDialog.Builder(context)
+        dialog.setTitle("Delete Dialog")
+        dialog.setMessage("Do you really want to delete?")
+        dialog.setPositiveButton("Yes") {
+            dialog, id ->
+            Toast.makeText(context, "The file has been deleted.",
+                    Toast.LENGTH_LONG).show()
+        }
+        dialog.setNegativeButton("No") {
+            dialog, id ->
+            Toast.makeText(context, "not deleted.", Toast.LENGTH_LONG).show()
+        }
+        dialog.show()
     }
 }

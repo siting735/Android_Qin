@@ -6,9 +6,11 @@
     tools:context=".SignDataForStudent">
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="signData" />
+        android:layout_height="match_parent">
+
+    </LinearLayout>
 
 </FrameLayout>

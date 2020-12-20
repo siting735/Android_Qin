@@ -3,12 +3,59 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".MineForStudent">
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="mine for student" />
+        android:layout_height="400dp">
+        <com.xuexiang.xui.widget.textview.supertextview.SuperTextView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1.3"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            app:sLeftIconRes="@drawable/round"
+            app:sLeftIconHeight="80dp"
+            app:sLeftIconWidth="80dp"
+            app:sDividerLineType="both"
+            app:sLeftTextIsBold="true"
+            app:sLeftBottomTextString="东莞理工学院"
+            app:sLeftTextString="陈浪杰" />
+        <com.xuexiang.xui.widget.textview.supertextview.SuperTextView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            app:sDividerLineType="both"
+            app:sLeftTextIsBold="true"
+            app:sLeftTextString="账号管理" />
+        <com.xuexiang.xui.widget.textview.supertextview.SuperTextView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            app:sDividerLineType="both"
+            app:sLeftTextIsBold="true"
+            app:sLeftTextString="关于" />
+        <com.xuexiang.xui.widget.textview.supertextview.SuperTextView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:layout_marginTop="30dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:textAlignment="center"
+            app:sCenterTextString="退出登录"
+            app:sCenterTextIsBold="true"
+            app:sDividerLineType="both" />
+    </LinearLayout>
 
 </FrameLayout>

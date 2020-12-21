@@ -6,6 +6,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
+import com.xuexiang.xui.widget.textview.supertextview.SuperTextView
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -66,6 +68,11 @@ class SignDataForStudent : Fragment() {
         val swipe= view?.findViewById<androidx.swiperefreshlayout.widget.SwipeRefreshLayout>(R.id.sign_data_swipe)
         swipe?.setOnRefreshListener {
             Log.i("swipe","sign_data")
+            val signDataList= view?.findViewById<LinearLayout>(R.id.sign_data_list)
+            val signDataView= SuperTextView(context)
+            signDataView.setCenterString("test")
+//            signDataView.layoutParams.height=100
+            signDataList?.addView(signDataView)
             swipe.isRefreshing=false
         }
     }

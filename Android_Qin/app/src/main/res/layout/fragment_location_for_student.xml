@@ -6,7 +6,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".LocationFragmentForStudent">
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        android:id="@+id/location_swipe"
+        android:id="@+id/location_swipe_for_student"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <LinearLayout
@@ -21,11 +21,11 @@
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
                 app:sDividerLineType="both"
-                app:sLeftTextSize="25dp"
+                app:sLeftTextSize="25sp"
                 app:sLeftTextIsBold="true"
                 app:sLeftTextString="当前活动：无" />
             <com.amap.api.maps2d.MapView
-                android:id="@+id/map"
+                android:id="@+id/map_for_student"
                 android:layout_marginTop="20dp"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
@@ -34,7 +34,7 @@
                 android:layout_height="0dp">
             </com.amap.api.maps2d.MapView>
             <com.xuexiang.xui.widget.button.shadowbutton.ShadowButton
-                android:id="@+id/sign_btn"
+                android:id="@+id/sign_btn_for_student"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:layout_margin="20dp"

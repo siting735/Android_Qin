@@ -3,11 +3,15 @@ package com.example.android_qin
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import com.amap.api.maps2d.AMap
 import com.amap.api.maps2d.MapView
 import com.amap.api.maps2d.model.MyLocationStyle
 import com.xuexiang.xui.XUI
+import org.json.JSONArray
+import java.net.HttpURLConnection
+import java.net.URL
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -21,7 +25,7 @@ class MainActivity : AppCompatActivity() {
     private fun checkLocalAccount(){
         // valid day 5
         // "username":"","password":"","role":"","loginDate":""
-        val intent = Intent(this, StudentActivity::class.java).apply {}
+        val intent = Intent(this, TeacherActivity::class.java).apply {}
         startActivity(intent)
 //        val intent = Intent(this, TeacherActivity::class.java).apply {}
 //        startActivity(intent)
@@ -52,6 +56,27 @@ class MainActivity : AppCompatActivity() {
         startActivity(intent)
     }
     private fun login(): Int {
-        return 2
+//        Thread {
+//            val url = URL("https://api.thecatapi.com/v1/images/search")
+//            val connection = url.openConnection() as HttpURLConnection
+//            connection.requestMethod = "GET"
+//            val inputstream = connection.inputStream
+//            val reader = inputstream.bufferedReader()
+//            var response = StringBuilder()
+//            while (true)
+//            {
+//                val line = reader.readLine() ?: break
+//                response.append(line)
+//            }
+//            reader.close()
+//            connection.disconnect()
+//            val jsonsString = response.toString()
+//            val jsons = JSONArray(jsonsString)
+//            Log.i("jsons",jsonsString)
+//            runOnUiThread{
+//
+//            }
+//        }.start()
+        return 1
     }
 }

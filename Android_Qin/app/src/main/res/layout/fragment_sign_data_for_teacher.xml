@@ -3,12 +3,96 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".SignDataForTeacher">
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/sign_data_swipe_for_teacher"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="sign data for teacher" />
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <com.xuexiang.xui.widget.textview.supertextview.SuperTextView
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="10dp"
+                app:sLeftTextSize="25sp"
+                app:sLeftTextString="班级列表："
+                app:sLeftTextIsBold="true"
+                app:sDividerLineType="both" />
+            <androidx.core.widget.NestedScrollView
+                android:layout_width="match_parent"
+                android:layout_height="500dp"
+                android:scrollbars="vertical"
+                android:fillViewport="true">
+                <LinearLayout
+                    android:id="@+id/class_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+                    <com.xuexiang.xui.widget.textview.supertextview.SuperTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="100dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginRight="10dp"
+                        app:sDividerLineType="both"
+                        app:sRightIconRes="@drawable/get_in"
+                        app:sLeftTextSize="23sp"
+                        app:sLeftTextString="18软卓1班" />
+
+                    <com.xuexiang.xui.widget.textview.supertextview.SuperTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="100dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginRight="10dp"
+                        app:sDividerLineType="both"
+                        app:sRightIconRes="@drawable/get_in"
+                        app:sLeftTextSize="23sp"
+                        app:sLeftTextString="18网安1班" />
+
+                    <com.xuexiang.xui.widget.textview.supertextview.SuperTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="100dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginRight="10dp"
+                        app:sDividerLineType="both"
+                        app:sRightIconRes="@drawable/get_in"
+                        app:sLeftTextSize="23sp"
+                        app:sLeftTextString="18软卓2班" />
+
+                    <com.xuexiang.xui.widget.textview.supertextview.SuperTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="100dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginRight="10dp"
+                        app:sDividerLineType="both"
+                        app:sRightIconRes="@drawable/get_in"
+                        app:sLeftTextSize="23sp"
+                        app:sLeftTextString="18网工1班" />
+
+                    <com.xuexiang.xui.widget.textview.supertextview.SuperTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="100dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginRight="10dp"
+                        app:sDividerLineType="both"
+                        app:sRightIconRes="@drawable/get_in"
+                        app:sLeftTextSize="23sp"
+                        app:sLeftTextString="18网工2班" />
+                </LinearLayout>
+            </androidx.core.widget.NestedScrollView>
+        </LinearLayout>
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 </FrameLayout>

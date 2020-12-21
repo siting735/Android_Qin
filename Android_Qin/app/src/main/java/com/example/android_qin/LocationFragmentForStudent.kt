@@ -64,7 +64,7 @@ class LocationFragmentForStudent : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        var mMapView = view?.findViewById<MapView>(R.id.map)
+        var mMapView = view?.findViewById<MapView>(R.id.map_for_student)
         //在activity执行onCreate时执行mMapView.onCreate(savedInstanceState)，创建地图
         var aMap: AMap?=null
         if (aMap == null) {
@@ -82,14 +82,14 @@ class LocationFragmentForStudent : Fragment() {
         configSwipeRefresh()
     }
     private fun configSwipeRefresh(){
-        val swipe= view?.findViewById<androidx.swiperefreshlayout.widget.SwipeRefreshLayout>(R.id.location_swipe)
+        val swipe= view?.findViewById<androidx.swiperefreshlayout.widget.SwipeRefreshLayout>(R.id.location_swipe_for_student)
         swipe?.setOnRefreshListener {
             Log.i("swipe","location")
             swipe.isRefreshing=false
         }
     }
     private fun configSignBtn(){
-        val signBtn= view?.findViewById<Button>(R.id.sign_btn)
+        val signBtn= view?.findViewById<Button>(R.id.sign_btn_for_student)
         signBtn?.setOnClickListener {
             Log.i("btn","sign")
 

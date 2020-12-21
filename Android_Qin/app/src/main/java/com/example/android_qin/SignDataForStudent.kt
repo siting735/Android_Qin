@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import androidx.core.view.marginLeft
 import com.xuexiang.xui.widget.textview.supertextview.SuperTextView
 
 // TODO: Rename parameter arguments, choose names that match
@@ -70,10 +71,21 @@ class SignDataForStudent : Fragment() {
             Log.i("swipe","sign_data")
             val signDataList= view?.findViewById<LinearLayout>(R.id.sign_data_list)
             val signDataView= SuperTextView(context)
-            signDataView.setCenterString("test")
-//            signDataView.layoutParams.height=100
+            signDataView.setLeftBottomString("2020-12-21 20:00")
+            signDataView.setRightString("未打卡")
+            var layoutParams = LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, dip2px(100f))
+            layoutParams.setMargins(dip2px(10f),dip2px(10f),dip2px(10f),0)
+            signDataView.layoutParams = layoutParams
             signDataList?.addView(signDataView)
             swipe.isRefreshing=false
         }
+    }
+    private fun dip2px(dpValue:Float): Int {
+        val scale = context?.resources?.displayMetrics?.density;
+        return (dpValue * scale!! + 0.5f).toInt()
+    }
+    private fun px2dip(pxValue:Float):Int{
+        val scale = context?.resources?.displayMetrics?.density;
+        return (pxValue / scale!! + 0.5f).toInt()
     }
 }

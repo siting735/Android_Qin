@@ -26,17 +26,15 @@ class MainActivity : AppCompatActivity() {
         XUI.init(this.application) // 初始化UI框架
         XUI.debug(true)  // 开启UI框架调试日志
         grantPermission()
-        //checkLocalAccount()
+        checkLocalAccount()
         setContentView(R.layout.activity_main)
         configLoginBtn()
     }
     private fun checkLocalAccount(){
         // valid day 5
         // "username":"","password":"","role":"","loginDate":""
-        val intent = Intent(this, StudentActivity::class.java).apply {}
-        startActivity(intent)
-//        val intent = Intent(this, TeacherActivity::class.java).apply {}
-//        startActivity(intent)
+        //toTeacherPage()
+        toStudentPage()
     }
     private fun configLoginBtn(){
         val loginBtn=findViewById<com.xuexiang.xui.widget.button.ButtonView>(R.id.login_btn)

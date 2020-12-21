@@ -1,10 +1,14 @@
 package com.example.android_qin
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.FragmentManager
+import androidx.navigation.fragment.NavHostFragment
+import com.xuexiang.xui.widget.textview.supertextview.SuperTextView
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -55,5 +59,19 @@ class SignDataForTeacher : Fragment() {
                     putString(ARG_PARAM2, param2)
                 }
             }
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        configBtn()
+    }
+    private fun configBtn(){
+        val btn=view?.findViewById<SuperTextView>(R.id.ruan_zhuo_1)
+        btn?.setOnClickListener {
+            Log.i("btn","nav in fragment")
+            val navHostFragment = activity?.supportFragmentManager?.findFragmentById(R.id.nav_host_for_teacher) as NavHostFragment
+            val navController = navHostFragment.navController
+            navController.navigate(R.id.signDataForEachClass)
+        }
     }
 }

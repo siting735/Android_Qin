@@ -20,4 +20,9 @@
         android:name="com.example.android_qin.MineForTeacher"
         android:label="fragment_mine_for_teacher"
         tools:layout="@layout/fragment_mine_for_teacher" />
+    <fragment
+        android:id="@+id/signDataForEachClass"
+        android:name="com.example.android_qin.SignDataForEachClass"
+        android:label="fragment_sign_data_for_each_class"
+        tools:layout="@layout/fragment_sign_data_for_each_class" />
 </navigation>

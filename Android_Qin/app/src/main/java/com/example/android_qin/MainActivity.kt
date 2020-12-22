@@ -72,7 +72,7 @@ class MainActivity : AppCompatActivity() {
             val userName = findViewById<ClearEditText>(R.id.user_name)
             val password = findViewById<PasswordEditText>(R.id.password)
             configLoadingProgress()
-            val urlForLogin = URL("http://10.60.0.13:8081/student/login?name="+userName.text+"&password="+password.text)
+            val urlForLogin = URL("http://10.60.0.13:8080/student/login?name="+userName.text+"&password="+password.text)
             var connection: HttpURLConnection? = null
             var response:StringBuilder? = null
             try {

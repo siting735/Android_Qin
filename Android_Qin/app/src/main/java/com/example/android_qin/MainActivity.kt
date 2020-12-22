@@ -9,13 +9,9 @@ import android.util.Log
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import com.amap.api.maps2d.AMap
-import com.amap.api.maps2d.MapView
-import com.amap.api.maps2d.model.MyLocationStyle
 import com.xuexiang.xui.XUI
 import com.xuexiang.xui.widget.edittext.ClearEditText
 import com.xuexiang.xui.widget.edittext.PasswordEditText
-import org.json.JSONArray
 import org.json.JSONObject
 import java.net.HttpURLConnection
 import java.net.URL
@@ -26,7 +22,7 @@ class MainActivity : AppCompatActivity() {
         XUI.init(this.application) // 初始化UI框架
         XUI.debug(true)  // 开启UI框架调试日志
         grantPermission()
-        checkLocalAccount()
+        //checkLocalAccount()
         setContentView(R.layout.activity_main)
         configLoginBtn()
     }
@@ -39,14 +35,10 @@ class MainActivity : AppCompatActivity() {
     private fun configLoginBtn(){
         val loginBtn=findViewById<com.xuexiang.xui.widget.button.ButtonView>(R.id.login_btn)
         loginBtn.setOnClickListener {
-            when (val loginState=login()) {
-                1 -> toStudentPage()
-                2 -> toTeacherPage()
-                else -> errorTip(loginState)
-            }
+            login()
         }
     }
-    private fun errorTip(loginState:Int){
+    private fun errorTip(loginState:Any){
         when(loginState){
             3 -> Toast.makeText(this,"用户名不存在",Toast.LENGTH_LONG).show()
             4 -> Toast.makeText(this,"密码错误",Toast.LENGTH_LONG).show()
@@ -61,15 +53,16 @@ class MainActivity : AppCompatActivity() {
         val intent = Intent(this, StudentActivity::class.java).apply {}
         startActivity(intent)
     }
-    private fun login(): Int {
+    private fun login(){
+        var jsonString = ""
         val userName = findViewById<ClearEditText>(R.id.user_name)
         val password = findViewById<PasswordEditText>(R.id.password)
         Thread {
             val url = URL("http://10.60.0.13:8080/student/login?name="+userName.text+"&password="+password.text)
             val connection = url.openConnection() as HttpURLConnection
             connection.requestMethod = "GET"
-            val inputstream = connection.inputStream
-            val reader = inputstream.bufferedReader()
+            val inputStream = connection.inputStream
+            val reader = inputStream.bufferedReader()
             var response = StringBuilder()
             while (true)
             {
@@ -78,16 +71,27 @@ class MainActivity : AppCompatActivity() {
             }
             reader.close()
             connection.disconnect()
-            val jsonsString = response.toString()
-            val jsons = JSONObject(jsonsString)
-            Log.i("json",jsonsString)
-            runOnUiThread{
-
+            jsonString = response.toString()
+            Log.i("json",jsonString)
+            val loginData=JSONObject(jsonString)
+            var loginState=loginData["loginState"]
+            if (loginState is String){
+                loginState=loginState.toInt()
+            }
+            when (loginState) {
+                1 -> {
+                    //transport data
+                    toStudentPage()
+                }
+                2 -> {
+                    //transport data
+                    toTeacherPage()
+                }
+                else -> errorTip(loginState)
             }
         }.start()
-        return 1
     }
-    fun grantPermission(){
+    private fun grantPermission(){
         if (ContextCompat.checkSelfPermission(this,
                         Manifest.permission.ACCESS_BACKGROUND_LOCATION)
                 != PackageManager.PERMISSION_GRANTED)

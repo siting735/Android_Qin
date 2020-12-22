@@ -1,18 +1,24 @@
 package com.example.android_qin
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.ProgressBar
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.DialogFragment.STYLE_NORMAL
 import com.xuexiang.xui.XUI
 import com.xuexiang.xui.widget.edittext.ClearEditText
 import com.xuexiang.xui.widget.edittext.PasswordEditText
 import org.json.JSONObject
+import java.lang.Exception
 import java.net.HttpURLConnection
 import java.net.URL
 
@@ -40,9 +46,15 @@ class MainActivity : AppCompatActivity() {
     }
     private fun errorTip(loginState:Any){
         when(loginState){
-            3 -> Toast.makeText(this,"用户名不存在",Toast.LENGTH_LONG).show()
-            4 -> Toast.makeText(this,"密码错误",Toast.LENGTH_LONG).show()
-            else -> Toast.makeText(this,"未知错误",Toast.LENGTH_LONG).show()
+            3 -> runOnUiThread {
+                Toast.makeText(this,"用户名不存在",Toast.LENGTH_LONG).show()
+            }
+            4 -> runOnUiThread {
+                Toast.makeText(this,"密码错误",Toast.LENGTH_LONG).show()
+            }
+            else -> runOnUiThread {
+                Toast.makeText(this,"未知错误",Toast.LENGTH_LONG).show()
+            }
         }
     }
     private fun toTeacherPage(){
@@ -53,24 +65,44 @@ class MainActivity : AppCompatActivity() {
         val intent = Intent(this, StudentActivity::class.java).apply {}
         startActivity(intent)
     }
+    var loadingDialog:AlertDialog? = null
     private fun login(){
         var jsonString = ""
         val userName = findViewById<ClearEditText>(R.id.user_name)
         val password = findViewById<PasswordEditText>(R.id.password)
+        configLoadingProgress()
         Thread {
-            val url = URL("http://10.60.0.13:8080/student/login?name="+userName.text+"&password="+password.text)
-            val connection = url.openConnection() as HttpURLConnection
-            connection.requestMethod = "GET"
-            val inputStream = connection.inputStream
-            val reader = inputStream.bufferedReader()
-            var response = StringBuilder()
-            while (true)
-            {
-                val line = reader.readLine() ?: break
-                response.append(line)
+            val url = URL("http://10.60.0.13:8081/student/login?name="+userName.text+"&password="+password.text)
+            var connection: HttpURLConnection? = null
+            var response:StringBuilder? = null
+            try {
+                connection = url.openConnection() as HttpURLConnection
+                connection?.requestMethod = "GET"
+                val inputStream = connection?.inputStream
+                val reader = inputStream?.bufferedReader()
+                response = StringBuilder()
+                while (true)
+                {
+                    val line = reader?.readLine() ?: break
+                    response.append(line)
+                }
+                reader?.close()
+                connection?.disconnect()
             }
-            reader.close()
-            connection.disconnect()
+            catch (e:Exception){
+                var loginFailDialog = AlertDialog.Builder(this)
+                loginFailDialog.setTitle("提示信息")
+                loginFailDialog.setMessage("连接服务器超时")
+                loginFailDialog.setPositiveButton("确定"){
+                    dialog, id -> loadingDialog?.cancel()
+                }
+                runOnUiThread {
+                    loginFailDialog.show()
+                }
+                Log.i("login","error")
+                Thread.currentThread().join()
+            }
+            Log.i("thread","this thread is still alive")
             jsonString = response.toString()
             Log.i("json",jsonString)
             val loginData=JSONObject(jsonString)
@@ -90,6 +122,27 @@ class MainActivity : AppCompatActivity() {
                 else -> errorTip(loginState)
             }
         }.start()
+    }
+    private fun configLoadingProgress(){
+        var loadingDialogBuilder = AlertDialog.Builder(this)
+        val loadingProgress = ProgressBar(this)
+        loadingDialogBuilder.setView(loadingProgress)
+        loadingDialogBuilder.setTitle("正在登陆...")
+        loadingDialog = loadingDialogBuilder.create()
+        loadingDialog!!.show()
+        //loadingDialog.show()
+//        var loginFailDialog = AlertDialog.Builder(this)
+//        loginFailDialog.setTitle("提示信息")
+//        loginFailDialog.setMessage("连接服务器超时")
+//        loginFailDialog.setPositiveButton("确定"){
+//            dialog, id ->{
+//
+//        }
+//        }
+//        loginFailDialog.show()
+//        val dialogFragment = LoadingStateFragment()
+//        dialogFragment.show(fragmentManager,"loading")
+//        dialogFragment.cancel()
     }
     private fun grantPermission(){
         if (ContextCompat.checkSelfPermission(this,

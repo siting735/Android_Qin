@@ -14,6 +14,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.DialogFragment.STYLE_NORMAL
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.xuexiang.xui.XUI
 import com.xuexiang.xui.widget.edittext.ClearEditText
 import com.xuexiang.xui.widget.edittext.PasswordEditText
@@ -67,82 +68,78 @@ class MainActivity : AppCompatActivity() {
     }
     var loadingDialog:AlertDialog? = null
     private fun login(){
-        var jsonString = ""
-        val userName = findViewById<ClearEditText>(R.id.user_name)
-        val password = findViewById<PasswordEditText>(R.id.password)
-        configLoadingProgress()
         Thread {
-            val url = URL("http://10.60.0.13:8081/student/login?name="+userName.text+"&password="+password.text)
+            val userName = findViewById<ClearEditText>(R.id.user_name)
+            val password = findViewById<PasswordEditText>(R.id.password)
+            configLoadingProgress()
+            val urlForLogin = URL("http://10.60.0.13:8081/student/login?name="+userName.text+"&password="+password.text)
             var connection: HttpURLConnection? = null
             var response:StringBuilder? = null
             try {
-                connection = url.openConnection() as HttpURLConnection
+                connection = urlForLogin.openConnection() as HttpURLConnection
                 connection?.requestMethod = "GET"
-                val inputStream = connection?.inputStream
-                val reader = inputStream?.bufferedReader()
-                response = StringBuilder()
-                while (true)
-                {
-                    val line = reader?.readLine() ?: break
-                    response.append(line)
-                }
-                reader?.close()
+                response = getDataFromConnection(connection)
                 connection?.disconnect()
             }
             catch (e:Exception){
-                var loginFailDialog = AlertDialog.Builder(this)
-                loginFailDialog.setTitle("提示信息")
-                loginFailDialog.setMessage("连接服务器超时")
-                loginFailDialog.setPositiveButton("确定"){
-                    dialog, id -> loadingDialog?.cancel()
-                }
+                var loginFailDialog = buildLoginFailDialog()
                 runOnUiThread {
                     loginFailDialog.show()
                 }
-                Log.i("login","error")
                 Thread.currentThread().join()
             }
-            Log.i("thread","this thread is still alive")
-            jsonString = response.toString()
-            Log.i("json",jsonString)
-            val loginData=JSONObject(jsonString)
-            var loginState=loginData["loginState"]
-            if (loginState is String){
-                loginState=loginState.toInt()
-            }
-            when (loginState) {
-                1 -> {
-                    //transport data
-                    toStudentPage()
-                }
-                2 -> {
-                    //transport data
-                    toTeacherPage()
-                }
-                else -> errorTip(loginState)
-            }
+            dealWithResponse(response)
         }.start()
+    }
+    private fun dealWithResponse(response:StringBuilder?){
+        val jsonString = response.toString()
+        val loginInfo=JSONObject(jsonString)
+        var loginState=loginInfo["loginState"]
+        if (loginState is String){
+            loginState=loginState.toInt()
+        }
+        when (loginState) {
+            1 -> {
+                //transport data
+                toStudentPage()
+            }
+            2 -> {
+                //transport data
+                toTeacherPage()
+            }
+            else -> errorTip(loginState)
+        }
+    }
+    private fun buildLoginFailDialog():AlertDialog.Builder{
+        val loginFailDialog = AlertDialog.Builder(this)
+        loginFailDialog.setTitle("提示信息")
+        loginFailDialog.setMessage("连接服务器超时")
+        loginFailDialog.setPositiveButton("确定"){
+            dialog, id -> loadingDialog?.cancel()
+        }
+        return loginFailDialog
+    }
+    private fun getDataFromConnection(connection:HttpURLConnection):StringBuilder{
+        val inputStream = connection?.inputStream
+        val reader = inputStream?.bufferedReader()
+        val response = StringBuilder()
+        while (true)
+        {
+            val line = reader?.readLine() ?: break
+            response.append(line)
+        }
+        reader?.close()
+        return response
     }
     private fun configLoadingProgress(){
         var loadingDialogBuilder = AlertDialog.Builder(this)
         val loadingProgress = ProgressBar(this)
         loadingDialogBuilder.setView(loadingProgress)
         loadingDialogBuilder.setTitle("正在登陆...")
-        loadingDialog = loadingDialogBuilder.create()
-        loadingDialog!!.show()
-        //loadingDialog.show()
-//        var loginFailDialog = AlertDialog.Builder(this)
-//        loginFailDialog.setTitle("提示信息")
-//        loginFailDialog.setMessage("连接服务器超时")
-//        loginFailDialog.setPositiveButton("确定"){
-//            dialog, id ->{
-//
-//        }
-//        }
-//        loginFailDialog.show()
-//        val dialogFragment = LoadingStateFragment()
-//        dialogFragment.show(fragmentManager,"loading")
-//        dialogFragment.cancel()
+        runOnUiThread {
+            loadingDialog = loadingDialogBuilder.create()
+            loadingDialog!!.show()
+        }
     }
     private fun grantPermission(){
         if (ContextCompat.checkSelfPermission(this,
@@ -151,9 +148,9 @@ class MainActivity : AppCompatActivity() {
         {
             Toast.makeText(this,"granting permission",Toast.LENGTH_SHORT).show()
             ActivityCompat.requestPermissions(this,
-                    arrayOf(Manifest.permission.ACCESS_BACKGROUND_LOCATION
-                            , Manifest.permission.ACCESS_FINE_LOCATION
-                            , Manifest.permission.ACCESS_COARSE_LOCATION,
+                    arrayOf(Manifest.permission.ACCESS_BACKGROUND_LOCATION,
+                            Manifest.permission.ACCESS_FINE_LOCATION,
+                            Manifest.permission.ACCESS_COARSE_LOCATION,
                             Manifest.permission.ACCESS_NETWORK_STATE,
                             Manifest.permission.INTERNET,
                             Manifest.permission.READ_PHONE_STATE,
@@ -163,7 +160,7 @@ class MainActivity : AppCompatActivity() {
                     10)
         }
         else{
-            Toast.makeText(this,"already get",Toast.LENGTH_SHORT).show()
+            Toast.makeText(this,"already get permission",Toast.LENGTH_SHORT).show()
         }
     }
 }

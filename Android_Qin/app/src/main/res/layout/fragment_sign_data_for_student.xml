@@ -36,57 +36,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical">
-
-                    <com.xuexiang.xui.widget.textview.supertextview.SuperTextView
-                        android:layout_width="match_parent"
-                        android:layout_height="100dp"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginRight="10dp"
-                        app:sDividerLineType="both"
-                        app:sRightTextString="已打卡"
-                        app:sLeftTextString="2020-12-18 19:00" />
-
-                    <com.xuexiang.xui.widget.textview.supertextview.SuperTextView
-                        android:layout_width="match_parent"
-                        android:layout_height="100dp"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginRight="10dp"
-                        app:sDividerLineType="both"
-                        app:sRightTextString="已打卡"
-                        app:sLeftTextIsBold="true"
-                        app:sLeftTextString="2020-12-18 19:00" />
-
-                    <com.xuexiang.xui.widget.textview.supertextview.SuperTextView
-                        android:layout_width="match_parent"
-                        android:layout_height="100dp"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginRight="10dp"
-                        app:sDividerLineType="both"
-                        app:sRightTextString="已打卡"
-                        app:sLeftTextString="2020-12-18 19:00" />
-
-                    <com.xuexiang.xui.widget.textview.supertextview.SuperTextView
-                        android:layout_width="match_parent"
-                        android:layout_height="100dp"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginRight="10dp"
-                        app:sDividerLineType="both"
-                        app:sRightTextString="已打卡"
-                        app:sLeftTextString="2020-12-18 19:00" />
-
-                    <com.xuexiang.xui.widget.textview.supertextview.SuperTextView
-                        android:layout_width="match_parent"
-                        android:layout_height="100dp"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginRight="10dp"
-                        app:sDividerLineType="both"
-                        app:sRightTextString="已打卡"
-                        app:sLeftTextString="2020-12-18 19:00" />
                 </LinearLayout>
             </androidx.core.widget.NestedScrollView>
         </LinearLayout>

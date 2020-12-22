@@ -33,56 +33,65 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         configLoginBtn()
     }
-    private fun checkLocalAccount(){
+
+    private fun checkLocalAccount() {
         // valid day 5
         // "username":"","password":"","role":"","loginDate":""
         //toTeacherPage()
-        toStudentPage()
+        //toStudentPage()
     }
-    private fun configLoginBtn(){
-        val loginBtn=findViewById<com.xuexiang.xui.widget.button.ButtonView>(R.id.login_btn)
+
+    private fun configLoginBtn() {
+        val loginBtn = findViewById<com.xuexiang.xui.widget.button.ButtonView>(R.id.login_btn)
         loginBtn.setOnClickListener {
             login()
         }
     }
-    private fun errorTip(loginState:Any){
-        when(loginState){
+
+    private fun errorTip(loginState: Any) {
+        when (loginState) {
             3 -> runOnUiThread {
-                Toast.makeText(this,"用户名不存在",Toast.LENGTH_LONG).show()
+                Toast.makeText(this, "用户名不存在", Toast.LENGTH_LONG).show()
             }
             4 -> runOnUiThread {
-                Toast.makeText(this,"密码错误",Toast.LENGTH_LONG).show()
+                Toast.makeText(this, "密码错误", Toast.LENGTH_LONG).show()
             }
             else -> runOnUiThread {
-                Toast.makeText(this,"未知错误",Toast.LENGTH_LONG).show()
+                Toast.makeText(this, "未知错误", Toast.LENGTH_LONG).show()
             }
         }
     }
-    private fun toTeacherPage(){
+
+    private fun toTeacherPage(loginInfo: JSONObject) {
         val intent = Intent(this, TeacherActivity::class.java).apply {}
         startActivity(intent)
     }
-    private fun toStudentPage(){
+
+    private fun toStudentPage(loginInfo: JSONObject) {
         val intent = Intent(this, StudentActivity::class.java).apply {}
+        intent.putExtra("studentId", loginInfo["studentId"].toString())
+        intent.putExtra("studentName", loginInfo["studentName"].toString())
+        intent.putExtra("classId", loginInfo["classId"].toString())
+        intent.putExtra("className", loginInfo["className"].toString())
         startActivity(intent)
     }
-    var loadingDialog:AlertDialog? = null
-    private fun login(){
+
+    var loadingDialog: AlertDialog? = null
+    private fun login() {
         Thread {
             val userName = findViewById<ClearEditText>(R.id.user_name)
             val password = findViewById<PasswordEditText>(R.id.password)
             configLoadingProgress()
-            val urlForLogin = URL("http://10.60.0.13:8080/student/login?name="+userName.text+"&password="+password.text)
+            val urlForLogin = URL("http://10.60.0.13:8080/student/login?name=" + userName.text + "&password=" + password.text)
             var connection: HttpURLConnection? = null
-            var response:StringBuilder? = null
+            var response: StringBuilder? = null
             try {
                 connection = urlForLogin.openConnection() as HttpURLConnection
                 connection?.requestMethod = "GET"
                 response = getDataFromConnection(connection)
                 connection?.disconnect()
-            }
-            catch (e:Exception){
-                var loginFailDialog = buildLoginFailDialog()
+            } catch (e: Exception) {
+                var loginFailDialog = buildConnectFailDialog()
                 runOnUiThread {
                     loginFailDialog.show()
                 }
@@ -91,47 +100,50 @@ class MainActivity : AppCompatActivity() {
             dealWithResponse(response)
         }.start()
     }
-    private fun dealWithResponse(response:StringBuilder?){
+
+    private fun dealWithResponse(response: StringBuilder?) {
         val jsonString = response.toString()
-        val loginInfo=JSONObject(jsonString)
-        var loginState=loginInfo["loginState"]
-        if (loginState is String){
-            loginState=loginState.toInt()
+        val loginInfo = JSONObject(jsonString)
+        var loginState = loginInfo["loginState"]
+        if (loginState is String) {
+            loginState = loginState.toInt()
         }
         when (loginState) {
             1 -> {
                 //transport data
-                toStudentPage()
+                toStudentPage(loginInfo)
             }
             2 -> {
                 //transport data
-                toTeacherPage()
+                toTeacherPage(loginInfo)
             }
             else -> errorTip(loginState)
         }
     }
-    private fun buildLoginFailDialog():AlertDialog.Builder{
+
+    private fun buildConnectFailDialog(): AlertDialog.Builder {
         val loginFailDialog = AlertDialog.Builder(this)
         loginFailDialog.setTitle("提示信息")
         loginFailDialog.setMessage("连接服务器超时")
-        loginFailDialog.setPositiveButton("确定"){
-            dialog, id -> loadingDialog?.cancel()
+        loginFailDialog.setPositiveButton("确定") { dialog, id ->
+            loadingDialog?.cancel()
         }
         return loginFailDialog
     }
-    private fun getDataFromConnection(connection:HttpURLConnection):StringBuilder{
+
+    private fun getDataFromConnection(connection: HttpURLConnection): StringBuilder {
         val inputStream = connection?.inputStream
         val reader = inputStream?.bufferedReader()
         val response = StringBuilder()
-        while (true)
-        {
+        while (true) {
             val line = reader?.readLine() ?: break
             response.append(line)
         }
         reader?.close()
         return response
     }
-    private fun configLoadingProgress(){
+
+    private fun configLoadingProgress() {
         var loadingDialogBuilder = AlertDialog.Builder(this)
         val loadingProgress = ProgressBar(this)
         loadingDialogBuilder.setView(loadingProgress)
@@ -141,12 +153,12 @@ class MainActivity : AppCompatActivity() {
             loadingDialog!!.show()
         }
     }
-    private fun grantPermission(){
+
+    private fun grantPermission() {
         if (ContextCompat.checkSelfPermission(this,
                         Manifest.permission.ACCESS_BACKGROUND_LOCATION)
-                != PackageManager.PERMISSION_GRANTED)
-        {
-            Toast.makeText(this,"granting permission",Toast.LENGTH_SHORT).show()
+                != PackageManager.PERMISSION_GRANTED) {
+            Toast.makeText(this, "granting permission", Toast.LENGTH_SHORT).show()
             ActivityCompat.requestPermissions(this,
                     arrayOf(Manifest.permission.ACCESS_BACKGROUND_LOCATION,
                             Manifest.permission.ACCESS_FINE_LOCATION,
@@ -158,9 +170,8 @@ class MainActivity : AppCompatActivity() {
                             Manifest.permission.ACCESS_LOCATION_EXTRA_COMMANDS
                     ),
                     10)
-        }
-        else{
-            Toast.makeText(this,"already get permission",Toast.LENGTH_SHORT).show()
+        } else {
+            Toast.makeText(this, "already get permission", Toast.LENGTH_SHORT).show()
         }
     }
 }

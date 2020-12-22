@@ -8,9 +8,17 @@ import androidx.navigation.fragment.NavHostFragment
 import com.xuexiang.xui.widget.tabbar.TabSegment
 
 class StudentActivity : AppCompatActivity() {
+    var studentId = ""
+    var studentName = ""
+    var classId = ""
+    var className = ""
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_student)
+        studentId = intent.getStringExtra("studentId").toString()
+        studentName = intent.getStringExtra("studentName").toString()
+        classId = intent.getStringExtra("classId").toString()
+        className = intent.getStringExtra("className").toString()
         configTabBar()
     }
 
@@ -26,12 +34,21 @@ class StudentActivity : AppCompatActivity() {
         tabSegment.notifyDataChanged()
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_for_student) as NavHostFragment
         val navController = navHostFragment.navController
+        val studentInfo = buildBundleForStudent()
         tabSegment.setOnTabClickListener {
             when(it){
-                0 -> navController.navigate(R.id.locationFragmentForStudent)
-                1 -> navController.navigate(R.id.signDataForStudent)
-                2 -> navController.navigate(R.id.mineForStudent)
+                0 -> navController.navigate(R.id.locationFragmentForStudent,studentInfo)
+                1 -> navController.navigate(R.id.signDataForStudent,studentInfo)
+                2 -> navController.navigate(R.id.mineForStudent,studentInfo)
             }
         }
+    }
+    private fun buildBundleForStudent():Bundle{
+        val bundle = Bundle()
+        bundle.putString("studentId",studentId)
+        bundle.putString("studentName",studentName)
+        bundle.putString("classId",classId)
+        bundle.putString("className",className)
+        return bundle
     }
 }

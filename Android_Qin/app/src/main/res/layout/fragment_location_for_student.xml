@@ -25,7 +25,7 @@
                 app:sLeftTextSize="25sp"
                 app:sLeftTextIsBold="true"
                 app:sLeftMaxEms="30"
-                app:sLeftTextString="当前活动：无" />
+                app:sLeftTextString="当前活动：" />
             <com.amap.api.maps2d.MapView
                 android:id="@+id/map_for_student"
                 android:layout_marginTop="20dp"

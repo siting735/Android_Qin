@@ -1,7 +1,11 @@
 package com.example.android_qin
 
+import android.Manifest
 import android.app.AlertDialog
+import android.content.pm.PackageManager
 import android.os.Bundle
+import android.provider.Settings
+import android.util.ArrayMap
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -9,6 +13,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import com.amap.api.maps2d.AMap
 import com.amap.api.maps2d.MapView
 import com.amap.api.maps2d.model.MyLocationStyle
@@ -92,6 +97,10 @@ class LocationFragmentForStudent : Fragment() {
         super.onStart()
         refreshActivity()
     }
+
+    override fun onResume() {
+        super.onResume()
+    }
     private fun configSwipeRefresh(){
         val swipe= view?.findViewById<androidx.swiperefreshlayout.widget.SwipeRefreshLayout>(R.id.location_swipe_for_student)
         swipe?.setOnRefreshListener {
@@ -102,9 +111,8 @@ class LocationFragmentForStudent : Fragment() {
     }
     private fun refreshActivity(){
         val classId = arguments?.get("classId").toString()
-        Log.i("classId in location1",classId)
         Thread{
-            val url = "http://10.60.0.13:8080/activity/activityInProgress?classId="+ classId
+            val url = "http://10.60.0.13:8080/activity/activityInProgress?classId=$classId"
             val urlForGetActivityInfo = URL(url)
             var connection: HttpURLConnection? = null
             var response: StringBuilder? = null
@@ -169,9 +177,14 @@ class LocationFragmentForStudent : Fragment() {
         }
     }
     private fun sign(){
-        val classId = arguments?.get("classId").toString()
+        val studentId = arguments?.get("studentId").toString()
+        val deviceId = getDeviceId()
+        Log.i("deviceId",deviceId)
+        val locationInfo = getLocationInfo()
+        val studentLongitude = locationInfo["studentLongitude"]
+        val studentLatitude = locationInfo["studentLatitude"]
         Thread{
-            val url = "http://10.60.0.13:8080/activity/activityInProgress?classId=$classId"
+            val url = "http://10.60.0.13:8080/sign/studentSign?studentId=$studentId&studentLongitude=$studentLongitude&studentLatitude=$studentLatitude&deviceId=$deviceId"
             val urlForGetSignData = URL(url)
             var connection: HttpURLConnection? = null
             var response: StringBuilder? = null
@@ -189,6 +202,26 @@ class LocationFragmentForStudent : Fragment() {
             }
             dealWithResponse(response)
         }.start()
+    }
+    private fun getDeviceId():String{
+        if(ContextCompat.checkSelfPermission(requireContext(),
+                Manifest.permission.READ_PHONE_STATE)
+            != PackageManager.PERMISSION_GRANTED){
+            activity?.runOnUiThread {
+                Toast.makeText(requireContext(),"no permission\nplease setting for the app",Toast.LENGTH_SHORT).show()
+            }
+            return null.toString()
+        }
+        var deviceId= Settings.System.getString(activity?.contentResolver, Settings.System.ANDROID_ID);
+        if(deviceId==null){
+            Toast.makeText(requireContext(),"error",Toast.LENGTH_SHORT).show()
+            return null.toString()
+        }
+        return deviceId.toString()
+    }
+    private fun getLocationInfo():ArrayMap<String,String>{
+        val locationInfo = ArrayMap<String,String>()
+        return locationInfo
     }
     fun show_dialog(view: View) {
         var dialog = AlertDialog.Builder(context)

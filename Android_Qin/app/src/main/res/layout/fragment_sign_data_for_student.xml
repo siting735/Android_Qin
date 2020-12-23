@@ -23,7 +23,6 @@
                 android:layout_marginRight="10dp"
                 app:sCenterBottomTextIsBold="true"
                 app:sCenterBottomTextSize="60dp"
-                app:sCenterBottomTextString="100%"
                 app:sCenterTextString="考勤率为:"
                 app:sDividerLineType="both" />
 

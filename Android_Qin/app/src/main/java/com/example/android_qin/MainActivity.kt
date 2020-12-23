@@ -25,8 +25,8 @@ import java.net.HttpURLConnection
 import java.net.URL
 
 class MainActivity : AppCompatActivity() {
-    val teacher = 1
-    val student = 0
+    private val teacher = 1
+    private val student = 0
     var identity = 0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,12 +42,12 @@ class MainActivity : AppCompatActivity() {
     private fun configIdentity() {
         val identityView = findViewById<MaterialSpinner>(R.id.identity)
         identityView.setItems("我是学生", "我是教师")
-        identityView.selectedIndex = 0
+        identityView.selectedIndex = STUDENT
         identityView.setOnItemSelectedListener { view, position, id, item ->
-            if (view.selectedIndex == student) {
-                identity = student
-            } else if (view.selectedIndex == teacher) {
-                identity = teacher
+            if (view.selectedIndex == STUDENT) {
+                identity = STUDENT
+            } else if (view.selectedIndex == TEACHER) {
+                identity = STUDENT
             }
         }
     }
@@ -102,7 +102,7 @@ class MainActivity : AppCompatActivity() {
             val password = findViewById<PasswordEditText>(R.id.password)
             var urlForLogin: URL? = null
             configLoadingProgress()
-            urlForLogin = if(identity == student){
+            urlForLogin = if(identity == STUDENT){
                 URL("http://10.60.0.13:8080/student/login?username=" + userName.text + "&password=" + password.text)
             } else{
                 URL("http://10.60.0.13:8080/teacher/login?username=" + userName.text + "&password=" + password.text)
@@ -210,5 +210,6 @@ class MainActivity : AppCompatActivity() {
 
     companion object {
         const val TEACHER = 1
+        const val STUDENT = 0
     }
 }

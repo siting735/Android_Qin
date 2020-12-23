@@ -14,6 +14,9 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.Toast
 import androidx.core.content.ContextCompat
+import com.amap.api.location.AMapLocationClient
+import com.amap.api.location.AMapLocationClientOption
+import com.amap.api.location.AMapLocationListener
 import com.amap.api.maps2d.AMap
 import com.amap.api.maps2d.MapView
 import com.amap.api.maps2d.model.MyLocationStyle
@@ -89,6 +92,7 @@ class LocationFragmentForStudent : Fragment() {
         aMap!!.isMyLocationEnabled = true // 设置为true表示启动显示定位蓝点，false表示隐藏定位蓝点并不进行定位，默认是false。
         myLocationStyle.myLocationType(MyLocationStyle.LOCATION_TYPE_FOLLOW) //连续定位、且将视角移动到地图中心点，定位蓝点跟随设备移动。（1秒1次定位）
         mMapView?.onCreate(savedInstanceState)
+        getLocationInfo()
         configSignBtn()
         configSwipeRefresh()
     }
@@ -100,6 +104,54 @@ class LocationFragmentForStudent : Fragment() {
 
     override fun onResume() {
         super.onResume()
+    }
+    //声明AMapLocationClient类对象
+    var mLocationClient: AMapLocationClient? = null
+
+    //声明定位回调监听器
+    var mLocationListener: AMapLocationListener? = null
+
+    //声明AMapLocationClientOption对象
+    var mLocationOption: AMapLocationClientOption? = null
+    private val locationInfo = ArrayMap<String,String>()
+    private fun getLocationInfo(){
+        mLocationClient = AMapLocationClient(context)
+        mLocationOption = AMapLocationClientOption()
+        mLocationOption!!.setLocationPurpose(AMapLocationClientOption.AMapLocationPurpose.Transport)
+        if (null != mLocationClient) {
+            mLocationClient!!.setLocationOption(mLocationOption)
+            //设置场景模式后最好调用一次stop，再调用start以保证场景模式生效
+            mLocationClient!!.stopLocation()
+            mLocationClient!!.startLocation()
+        }
+        //设置定位模式为AMapLocationMode.Device_Sensors，仅设备模式。
+        mLocationOption!!.locationMode = AMapLocationClientOption.AMapLocationMode.Hight_Accuracy
+        //设置定位间隔,单位毫秒,默认为2000ms，最低1000ms。
+        mLocationOption!!.interval = 1000
+        //给定位客户端对象设置定位参数
+        mLocationClient!!.setLocationOption(mLocationOption)
+        mLocationOption!!.isMockEnable = true
+        mLocationListener = AMapLocationListener { aMapLocation ->
+            if (aMapLocation != null) {
+                if (aMapLocation.errorCode == 0) {
+                    //可在其中解析amapLocation获取相应内容。
+                    Log.d("定位成功", "定位成功")
+                    locationInfo["studentLongitude"] = aMapLocation.longitude.toString()
+                    locationInfo["studentLatitude"] = aMapLocation.latitude.toString()
+                    Log.i("locationInfo",locationInfo.toString())
+                } else {
+                    //定位失败时，可通过ErrCode（错误码）信息来确定失败的原因，errInfo是错误信息，详见错误码表。
+                    Log.e("AmapError", "location Error, ErrCode:"
+                            + aMapLocation.errorCode + ", errInfo:"
+                            + aMapLocation.errorInfo)
+                    Toast.makeText(context, "定位失败", Toast.LENGTH_LONG)
+                }
+            }
+        }
+        mLocationClient!!.setLocationListener(mLocationListener)
+        //启动定位
+        mLocationClient!!.startLocation()
+        Log.d("getGPSInfo", "getGPSInfo")
     }
     private fun configSwipeRefresh(){
         val swipe= view?.findViewById<androidx.swiperefreshlayout.widget.SwipeRefreshLayout>(R.id.location_swipe_for_student)
@@ -130,10 +182,10 @@ class LocationFragmentForStudent : Fragment() {
                 }
                 Thread.currentThread().join()
             }
-            dealWithResponse(response)
+            dealWithResponseForRefreshActivity(response)
         }.start()
     }
-    private fun dealWithResponse(response: StringBuilder?){
+    private fun dealWithResponseForRefreshActivity(response: StringBuilder?){
         val jsonString = response.toString()
         val responseJson = JSONObject(jsonString)
         val activityTitle = responseJson["activityTitle"].toString()
@@ -180,10 +232,9 @@ class LocationFragmentForStudent : Fragment() {
         val studentId = arguments?.get("studentId").toString()
         val deviceId = getDeviceId()
         Log.i("deviceId",deviceId)
-        val locationInfo = getLocationInfo()
-        val studentLongitude = locationInfo["studentLongitude"]
-        val studentLatitude = locationInfo["studentLatitude"]
         Thread{
+            val studentLongitude = locationInfo["studentLongitude"]
+            val studentLatitude = locationInfo["studentLatitude"]
             val url = "http://10.60.0.13:8080/sign/studentSign?studentId=$studentId&studentLongitude=$studentLongitude&studentLatitude=$studentLatitude&deviceId=$deviceId"
             val urlForGetSignData = URL(url)
             var connection: HttpURLConnection? = null
@@ -194,21 +245,37 @@ class LocationFragmentForStudent : Fragment() {
                 response = getDataFromConnection(connection)
                 connection?.disconnect()
             } catch (e: Exception) {
+                Log.e("error in sign",e.toString())
                 var loginFailDialog = buildConnectFailDialog()
                 activity?.runOnUiThread {
                     loginFailDialog.show()
                 }
                 Thread.currentThread().join()
             }
-            dealWithResponse(response)
+            dealWithResponseForSign(response)
         }.start()
+    }
+    private fun dealWithResponseForSign(response:StringBuilder?){
+        val jsonString = response.toString()
+        val responseJson = JSONObject(jsonString)
+        val signState = responseJson["signState"] as Int
+        if(signState == 0){
+            activity?.runOnUiThread {
+                Toast.makeText(context,"签到失败",Toast.LENGTH_LONG).show()
+            }
+        }
+        else{
+            activity?.runOnUiThread {
+                Toast.makeText(context,"签到成功",Toast.LENGTH_LONG).show()
+            }
+        }
     }
     private fun getDeviceId():String{
         if(ContextCompat.checkSelfPermission(requireContext(),
                 Manifest.permission.READ_PHONE_STATE)
             != PackageManager.PERMISSION_GRANTED){
             activity?.runOnUiThread {
-                Toast.makeText(requireContext(),"no permission\nplease setting for the app",Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(),"no permission\nplease setting for the app",Toast.LENGTH_LONG).show()
             }
             return null.toString()
         }
@@ -218,10 +285,6 @@ class LocationFragmentForStudent : Fragment() {
             return null.toString()
         }
         return deviceId.toString()
-    }
-    private fun getLocationInfo():ArrayMap<String,String>{
-        val locationInfo = ArrayMap<String,String>()
-        return locationInfo
     }
     fun show_dialog(view: View) {
         var dialog = AlertDialog.Builder(context)

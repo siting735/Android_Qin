@@ -2,13 +2,24 @@ package com.example.android_qin
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import androidx.navigation.fragment.NavHostFragment
 import com.xuexiang.xui.widget.tabbar.TabSegment
+import org.json.JSONArray
 
 class TeacherActivity : AppCompatActivity() {
+    var teacherId = ""
+    var teacherName = ""
+    var classesInfoString = ""
+    var classesInfo:JSONArray? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_teacher)
+        teacherId = intent.getStringExtra("teacherId").toString()
+        teacherName = intent.getStringExtra("teacherName").toString()
+        classesInfoString = intent.getStringExtra("classesInfo").toString()
+        classesInfo = JSONArray(classesInfoString)
+        Log.i("classesInfo in teacher",classesInfo.toString())
         configTabBar()
     }
     private fun configTabBar(){
@@ -21,14 +32,23 @@ class TeacherActivity : AppCompatActivity() {
         tabSegment.addTab(dataTab)
         tabSegment.addTab(mineTab)
         tabSegment.notifyDataChanged()
+        val teacherInfo = buildBundleForTeacher()
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_for_teacher) as NavHostFragment
         val navController = navHostFragment.navController
         tabSegment.setOnTabClickListener {
             when(it){
-                0 -> navController.navigate(R.id.locationFragmentForTeacher)
-                1 -> navController.navigate(R.id.signDataForTeacher)
-                2 -> navController.navigate(R.id.mineForTeacher)
+                0 -> navController.navigate(R.id.locationFragmentForTeacher,teacherInfo)
+                1 -> navController.navigate(R.id.signDataForTeacher,teacherInfo)
+                2 -> navController.navigate(R.id.mineForTeacher,teacherInfo)
             }
         }
+        navController.navigate(R.id.locationFragmentForTeacher,teacherInfo)
+    }
+    private fun buildBundleForTeacher():Bundle{
+        val bundle = Bundle()
+        bundle.putString("teacherId",teacherId)
+        bundle.putString("teacherName",teacherName)
+        bundle.putString("classesInfoString",classesInfoString)
+        return bundle
     }
 }

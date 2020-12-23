@@ -113,7 +113,7 @@ class SignDataForStudent : Fragment() {
         }
     }
     private fun addSignDataToLayout(signData: JSONObject?){
-        val signDataList= view?.findViewById<LinearLayout>(R.id.sign_data_list)
+        val signDataListLayout= view?.findViewById<LinearLayout>(R.id.sign_data_list)
         val signDataView = SuperTextView(context)
         val activityTitle = signData?.get("activityTitle")?.toString()
         val signState = signData?.get("signState")?.toString()
@@ -126,7 +126,7 @@ class SignDataForStudent : Fragment() {
         layoutParams.setMargins(dip2px(10f),dip2px(10f),dip2px(10f),0)
         signDataView.layoutParams = layoutParams
         activity?.runOnUiThread {
-            signDataList?.addView(signDataView)
+            signDataListLayout?.addView(signDataView)
         }
     }
     private fun buildConnectFailDialog(): AlertDialog.Builder {

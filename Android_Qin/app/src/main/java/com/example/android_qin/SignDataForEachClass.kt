@@ -1,6 +1,7 @@
 package com.example.android_qin
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -53,5 +54,15 @@ class SignDataForEachClass : Fragment() {
                         putString(ARG_PARAM2, param2)
                     }
                 }
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        getStudentsSignData()
+    }
+
+    private fun getStudentsSignData() {
+        val classId = arguments?.get("classId").toString()
+        Log.i("classId in each class",classId)
     }
 }

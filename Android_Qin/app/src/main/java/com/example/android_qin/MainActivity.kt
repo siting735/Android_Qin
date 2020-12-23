@@ -25,20 +25,20 @@ import java.net.HttpURLConnection
 import java.net.URL
 
 class MainActivity : AppCompatActivity() {
-    private val teacher = 1
-    private val student = 0
     var identity = 0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        XUI.init(this.application) // 初始化UI框架
-        XUI.debug(true)  // 开启UI框架调试日志
+        initUI()
+        setContentView(R.layout.activity_main)
         grantPermission()
         checkLocalAccount()
-        setContentView(R.layout.activity_main)
         configLoginBtn()
         configIdentity()
     }
-
+    private fun initUI(){
+        XUI.init(this.application)
+        XUI.debug(true)
+    }
     private fun configIdentity() {
         val identityView = findViewById<MaterialSpinner>(R.id.identity)
         identityView.setItems("我是学生", "我是教师")
@@ -47,7 +47,7 @@ class MainActivity : AppCompatActivity() {
             if (view.selectedIndex == STUDENT) {
                 identity = STUDENT
             } else if (view.selectedIndex == TEACHER) {
-                identity = STUDENT
+                identity = TEACHER
             }
         }
     }
@@ -80,9 +80,11 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
-
     private fun toTeacherPage(loginInfo: JSONObject) {
         val intent = Intent(this, TeacherActivity::class.java).apply {}
+        intent.putExtra("teacherId", loginInfo["teacherId"].toString())
+        intent.putExtra("teacherName", loginInfo["teacherName"].toString())
+        intent.putExtra("classesInfo", loginInfo["classesInfo"].toString())
         startActivity(intent)
     }
 
@@ -209,7 +211,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     companion object {
-        const val TEACHER = 1
         const val STUDENT = 0
+        const val TEACHER = 1
     }
+    private val teacher = 1
+    private val student = 0
 }

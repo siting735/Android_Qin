@@ -27,7 +27,7 @@
                 app:sDividerLineType="both" />
             <androidx.core.widget.NestedScrollView
                 android:layout_width="match_parent"
-                android:layout_height="500dp"
+                android:layout_height="480dp"
                 android:scrollbars="vertical"
                 android:fillViewport="true">
                 <LinearLayout
@@ -35,61 +35,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical">
-                    <com.xuexiang.xui.widget.textview.supertextview.SuperTextView
-                        android:id="@+id/ruan_zhuo_1"
-                        android:layout_width="match_parent"
-                        android:layout_height="100dp"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginRight="10dp"
-                        app:sDividerLineType="both"
-                        app:sRightIconRes="@drawable/get_in"
-                        app:sLeftTextSize="23sp"
-                        app:sLeftTextString="18软卓1班" />
-
-                    <com.xuexiang.xui.widget.textview.supertextview.SuperTextView
-                        android:layout_width="match_parent"
-                        android:layout_height="100dp"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginRight="10dp"
-                        app:sDividerLineType="both"
-                        app:sRightIconRes="@drawable/get_in"
-                        app:sLeftTextSize="23sp"
-                        app:sLeftTextString="18网安1班" />
-
-                    <com.xuexiang.xui.widget.textview.supertextview.SuperTextView
-                        android:layout_width="match_parent"
-                        android:layout_height="100dp"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginRight="10dp"
-                        app:sDividerLineType="both"
-                        app:sRightIconRes="@drawable/get_in"
-                        app:sLeftTextSize="23sp"
-                        app:sLeftTextString="18软卓2班" />
-
-                    <com.xuexiang.xui.widget.textview.supertextview.SuperTextView
-                        android:layout_width="match_parent"
-                        android:layout_height="100dp"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginRight="10dp"
-                        app:sDividerLineType="both"
-                        app:sRightIconRes="@drawable/get_in"
-                        app:sLeftTextSize="23sp"
-                        app:sLeftTextString="18网工1班" />
-
-                    <com.xuexiang.xui.widget.textview.supertextview.SuperTextView
-                        android:layout_width="match_parent"
-                        android:layout_height="100dp"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginRight="10dp"
-                        app:sDividerLineType="both"
-                        app:sRightIconRes="@drawable/get_in"
-                        app:sLeftTextSize="23sp"
-                        app:sLeftTextString="18网工2班" />
                 </LinearLayout>
             </androidx.core.widget.NestedScrollView>
         </LinearLayout>

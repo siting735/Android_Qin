@@ -18,20 +18,38 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.xuexiang.xui.XUI
 import com.xuexiang.xui.widget.edittext.ClearEditText
 import com.xuexiang.xui.widget.edittext.PasswordEditText
+import com.xuexiang.xui.widget.spinner.materialspinner.MaterialSpinner
 import org.json.JSONObject
 import java.lang.Exception
 import java.net.HttpURLConnection
 import java.net.URL
 
 class MainActivity : AppCompatActivity() {
+    val teacher = 1
+    val student = 0
+    var identity = 0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         XUI.init(this.application) // 初始化UI框架
         XUI.debug(true)  // 开启UI框架调试日志
         grantPermission()
-        //checkLocalAccount()
+        checkLocalAccount()
         setContentView(R.layout.activity_main)
         configLoginBtn()
+        configIdentity()
+    }
+
+    private fun configIdentity() {
+        val identityView = findViewById<MaterialSpinner>(R.id.identity)
+        identityView.setItems("我是学生", "我是教师")
+        identityView.selectedIndex = 0
+        identityView.setOnItemSelectedListener { view, position, id, item ->
+            if (view.selectedIndex == student) {
+                identity = student
+            } else if (view.selectedIndex == teacher) {
+                identity = teacher
+            }
+        }
     }
 
     private fun checkLocalAccount() {
@@ -49,6 +67,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun errorTip(loginState: Any) {
+        loadingDialog?.cancel()
         when (loginState) {
             3 -> runOnUiThread {
                 Toast.makeText(this, "用户名不存在", Toast.LENGTH_LONG).show()
@@ -81,8 +100,13 @@ class MainActivity : AppCompatActivity() {
         Thread {
             val userName = findViewById<ClearEditText>(R.id.user_name)
             val password = findViewById<PasswordEditText>(R.id.password)
+            var urlForLogin: URL? = null
             configLoadingProgress()
-            val urlForLogin = URL("http://10.60.0.13:8080/student/login?username=" + userName.text + "&password=" + password.text)
+            urlForLogin = if(identity == student){
+                URL("http://10.60.0.13:8080/student/login?username=" + userName.text + "&password=" + password.text)
+            } else{
+                URL("http://10.60.0.13:8080/teacher/login?username=" + userName.text + "&password=" + password.text)
+            }
             var connection: HttpURLConnection? = null
             var response: StringBuilder? = null
             try {
@@ -94,8 +118,8 @@ class MainActivity : AppCompatActivity() {
                 var loginFailDialog = buildConnectFailDialog()
                 runOnUiThread {
                     loginFailDialog.show()
-                    Log.e("error in location",e.toString())
-                    Log.i("fail dialog","i am main")
+                    Log.e("error in location", e.toString())
+                    Log.i("fail dialog", "i am main")
                 }
                 Thread.currentThread().join()
             }
@@ -110,6 +134,7 @@ class MainActivity : AppCompatActivity() {
         if (loginState is String) {
             loginState = loginState.toInt()
         }
+        Log.i("loginState", loginState.toString())
         when (loginState) {
             1 -> {
                 //transport data
@@ -157,23 +182,33 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun grantPermission() {
-        if (ContextCompat.checkSelfPermission(this,
-                        Manifest.permission.ACCESS_BACKGROUND_LOCATION)
-                != PackageManager.PERMISSION_GRANTED) {
+        if (ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_BACKGROUND_LOCATION
+            )
+            != PackageManager.PERMISSION_GRANTED
+        ) {
             Toast.makeText(this, "granting permission", Toast.LENGTH_SHORT).show()
-            ActivityCompat.requestPermissions(this,
-                    arrayOf(Manifest.permission.ACCESS_BACKGROUND_LOCATION,
-                            Manifest.permission.ACCESS_FINE_LOCATION,
-                            Manifest.permission.ACCESS_COARSE_LOCATION,
-                            Manifest.permission.ACCESS_NETWORK_STATE,
-                            Manifest.permission.INTERNET,
-                            Manifest.permission.READ_PHONE_STATE,
-                            Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                            Manifest.permission.ACCESS_LOCATION_EXTRA_COMMANDS
-                    ),
-                    10)
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(
+                    Manifest.permission.ACCESS_BACKGROUND_LOCATION,
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.ACCESS_COARSE_LOCATION,
+                    Manifest.permission.ACCESS_NETWORK_STATE,
+                    Manifest.permission.INTERNET,
+                    Manifest.permission.READ_PHONE_STATE,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                    Manifest.permission.ACCESS_LOCATION_EXTRA_COMMANDS
+                ),
+                10
+            )
         } else {
             Toast.makeText(this, "already get permission", Toast.LENGTH_SHORT).show()
         }
+    }
+
+    companion object {
+        const val TEACHER = 1
     }
 }

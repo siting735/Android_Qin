@@ -6,6 +6,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity">
+    <com.xuexiang.xui.widget.spinner.materialspinner.MaterialSpinner
+        android:id="@+id/identity"
+        android:layout_width="200dp"
+        android:layout_height="47dp"
+        android:textSize="20sp"
+        android:layout_gravity="right"
+        android:layout_marginTop="20dp"
+        android:enabled="true" />
     <TextView
         android:text="请登录"
         android:textSize="40sp"

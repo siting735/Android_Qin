@@ -12,6 +12,12 @@ import android.widget.Toast
 import com.amap.api.maps2d.AMap
 import com.amap.api.maps2d.MapView
 import com.amap.api.maps2d.model.MyLocationStyle
+import com.xuexiang.xui.widget.textview.supertextview.SuperTextView
+import org.json.JSONArray
+import org.json.JSONObject
+import java.lang.Exception
+import java.net.HttpURLConnection
+import java.net.URL
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -64,6 +70,7 @@ class LocationFragmentForStudent : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        refreshActivity()
         var mMapView = view?.findViewById<MapView>(R.id.map_for_student)
         //在activity执行onCreate时执行mMapView.onCreate(savedInstanceState)，创建地图
         var aMap: AMap?=null
@@ -85,14 +92,71 @@ class LocationFragmentForStudent : Fragment() {
         val swipe= view?.findViewById<androidx.swiperefreshlayout.widget.SwipeRefreshLayout>(R.id.location_swipe_for_student)
         swipe?.setOnRefreshListener {
             Log.i("swipe","location")
+            refreshActivity()
             swipe.isRefreshing=false
         }
+    }
+    private fun refreshActivity(){
+        val classId = arguments?.get("classId").toString()
+        Thread{
+            val url = "http://10.60.0.13:8080/activity/activityInProgress?classId=$classId"
+            val urlForGetSignData = URL(url)
+            var connection: HttpURLConnection? = null
+            var response: StringBuilder? = null
+            try {
+                connection = urlForGetSignData.openConnection() as HttpURLConnection
+                connection?.requestMethod = "GET"
+                response = getDataFromConnection(connection)
+                connection?.disconnect()
+            } catch (e: Exception) {
+                var loginFailDialog = buildConnectFailDialog()
+                activity?.runOnUiThread {
+                    loginFailDialog.show()
+                }
+                Thread.currentThread().join()
+            }
+            dealWithResponse(response)
+        }.start()
+    }
+    private fun dealWithResponse(response: StringBuilder?){
+        val jsonString = response.toString()
+        val responseJson = JSONObject(jsonString)
+        val activityTitle = responseJson["activityTitle"].toString()
+        val activityTitleTextView = view?.findViewById<SuperTextView>(R.id.activity_title)
+        if(activityTitle == ""){
+            activity?.runOnUiThread {
+                activityTitleTextView?.setLeftString("当前活动：无")
+            }
+        }
+        Log.i("activity title",activityTitle)
+        activity?.runOnUiThread {
+            activityTitleTextView?.setLeftString("当前活动：$activityTitle")
+        }
+    }
+    private fun buildConnectFailDialog(): androidx.appcompat.app.AlertDialog.Builder {
+        val loginFailDialog = androidx.appcompat.app.AlertDialog.Builder(this.requireContext())
+        loginFailDialog.setTitle("提示信息")
+        loginFailDialog.setMessage("连接服务器失败")
+        loginFailDialog.setPositiveButton("确定") {
+                dialog, id ->{}
+        }
+        return loginFailDialog
+    }
+    private fun getDataFromConnection(connection: HttpURLConnection): StringBuilder {
+        val inputStream = connection?.inputStream
+        val reader = inputStream?.bufferedReader()
+        val response = StringBuilder()
+        while (true) {
+            val line = reader?.readLine() ?: break
+            response.append(line)
+        }
+        reader?.close()
+        return response
     }
     private fun configSignBtn(){
         val signBtn= view?.findViewById<Button>(R.id.sign_btn_for_student)
         signBtn?.setOnClickListener {
             Log.i("btn","sign")
-
         }
     }
     fun show_dialog(view: View) {

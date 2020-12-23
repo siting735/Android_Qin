@@ -82,7 +82,7 @@ class MainActivity : AppCompatActivity() {
             val userName = findViewById<ClearEditText>(R.id.user_name)
             val password = findViewById<PasswordEditText>(R.id.password)
             configLoadingProgress()
-            val urlForLogin = URL("http://10.60.0.13:8080/student/login?name=" + userName.text + "&password=" + password.text)
+            val urlForLogin = URL("http://10.60.0.13:8080/student/login?username=" + userName.text + "&password=" + password.text)
             var connection: HttpURLConnection? = null
             var response: StringBuilder? = null
             try {
@@ -124,7 +124,7 @@ class MainActivity : AppCompatActivity() {
     private fun buildConnectFailDialog(): AlertDialog.Builder {
         val loginFailDialog = AlertDialog.Builder(this)
         loginFailDialog.setTitle("提示信息")
-        loginFailDialog.setMessage("连接服务器超时")
+        loginFailDialog.setMessage("连接服务器失败")
         loginFailDialog.setPositiveButton("确定") { dialog, id ->
             loadingDialog?.cancel()
         }

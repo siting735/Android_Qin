@@ -74,7 +74,6 @@ class SignDataForStudent : Fragment() {
     }
     private fun getSignDataForStudent(){
         val studentId = arguments?.get("studentId").toString()
-        Log.i("studentId","我傻了")
         Thread{
             val url = "http://10.60.0.13:8080/student/studentSignMessage?studentId=$studentId"
             val urlForGetSignData = URL(url)
@@ -102,6 +101,7 @@ class SignDataForStudent : Fragment() {
         val jsonString = response.toString()
         val responseJson = JSONObject(jsonString)
         val signRito = responseJson["signRito"].toString()
+        // have not config signRito
         val signDataList = responseJson["activityInfo"] as JSONArray
         for(index in 0 until signDataList.length()){
             addSignDataToLayout(signDataList[index] as JSONObject)
@@ -127,7 +127,7 @@ class SignDataForStudent : Fragment() {
     private fun buildConnectFailDialog(): AlertDialog.Builder {
         val loginFailDialog = AlertDialog.Builder(this.requireContext())
         loginFailDialog.setTitle("提示信息")
-        loginFailDialog.setMessage("连接服务器超时")
+        loginFailDialog.setMessage("连接服务器失败")
         loginFailDialog.setPositiveButton("确定") {
                 dialog, id ->{}
         }
@@ -147,7 +147,6 @@ class SignDataForStudent : Fragment() {
     private fun configSwipeRefresh(){
         val swipe= view?.findViewById<androidx.swiperefreshlayout.widget.SwipeRefreshLayout>(R.id.sign_data_swipe)
         swipe?.setOnRefreshListener {
-            Log.i("swipe","sign_data")
             removeOriginSignDatas()
             getSignDataForStudent()
             swipe.isRefreshing=false

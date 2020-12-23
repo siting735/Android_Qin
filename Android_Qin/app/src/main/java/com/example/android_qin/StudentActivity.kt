@@ -42,6 +42,7 @@ class StudentActivity : AppCompatActivity() {
                 2 -> navController.navigate(R.id.mineForStudent,studentInfo)
             }
         }
+        navController.navigate(R.id.locationFragmentForStudent,studentInfo)
     }
     private fun buildBundleForStudent():Bundle{
         val bundle = Bundle()

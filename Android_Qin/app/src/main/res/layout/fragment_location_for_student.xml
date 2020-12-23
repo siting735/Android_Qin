@@ -14,6 +14,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
             <com.xuexiang.xui.widget.textview.supertextview.SuperTextView
+                android:id="@+id/activity_title"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
@@ -23,6 +24,7 @@
                 app:sDividerLineType="both"
                 app:sLeftTextSize="25sp"
                 app:sLeftTextIsBold="true"
+                app:sLeftMaxEms="30"
                 app:sLeftTextString="当前活动：无" />
             <com.amap.api.maps2d.MapView
                 android:id="@+id/map_for_student"

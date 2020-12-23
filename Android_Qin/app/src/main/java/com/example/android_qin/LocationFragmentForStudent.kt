@@ -70,7 +70,6 @@ class LocationFragmentForStudent : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        refreshActivity()
         var mMapView = view?.findViewById<MapView>(R.id.map_for_student)
         //在activity执行onCreate时执行mMapView.onCreate(savedInstanceState)，创建地图
         var aMap: AMap?=null
@@ -88,6 +87,11 @@ class LocationFragmentForStudent : Fragment() {
         configSignBtn()
         configSwipeRefresh()
     }
+
+    override fun onStart() {
+        super.onStart()
+        refreshActivity()
+    }
     private fun configSwipeRefresh(){
         val swipe= view?.findViewById<androidx.swiperefreshlayout.widget.SwipeRefreshLayout>(R.id.location_swipe_for_student)
         swipe?.setOnRefreshListener {
@@ -98,13 +102,14 @@ class LocationFragmentForStudent : Fragment() {
     }
     private fun refreshActivity(){
         val classId = arguments?.get("classId").toString()
+        Log.i("classId in location1",classId)
         Thread{
-            val url = "http://10.60.0.13:8080/activity/activityInProgress?classId=$classId"
-            val urlForGetSignData = URL(url)
+            val url = "http://10.60.0.13:8080/activity/activityInProgress?classId="+ classId
+            val urlForGetActivityInfo = URL(url)
             var connection: HttpURLConnection? = null
             var response: StringBuilder? = null
             try {
-                connection = urlForGetSignData.openConnection() as HttpURLConnection
+                connection = urlForGetActivityInfo.openConnection() as HttpURLConnection
                 connection?.requestMethod = "GET"
                 response = getDataFromConnection(connection)
                 connection?.disconnect()
@@ -112,6 +117,8 @@ class LocationFragmentForStudent : Fragment() {
                 var loginFailDialog = buildConnectFailDialog()
                 activity?.runOnUiThread {
                     loginFailDialog.show()
+                    Log.i("fail dialog reason",e.toString())
+                    Log.i("fail dialog","i am location")
                 }
                 Thread.currentThread().join()
             }
@@ -128,10 +135,12 @@ class LocationFragmentForStudent : Fragment() {
                 activityTitleTextView?.setLeftString("当前活动：无")
             }
         }
-        Log.i("activity title",activityTitle)
-        activity?.runOnUiThread {
-            activityTitleTextView?.setLeftString("当前活动：$activityTitle")
+        else{
+            activity?.runOnUiThread {
+                activityTitleTextView?.setLeftString("当前活动：$activityTitle")
+            }
         }
+
     }
     private fun buildConnectFailDialog(): androidx.appcompat.app.AlertDialog.Builder {
         val loginFailDialog = androidx.appcompat.app.AlertDialog.Builder(this.requireContext())
@@ -156,8 +165,30 @@ class LocationFragmentForStudent : Fragment() {
     private fun configSignBtn(){
         val signBtn= view?.findViewById<Button>(R.id.sign_btn_for_student)
         signBtn?.setOnClickListener {
-            Log.i("btn","sign")
+            sign()
         }
+    }
+    private fun sign(){
+        val classId = arguments?.get("classId").toString()
+        Thread{
+            val url = "http://10.60.0.13:8080/activity/activityInProgress?classId=$classId"
+            val urlForGetSignData = URL(url)
+            var connection: HttpURLConnection? = null
+            var response: StringBuilder? = null
+            try {
+                connection = urlForGetSignData.openConnection() as HttpURLConnection
+                connection?.requestMethod = "GET"
+                response = getDataFromConnection(connection)
+                connection?.disconnect()
+            } catch (e: Exception) {
+                var loginFailDialog = buildConnectFailDialog()
+                activity?.runOnUiThread {
+                    loginFailDialog.show()
+                }
+                Thread.currentThread().join()
+            }
+            dealWithResponse(response)
+        }.start()
     }
     fun show_dialog(view: View) {
         var dialog = AlertDialog.Builder(context)

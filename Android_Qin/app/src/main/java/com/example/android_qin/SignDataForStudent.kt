@@ -85,8 +85,7 @@ class SignDataForStudent : Fragment() {
                 response = getDataFromConnection(connection)
                 connection?.disconnect()
             } catch (e: Exception) {
-                Log.e("studentId",studentId)
-                Log.e("connection",e.toString())
+                Log.e("error in sign",e.toString())
                 var loginFailDialog = buildConnectFailDialog()
                 activity?.runOnUiThread {
                     loginFailDialog.show()
@@ -100,11 +99,17 @@ class SignDataForStudent : Fragment() {
     private fun dealWithResponse(response: StringBuilder?){
         val jsonString = response.toString()
         val responseJson = JSONObject(jsonString)
-        val signRito = responseJson["signRito"].toString()
-        // have not config signRito
         val signDataList = responseJson["activityInfo"] as JSONArray
+        updateSignRiro(responseJson)
         for(index in 0 until signDataList.length()){
             addSignDataToLayout(signDataList[index] as JSONObject)
+        }
+    }
+    private fun updateSignRiro(responseJson: JSONObject){
+        val signRito = responseJson["signRito"].toString()
+        val signRitoTextView = view?.findViewById<SuperTextView>(R.id.sign_rito)
+        activity?.runOnUiThread {
+            signRitoTextView?.setCenterBottomString("$signRito%")
         }
     }
     private fun addSignDataToLayout(signData: JSONObject?){

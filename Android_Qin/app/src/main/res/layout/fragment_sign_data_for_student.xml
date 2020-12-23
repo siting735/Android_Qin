@@ -15,6 +15,7 @@
             android:orientation="vertical">
 
             <com.xuexiang.xui.widget.textview.supertextview.SuperTextView
+                android:id="@+id/sign_rito"
                 android:layout_width="match_parent"
                 android:layout_height="150dp"
                 android:layout_marginLeft="10dp"

@@ -94,6 +94,8 @@ class MainActivity : AppCompatActivity() {
                 var loginFailDialog = buildConnectFailDialog()
                 runOnUiThread {
                     loginFailDialog.show()
+                    Log.e("error in location",e.toString())
+                    Log.i("fail dialog","i am main")
                 }
                 Thread.currentThread().join()
             }

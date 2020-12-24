@@ -52,5 +52,7 @@ class TeacherActivity : AppCompatActivity() {
         bundle.putString("classesInfoString",classesInfoString)
         return bundle
     }
-    override fun onBackPressed() {}
+    override fun onBackPressed() {
+        //invalid back button
+    }
 }

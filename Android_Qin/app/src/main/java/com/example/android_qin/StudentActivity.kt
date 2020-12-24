@@ -71,5 +71,7 @@ class StudentActivity : AppCompatActivity() {
         return bundle
     }
 
-    override fun onBackPressed() {}
+    override fun onBackPressed() {
+        //invalid back button
+    }
 }

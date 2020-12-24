@@ -1,5 +1,6 @@
 package com.example.android_qin
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -73,6 +74,7 @@ class SignDataForStudent : Fragment() {
             signRitoTextView?.setCenterBottomString("$signRito%")
         }
     }
+    @SuppressLint("ResourceAsColor")
     private fun addSignDataToLayout(signData: JSONObject?){
         val signDataListLayout= view?.findViewById<LinearLayout>(R.id.sign_data_list)
         val signDataView = SuperTextView(context)
@@ -80,8 +82,14 @@ class SignDataForStudent : Fragment() {
         val signState = signData?.get("signState")?.toString()
         signDataView.setLeftBottomString(activityTitle)
         when(signState){
-            "1" -> signDataView.setRightString("已打卡")
-            "2" -> signDataView.setRightString("未打卡")
+            "1" -> {
+                signDataView.setRightString("已打卡")
+                signDataView.setRightTextColor(R.color.blue)
+            }
+            "2" -> {
+                signDataView.setRightString("未打卡")
+                signDataView.setRightTextColor(R.color.blue)
+            }
         }
         var layoutParams = LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, dip2px(100f))
         layoutParams.setMargins(dip2px(10f),dip2px(10f),dip2px(10f),0)

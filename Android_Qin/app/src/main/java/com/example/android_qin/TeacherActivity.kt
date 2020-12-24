@@ -31,6 +31,7 @@ class TeacherActivity : AppCompatActivity() {
         tabSegment.addTab(locationTab)
         tabSegment.addTab(dataTab)
         tabSegment.addTab(mineTab)
+        tabSegment.selectTab(0)
         tabSegment.notifyDataChanged()
         val teacherInfo = buildBundleForTeacher()
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_for_teacher) as NavHostFragment

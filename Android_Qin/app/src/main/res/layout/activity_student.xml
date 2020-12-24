@@ -21,11 +21,10 @@
             app:navGraph="@navigation/student_nav" />
     </LinearLayout>
 
-
     <com.xuexiang.xui.widget.tabbar.TabSegment
         android:id="@+id/student_tab_bar"
         app:ts_icon_position="top"
-        app:ts_indicator_height="2dp"
+        app:ts_indicator_height="4dp"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"/>

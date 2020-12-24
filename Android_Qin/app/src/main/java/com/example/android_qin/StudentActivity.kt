@@ -31,6 +31,7 @@ class StudentActivity : AppCompatActivity() {
         tabSegment.addTab(locationTab)
         tabSegment.addTab(dataTab)
         tabSegment.addTab(mineTab)
+        tabSegment.selectTab(0)
         tabSegment.notifyDataChanged()
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_for_student) as NavHostFragment
         val navController = navHostFragment.navController

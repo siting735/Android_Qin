@@ -1,77 +1,81 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".LocationFragmentForStudent">
+
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
         <Toolbar
-            android:titleTextColor="@color/white"
-            android:background="@color/xui_config_color_titlebar"
-            android:layout_weight="1"
             android:layout_width="match_parent"
-            android:layout_height="0dp">
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:background="@color/xui_config_color_titlebar"
+            android:titleTextColor="@color/white">
+
             <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:text="打卡"
-                android:textSize="20sp"
                 android:textColor="@color/white"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:textSize="20sp" />
         </Toolbar>
-        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-            android:id="@+id/location_swipe_for_student"
+
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_weight="1"
-            android:layout_height="0dp">
-            <LinearLayout
-                android:orientation="vertical"
+            android:layout_height="0dp"
+            android:layout_weight="9"
+            android:orientation="vertical">
+
+            <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+                android:id="@+id/location_swipe_for_student"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
-                <com.xuexiang.xui.widget.textview.supertextview.SuperTextView
-                    android:id="@+id/activity_title"
+                android:layout_height="0dp"
+                android:layout_weight="1.5">
+
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    app:sDividerLineType="both"
-                    app:sLeftTextSize="25sp"
-                    app:sLeftTextIsBold="true"
-                    app:sLeftMaxEms="30"
-                    app:sLeftTextString="当前活动：" />
-            </LinearLayout>
-        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-        <com.amap.api.maps2d.MapView
-            android:id="@+id/map_for_student"
-            android:layout_marginTop="20dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_weight="5"
-            android:layout_width="match_parent"
-            android:layout_height="0dp">
-        </com.amap.api.maps2d.MapView>
-        <com.xuexiang.xui.widget.button.shadowbutton.ShadowButton
-            android:id="@+id/sign_btn_for_student"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:layout_marginTop="30dp"
-            android:layout_marginBottom="20dp"
-            android:layout_gravity="center"
-            android:background="@drawable/round_button"
-            app:sb_shape_type="round"
-            app:sb_radius="6dp"/>
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <com.xuexiang.xui.widget.textview.supertextview.SuperTextView
+                        android:id="@+id/activity_title"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_margin="10dp"
+                        android:layout_weight="1"
+                        app:sDividerLineType="both"
+                        app:sLeftMaxEms="30"
+                        app:sLeftTextIsBold="true"
+                        app:sLeftTextSize="25sp"
+                        app:sLeftTextString="当前活动：" />
+                </LinearLayout>
+            </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+            <com.amap.api.maps2d.MapView
+                android:id="@+id/map_for_student"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_weight="5"/>
+
+            <com.xuexiang.xui.widget.button.shadowbutton.ShadowButton
+                android:id="@+id/sign_btn_for_student"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="10dp"
+                android:background="@drawable/round_button"
+                app:sb_radius="6dp"
+                app:sb_shape_type="round" />
+        </LinearLayout>
     </LinearLayout>
-
-    <!-- TODO: Update blank fragment layout
-                app:sb_color_unpressed="@color/xui_btn_gray_normal_color"
-                android:alpha="0.3"
-    -->
-
-
 </FrameLayout>

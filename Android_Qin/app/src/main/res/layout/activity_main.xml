@@ -25,72 +25,79 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
         </Toolbar>
-        <com.xuexiang.xui.widget.spinner.materialspinner.MaterialSpinner
-            android:id="@+id/identity"
-            android:layout_weight="1"
-            android:layout_width="200dp"
-            android:layout_height="0dp"
-            android:textSize="20sp"
-            android:layout_gravity="right"
-            android:layout_marginTop="20dp"
-            android:enabled="true" />
-        <TextView
-            android:text="请登录"
-            android:textSize="35sp"
-            android:layout_marginLeft="20dp"
-            android:textFontWeight="1"
-            android:layout_marginTop="20dp"
-            android:layout_width="match_parent"
-            android:layout_weight="1"
-            android:layout_height="0dp"/>
         <LinearLayout
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="20dp"
-            android:orientation="horizontal"
-            android:layout_weight="1"
+            android:layout_weight="9"
+            android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="0dp">
-            <com.xuexiang.xui.widget.edittext.ClearEditText
-                android:id="@+id/user_name"
+            <com.xuexiang.xui.widget.spinner.materialspinner.MaterialSpinner
+                android:id="@+id/identity"
+                android:layout_weight="1"
+                android:layout_width="200dp"
+                android:layout_height="0dp"
                 android:textSize="20sp"
-                android:hint="输入账号"
+                android:layout_gravity="right"
+                android:layout_marginTop="20dp"
+                android:enabled="true" />
+            <TextView
+                android:text="请登录"
+                android:textSize="35sp"
+                android:layout_marginLeft="20dp"
+                android:textFontWeight="1"
+                android:layout_marginTop="20dp"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp" />
-        </LinearLayout>
-        <LinearLayout
-            android:layout_marginTop="10dp"
-            android:layout_marginLeft="10dp"
-            android:orientation="horizontal"
-            android:layout_weight="1"
-            android:layout_width="match_parent"
-            android:layout_height="0dp">
-            <com.xuexiang.xui.widget.edittext.PasswordEditText
-                android:id="@+id/password"
+                android:layout_weight="1"
+                android:layout_height="0dp"/>
+            <LinearLayout
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="20dp"
+                android:orientation="horizontal"
+                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="0dp">
+                <com.xuexiang.xui.widget.edittext.ClearEditText
+                    android:id="@+id/user_name"
+                    android:textSize="20sp"
+                    android:hint="输入账号"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="10dp"
+                android:orientation="horizontal"
+                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="0dp">
+                <com.xuexiang.xui.widget.edittext.PasswordEditText
+                    android:id="@+id/password"
+                    android:textSize="20sp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:hint="输入密码"
+                    android:inputType="textPassword"
+                    android:textAlignment="viewStart"
+                    app:pet_enableIconAlpha="true" />
+            </LinearLayout>
+            <com.xuexiang.xui.widget.button.ButtonView
+                android:id="@+id/login_btn"
+                style="@style/ButtonView.Blue"
+                android:text="登  录"
+                android:layout_weight="1"
+                android:layout_height="0dp"
+                android:layout_marginTop="30dp"
                 android:textSize="20sp"
+                android:layout_width="250dp"
+                android:layout_gravity="center" />
+            <LinearLayout
+                android:layout_weight="3"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="start"
-                android:hint="输入密码"
-                android:inputType="textPassword"
-                android:textAlignment="viewStart"
-                app:pet_enableIconAlpha="true" />
+                android:layout_height="0dp"/>
         </LinearLayout>
-        <com.xuexiang.xui.widget.button.ButtonView
-            android:id="@+id/login_btn"
-            style="@style/ButtonView.Blue"
-            android:text="登  录"
-            android:layout_weight="1"
-            android:layout_height="0dp"
-            android:layout_marginTop="30dp"
-            android:textSize="20sp"
-            android:layout_width="250dp"
-            android:layout_gravity="center" />
-        <LinearLayout
-            android:layout_weight="3"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"/>
-    </LinearLayout>
+        </LinearLayout>
+
     <LinearLayout
         android:layout_weight="1"
         android:layout_width="match_parent"

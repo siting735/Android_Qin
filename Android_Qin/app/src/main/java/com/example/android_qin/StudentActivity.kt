@@ -22,6 +22,8 @@ class StudentActivity : AppCompatActivity() {
         configTabBar()
     }
 
+    override fun onBackPressed() {}
+
     private fun configTabBar(){
         var tabSegment=findViewById<TabSegment>(R.id.student_tab_bar)
         tabSegment.mode = TabSegment.MODE_FIXED

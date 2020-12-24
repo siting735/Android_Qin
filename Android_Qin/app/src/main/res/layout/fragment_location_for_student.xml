@@ -9,10 +9,25 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+        <Toolbar
+            android:titleTextColor="@color/white"
+            android:background="@color/xui_config_color_titlebar"
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="0dp">
+            <TextView
+                android:layout_gravity="center"
+                android:text="打卡"
+                android:textSize="20sp"
+                android:textColor="@color/white"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+        </Toolbar>
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/location_swipe_for_student"
             android:layout_width="match_parent"
-            android:layout_height="90dp">
+            android:layout_weight="1"
+            android:layout_height="0dp">
             <LinearLayout
                 android:orientation="vertical"
                 android:layout_width="match_parent"
@@ -37,8 +52,9 @@
             android:layout_marginTop="20dp"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
+            android:layout_weight="5"
             android:layout_width="match_parent"
-            android:layout_height="300dp">
+            android:layout_height="0dp">
         </com.amap.api.maps2d.MapView>
         <com.xuexiang.xui.widget.button.shadowbutton.ShadowButton
             android:id="@+id/sign_btn_for_student"

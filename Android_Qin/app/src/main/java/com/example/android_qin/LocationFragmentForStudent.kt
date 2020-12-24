@@ -122,7 +122,7 @@ class LocationFragmentForStudent : Fragment() {
             try {
                 connection = urlForGetActivityInfo.openConnection() as HttpURLConnection
                 connection?.requestMethod = "GET"
-                response = getDataFromConnection(connection)
+                response = ConnectionUtil.getDataFromConnection(connection)
                 connection?.disconnect()
             } catch (e: Exception) {
                 var loginFailDialog = buildConnectFailDialog()
@@ -136,6 +136,15 @@ class LocationFragmentForStudent : Fragment() {
             }
             dealWithResponseForRefreshActivity(response)
         }.start()
+    }
+    private fun buildConnectFailDialog(): androidx.appcompat.app.AlertDialog.Builder {
+        val loginFailDialog = androidx.appcompat.app.AlertDialog.Builder(requireContext())
+        loginFailDialog.setTitle("提示信息")
+        loginFailDialog.setMessage("连接服务器失败")
+        loginFailDialog.setPositiveButton("确定") {
+                dialog, id ->{}
+        }
+        return loginFailDialog
     }
     private fun dealWithResponseForRefreshActivity(response: StringBuilder?){
         val jsonString = response.toString()
@@ -152,27 +161,6 @@ class LocationFragmentForStudent : Fragment() {
                 activityTitleTextView?.setLeftString("当前活动：$activityTitle")
             }
         }
-
-    }
-    private fun buildConnectFailDialog(): androidx.appcompat.app.AlertDialog.Builder {
-        val loginFailDialog = androidx.appcompat.app.AlertDialog.Builder(this.requireContext())
-        loginFailDialog.setTitle("提示信息")
-        loginFailDialog.setMessage("连接服务器失败")
-        loginFailDialog.setPositiveButton("确定") {
-                dialog, id ->{}
-        }
-        return loginFailDialog
-    }
-    private fun getDataFromConnection(connection: HttpURLConnection): StringBuilder {
-        val inputStream = connection?.inputStream
-        val reader = inputStream?.bufferedReader()
-        val response = StringBuilder()
-        while (true) {
-            val line = reader?.readLine() ?: break
-            response.append(line)
-        }
-        reader?.close()
-        return response
     }
     private fun configSignBtn(){
         val signBtn= view?.findViewById<Button>(R.id.sign_btn_for_student)
@@ -195,7 +183,7 @@ class LocationFragmentForStudent : Fragment() {
             try {
                 connection = urlForGetSignData.openConnection() as HttpURLConnection
                 connection?.requestMethod = "GET"
-                response = getDataFromConnection(connection)
+                response = ConnectionUtil.getDataFromConnection(connection)
                 connection?.disconnect()
             } catch (e: Exception) {
                 Log.e("error in sign",e.toString())

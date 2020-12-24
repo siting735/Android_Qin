@@ -5,47 +5,51 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".LocationFragmentForTeacher">
-
-    <!-- TODO: Update blank fragment layout -->
-    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        android:id="@+id/location_swipe_for_teacher"
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <LinearLayout
-            android:orientation="vertical"
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/location_swipe_for_teacher"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-            <com.xuexiang.xui.widget.textview.supertextview.SuperTextView
+            android:layout_height="90dp">
+            <LinearLayout
+                android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:layout_marginTop="10dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                app:sDividerLineType="both"
-                app:sLeftTextSize="25sp"
-                app:sLeftTextIsBold="true"
-                app:sLeftTextString="当前活动：无" />
-            <com.amap.api.maps2d.MapView
-                android:id="@+id/map_for_teacher"
-                android:layout_marginTop="20dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:layout_width="match_parent"
-                android:layout_weight="5"
-                android:layout_height="0dp">
-            </com.amap.api.maps2d.MapView>
-            <com.xuexiang.xui.widget.button.shadowbutton.ShadowButton
-                android:id="@+id/sign_btn_for_teacher"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:layout_margin="20dp"
-                android:layout_gravity="center"
-                android:background="@drawable/round_button"
-                app:sb_shape_type="round"
-                app:sb_radius="6dp"/>
-
-        </LinearLayout>
-    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+                android:layout_height="match_parent">
+                <com.xuexiang.xui.widget.textview.supertextview.SuperTextView
+                    android:id="@+id/activity_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    app:sDividerLineType="both"
+                    app:sLeftTextSize="25sp"
+                    app:sLeftTextIsBold="true"
+                    app:sLeftMaxEms="30"
+                    app:sLeftTextString="当前活动：" />
+            </LinearLayout>
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+        <com.amap.api.maps2d.MapView
+            android:id="@+id/map_for_teacher"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="300dp">
+        </com.amap.api.maps2d.MapView>
+        <com.xuexiang.xui.widget.button.shadowbutton.ShadowButton
+            android:id="@+id/sign_btn_for_teacher"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginBottom="20dp"
+            android:layout_gravity="center"
+            android:background="@drawable/round_button"
+            app:sb_shape_type="round"
+            app:sb_radius="6dp"/>
+    </LinearLayout>
 
 </FrameLayout>

@@ -43,7 +43,7 @@ class SignDataForStudent : Fragment() {
             try {
                 connection = urlForGetSignData.openConnection() as HttpURLConnection
                 connection?.requestMethod = "GET"
-                response = getDataFromConnection(connection)
+                response = ConnectionUtil.getDataFromConnection(connection)
                 connection?.disconnect()
             } catch (e: Exception) {
                 Log.e("error in sign",e.toString())
@@ -98,17 +98,6 @@ class SignDataForStudent : Fragment() {
                 dialog, id ->{}
         }
         return loginFailDialog
-    }
-    private fun getDataFromConnection(connection: HttpURLConnection): StringBuilder {
-        val inputStream = connection?.inputStream
-        val reader = inputStream?.bufferedReader()
-        val response = StringBuilder()
-        while (true) {
-            val line = reader?.readLine() ?: break
-            response.append(line)
-        }
-        reader?.close()
-        return response
     }
     private fun configSwipeRefresh(){
         val swipe= view?.findViewById<androidx.swiperefreshlayout.widget.SwipeRefreshLayout>(R.id.sign_data_swipe)

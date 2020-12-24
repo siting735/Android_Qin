@@ -19,10 +19,19 @@
         android:id="@+id/mineForTeacher"
         android:name="com.example.android_qin.MineForTeacher"
         android:label="fragment_mine_for_teacher"
-        tools:layout="@layout/fragment_mine_for_teacher" />
+        tools:layout="@layout/fragment_mine_for_teacher" >
+        <action
+            android:id="@+id/action_mineForTeacher_to_mainActivity"
+            app:destination="@id/mainActivity" />
+    </fragment>
     <fragment
         android:id="@+id/signDataForEachClass"
         android:name="com.example.android_qin.SignDataForEachClass"
         android:label="fragment_sign_data_for_each_class"
         tools:layout="@layout/fragment_sign_data_for_each_class" />
+    <activity
+        android:id="@+id/mainActivity"
+        android:name="com.example.android_qin.MainActivity"
+        android:label="activity_main"
+        tools:layout="@layout/activity_main" />
 </navigation>

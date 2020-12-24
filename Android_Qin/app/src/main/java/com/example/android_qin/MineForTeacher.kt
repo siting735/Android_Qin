@@ -1,10 +1,14 @@
 package com.example.android_qin
 
+import android.app.AlertDialog
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.navigation.fragment.NavHostFragment
+import com.xuexiang.xui.widget.textview.supertextview.SuperTextView
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -37,6 +41,27 @@ class MineForTeacher : Fragment() {
         return inflater.inflate(R.layout.fragment_mine_for_teacher, container, false)
     }
 
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        val logOutBtn = view?.findViewById<SuperTextView>(R.id.log_out_btn_for_teacher)
+        logOutBtn?.setOnClickListener {
+            logOutConfirm()
+        }
+    }
+    private fun logOutConfirm() {
+        val navHostFragment = activity?.supportFragmentManager?.findFragmentById(R.id.nav_host_for_teacher) as NavHostFragment
+        val navController = navHostFragment.navController
+        var dialog = AlertDialog.Builder(context)
+        dialog.setTitle("提示")
+        dialog.setMessage("确认退出？")
+        dialog.setPositiveButton("是的") {
+                dialog, id -> navController.navigate(R.id.action_mineForTeacher_to_mainActivity)
+        }
+        dialog.setNegativeButton("取消") {
+                dialog, id ->{}
+        }
+        dialog.show()
+    }
     companion object {
         /**
          * Use this factory method to create a new instance of

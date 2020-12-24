@@ -115,7 +115,7 @@ class MainActivity : AppCompatActivity() {
             try {
                 connection = urlForLogin.openConnection() as HttpURLConnection
                 connection?.requestMethod = "GET"
-                response = getDataFromConnection(connection)
+                response = ConnectionUtil.getDataFromConnection(connection)
                 connection?.disconnect()
             } catch (e: Exception) {
                 var loginFailDialog = buildConnectFailDialog()
@@ -161,17 +161,6 @@ class MainActivity : AppCompatActivity() {
         return loginFailDialog
     }
 
-    private fun getDataFromConnection(connection: HttpURLConnection): StringBuilder {
-        val inputStream = connection?.inputStream
-        val reader = inputStream?.bufferedReader()
-        val response = StringBuilder()
-        while (true) {
-            val line = reader?.readLine() ?: break
-            response.append(line)
-        }
-        reader?.close()
-        return response
-    }
 
     private fun configLoadingProgress() {
         var loadingDialogBuilder = AlertDialog.Builder(this)

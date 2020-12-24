@@ -18,7 +18,6 @@ private const val ARG_PARAM2 = "param2"
  * create an instance of this fragment.
  */
 class SignDataForEachClass : Fragment() {
-    val ip = getString(R.string.ip)
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         getStudentsSignData()

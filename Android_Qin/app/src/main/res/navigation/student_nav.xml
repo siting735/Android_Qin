@@ -19,5 +19,14 @@
         android:id="@+id/mineForStudent"
         android:name="com.example.android_qin.MineForStudent"
         android:label="fragment_mine_for_student"
-        tools:layout="@layout/fragment_mine_for_student" />
+        tools:layout="@layout/fragment_mine_for_student" >
+        <action
+            android:id="@+id/action_mineForStudent_to_mainActivity2"
+            app:destination="@id/mainActivity2" />
+    </fragment>
+    <activity
+        android:id="@+id/mainActivity2"
+        android:name="com.example.android_qin.MainActivity"
+        android:label="activity_main"
+        tools:layout="@layout/activity_main" />
 </navigation>

@@ -99,15 +99,16 @@ class MainActivity : AppCompatActivity() {
 
     var loadingDialog: AlertDialog? = null
     private fun login() {
+        val ip = getString(R.string.ip)
         Thread {
             val userName = findViewById<ClearEditText>(R.id.user_name)
             val password = findViewById<PasswordEditText>(R.id.password)
             var urlForLogin: URL? = null
             configLoadingProgress()
             urlForLogin = if(identity == STUDENT){
-                URL("http://10.60.0.13:8080/student/login?username=" + userName.text + "&password=" + password.text)
+                URL("http://$ip:8080/student/login?username=" + userName.text + "&password=" + password.text)
             } else{
-                URL("http://10.60.0.13:8080/teacher/login?username=" + userName.text + "&password=" + password.text)
+                URL("http://$ip:8080/teacher/login?username=" + userName.text + "&password=" + password.text)
             }
             var connection: HttpURLConnection? = null
             var response: StringBuilder? = null
@@ -182,7 +183,6 @@ class MainActivity : AppCompatActivity() {
             loadingDialog!!.show()
         }
     }
-
     private fun grantPermission() {
         if (ContextCompat.checkSelfPermission(
                 this,
@@ -209,7 +209,6 @@ class MainActivity : AppCompatActivity() {
             Toast.makeText(this, "already get permission", Toast.LENGTH_SHORT).show()
         }
     }
-
     companion object {
         const val STUDENT = 0
         const val TEACHER = 1

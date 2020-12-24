@@ -18,6 +18,16 @@ private const val ARG_PARAM2 = "param2"
  * create an instance of this fragment.
  */
 class SignDataForEachClass : Fragment() {
+    val ip = getString(R.string.ip)
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        getStudentsSignData()
+    }
+
+    private fun getStudentsSignData() {
+        val classId = arguments?.get("classId").toString()
+        Log.i("classId in each class",classId)
+    }
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
@@ -48,21 +58,11 @@ class SignDataForEachClass : Fragment() {
         // TODO: Rename and change types and number of parameters
         @JvmStatic
         fun newInstance(param1: String, param2: String) =
-                SignDataForEachClass().apply {
-                    arguments = Bundle().apply {
-                        putString(ARG_PARAM1, param1)
-                        putString(ARG_PARAM2, param2)
-                    }
+            SignDataForEachClass().apply {
+                arguments = Bundle().apply {
+                    putString(ARG_PARAM1, param1)
+                    putString(ARG_PARAM2, param2)
                 }
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        getStudentsSignData()
-    }
-
-    private fun getStudentsSignData() {
-        val classId = arguments?.get("classId").toString()
-        Log.i("classId in each class",classId)
+            }
     }
 }

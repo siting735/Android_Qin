@@ -38,49 +38,10 @@ private const val ARG_PARAM2 = "param2"
  * create an instance of this fragment.
  */
 class LocationFragmentForStudent : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_location_for_student, container, false)
-    }
-
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment LocationFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-                LocationFragmentForStudent().apply {
-                    arguments = Bundle().apply {
-                        putString(ARG_PARAM1, param1)
-                        putString(ARG_PARAM2, param2)
-                    }
-                }
-    }
-
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         var mMapView = view?.findViewById<MapView>(R.id.map_for_student)
-        //在activity执行onCreate时执行mMapView.onCreate(savedInstanceState)，创建地图
-        var aMap: AMap?=null
+        var aMap: AMap?=null  //创建地图
         if (aMap == null) {
             aMap = mMapView?.map
         }
@@ -96,21 +57,10 @@ class LocationFragmentForStudent : Fragment() {
         configSignBtn()
         configSwipeRefresh()
     }
-
-    override fun onStart() {
-        super.onStart()
-        refreshActivity()
-    }
-
-    override fun onResume() {
-        super.onResume()
-    }
     //声明AMapLocationClient类对象
     var mLocationClient: AMapLocationClient? = null
-
     //声明定位回调监听器
     var mLocationListener: AMapLocationListener? = null
-
     //声明AMapLocationClientOption对象
     var mLocationOption: AMapLocationClientOption? = null
     private val locationInfo = ArrayMap<String,String>()
@@ -127,7 +77,7 @@ class LocationFragmentForStudent : Fragment() {
         //设置定位模式为AMapLocationMode.Device_Sensors，仅设备模式。
         mLocationOption!!.locationMode = AMapLocationClientOption.AMapLocationMode.Hight_Accuracy
         //设置定位间隔,单位毫秒,默认为2000ms，最低1000ms。
-        mLocationOption!!.interval = 1000
+        mLocationOption!!.interval = 5000
         //给定位客户端对象设置定位参数
         mLocationClient!!.setLocationOption(mLocationOption)
         mLocationOption!!.isMockEnable = true
@@ -162,9 +112,10 @@ class LocationFragmentForStudent : Fragment() {
         }
     }
     private fun refreshActivity(){
+        val ip = getString(R.string.ip)
         val classId = arguments?.get("classId").toString()
         Thread{
-            val url = "http://10.60.0.13:8080/activity/activityInProgress?classId=$classId"
+            val url = "http://$ip:8080/activity/activityInProgress?classId=$classId"
             val urlForGetActivityInfo = URL(url)
             var connection: HttpURLConnection? = null
             var response: StringBuilder? = null
@@ -177,8 +128,9 @@ class LocationFragmentForStudent : Fragment() {
                 var loginFailDialog = buildConnectFailDialog()
                 activity?.runOnUiThread {
                     loginFailDialog.show()
-                    Log.i("fail dialog reason",e.toString())
-                    Log.i("fail dialog","i am location")
+                    Log.i("fail dialog reason in location",e.toString())
+                    Log.i("ip in location",ip.toString())
+                    Log.i("ip res id",getString(R.string.ip))
                 }
                 Thread.currentThread().join()
             }
@@ -229,13 +181,14 @@ class LocationFragmentForStudent : Fragment() {
         }
     }
     private fun sign(){
+        val ip = getString(R.string.ip)
         val studentId = arguments?.get("studentId").toString()
         val deviceId = getDeviceId()
         Log.i("deviceId",deviceId)
         Thread{
             val studentLongitude = locationInfo["studentLongitude"]
             val studentLatitude = locationInfo["studentLatitude"]
-            val url = "http://10.60.0.13:8080/sign/studentSign?studentId=$studentId&studentLongitude=$studentLongitude&studentLatitude=$studentLatitude&deviceId=$deviceId"
+            val url = "http://$ip:8080/sign/studentSign?studentId=$studentId&studentLongitude=$studentLongitude&studentLatitude=$studentLatitude&deviceId=$deviceId"
             val urlForGetSignData = URL(url)
             var connection: HttpURLConnection? = null
             var response: StringBuilder? = null
@@ -300,5 +253,50 @@ class LocationFragmentForStudent : Fragment() {
             Toast.makeText(context, "not deleted.", Toast.LENGTH_LONG).show()
         }
         dialog.show()
+    }
+    override fun onStart() {
+        super.onStart()
+        refreshActivity()
+    }
+
+    override fun onResume() {
+        super.onResume()
+    }
+    // TODO: Rename and change types of parameters
+    private var param1: String? = null
+    private var param2: String? = null
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        arguments?.let {
+            param1 = it.getString(ARG_PARAM1)
+            param2 = it.getString(ARG_PARAM2)
+        }
+    }
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
+                              savedInstanceState: Bundle?): View? {
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_location_for_student, container, false)
+    }
+
+    companion object {
+        /**
+         * Use this factory method to create a new instance of
+         * this fragment using the provided parameters.
+         *
+         * @param param1 Parameter 1.
+         * @param param2 Parameter 2.
+         * @return A new instance of fragment LocationFragment.
+         */
+        // TODO: Rename and change types and number of parameters
+        @JvmStatic
+        fun newInstance(param1: String, param2: String) =
+            LocationFragmentForStudent().apply {
+                arguments = Bundle().apply {
+                    putString(ARG_PARAM1, param1)
+                    putString(ARG_PARAM2, param2)
+                }
+            }
     }
 }

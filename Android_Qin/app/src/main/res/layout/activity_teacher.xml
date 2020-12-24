@@ -25,6 +25,7 @@
         android:id="@+id/teacher_tab_bar"
         app:ts_icon_position="top"
         app:ts_indicator_height="4dp"
+        android:layout_marginTop="20dp"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"/>

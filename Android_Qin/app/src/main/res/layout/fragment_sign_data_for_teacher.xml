@@ -1,44 +1,78 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".SignDataForTeacher">
 
-    <!-- TODO: Update blank fragment layout -->
-    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        android:id="@+id/sign_data_swipe_for_teacher"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <LinearLayout
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <Toolbar
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-            <com.xuexiang.xui.widget.textview.supertextview.SuperTextView
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:background="@color/xui_config_color_titlebar"
+            android:titleTextColor="@color/white">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="统计"
+                android:textColor="@color/white"
+                android:textSize="20sp" />
+        </Toolbar>
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="9">
+
+            <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+                android:id="@+id/sign_data_swipe_for_teacher"
                 android:layout_width="match_parent"
-                android:layout_height="70dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginRight="10dp"
-                app:sLeftTextSize="25sp"
-                app:sLeftTextString="班级列表："
-                app:sLeftTextIsBold="true"
-                app:sDividerLineType="both" />
-            <androidx.core.widget.NestedScrollView
-                android:layout_width="match_parent"
-                android:layout_height="480dp"
-                android:scrollbars="vertical"
-                android:fillViewport="true">
+                android:layout_height="0dp"
+                android:layout_weight="2">
+
                 <LinearLayout
-                    android:id="@+id/class_list"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical">
-                </LinearLayout>
-            </androidx.core.widget.NestedScrollView>
-        </LinearLayout>
 
-    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+                    <com.xuexiang.xui.widget.textview.supertextview.SuperTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="70dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginRight="10dp"
+                        app:sDividerLineType="both"
+                        app:sLeftTextIsBold="true"
+                        app:sLeftTextSize="25sp"
+                        app:sLeftTextString="班级列表：" />
+
+                    <androidx.core.widget.NestedScrollView
+                        android:layout_width="match_parent"
+                        android:layout_weight="4"
+                        android:layout_height="0dp"
+                        android:fillViewport="true"
+                        android:scrollbars="vertical">
+
+                        <LinearLayout
+                            android:id="@+id/class_list"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical"></LinearLayout>
+                    </androidx.core.widget.NestedScrollView>
+                </LinearLayout>
+
+            </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+        </LinearLayout>
+    </LinearLayout>
+
 
 </FrameLayout>

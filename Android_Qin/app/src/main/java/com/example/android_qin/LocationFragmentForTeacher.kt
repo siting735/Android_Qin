@@ -1,5 +1,6 @@
 package com.example.android_qin
 
+import android.app.AlertDialog
 import android.os.Bundle
 import android.util.ArrayMap
 import android.util.Log
@@ -9,12 +10,15 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.Toast
+import androidx.navigation.fragment.NavHostFragment
 import com.amap.api.location.AMapLocationClient
 import com.amap.api.location.AMapLocationClientOption
 import com.amap.api.location.AMapLocationListener
 import com.amap.api.maps2d.AMap
 import com.amap.api.maps2d.MapView
 import com.amap.api.maps2d.model.MyLocationStyle
+import com.xuexiang.xui.widget.edittext.ClearEditText
+import com.xuexiang.xui.widget.edittext.PasswordEditText
 import com.xuexiang.xui.widget.textview.supertextview.SuperTextView
 import org.json.JSONObject
 import java.lang.Exception
@@ -140,6 +144,7 @@ class LocationFragmentForTeacher : Fragment() {
         val activityTitleTextView = view?.findViewById<SuperTextView>(R.id.activity_title)
         if(activityTitle == ""){
             activity?.runOnUiThread {
+                currentClassId = ""
                 activityTitleTextView?.setLeftString("当前活动：无")
             }
         }
@@ -160,10 +165,72 @@ class LocationFragmentForTeacher : Fragment() {
     private fun configSignBtn(){
         val signBtn= view?.findViewById<Button>(R.id.sign_btn_for_teacher)
         signBtn?.setOnClickListener {
-            Log.i("btn","sign for teacher")
+            if(currentClassId == ""){
+                launchSignActivityConfirm()
+            }
+            else{
+                endSignActivityConfirm()
+            }
+            Log.i("sign in teacher","i am in")
         }
     }
+    private fun launchSignActivityConfirm(){
+        var dialog = AlertDialog.Builder(context)
+        dialog.setTitle("提示")
+        dialog.setMessage("确认发起活动？")
+        dialog.setPositiveButton("是的") {
+                dialog, id -> launchActivity()
+        }
+        dialog.setNegativeButton("取消") {
+                dialog, id ->{}
+        }
+        dialog.show()
+    }
+    private fun endSignActivityConfirm(){
+        var dialog = AlertDialog.Builder(context)
+        dialog.setTitle("提示")
+        dialog.setMessage("确认结束当前活动？")
+        dialog.setPositiveButton("是的") {
+                dialog, id -> endActivity()
+        }
+        dialog.setNegativeButton("取消") {
+                dialog, id ->{}
+        }
+        dialog.show()
+    }
+    private fun launchActivity(){
+        val ip = getString(R.string.ip)
+        Thread {
+            var urlForLogin: URL? = null
+            urlForLogin = URL("http://$ip:8080/activity/launchActivity?")
+            var connection: HttpURLConnection? = null
+            var response: StringBuilder? = null
+            try {
+                connection = urlForLogin.openConnection() as HttpURLConnection
+                connection?.requestMethod = "GET"
+                response = ConnectionUtil.getDataFromConnection(connection)
+                connection?.disconnect()
+            } catch (e: Exception) {
+                var loginFailDialog = buildConnectFailDialog()
+                activity?.runOnUiThread {
+                    loginFailDialog.show()
+                    Log.e("error in location", e.toString())
+                    Log.i("fail dialog", "i am main")
+                }
+                Thread.currentThread().join()
+            }
+            dealWithResponseForLaunchActivity(response)
+        }.start()
+    }
+    private fun endActivity(){
 
+    }
+    private fun dealWithResponseForLaunchActivity(response:StringBuilder?){
+
+    }
+    private fun dealWithResponseForEndActivity(response:StringBuilder?){
+
+    }
     override fun onStart() {
         super.onStart()
         refreshActivity()

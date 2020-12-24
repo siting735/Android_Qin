@@ -21,6 +21,35 @@ private const val ARG_PARAM2 = "param2"
  * create an instance of this fragment.
  */
 class MineForTeacher : Fragment() {
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        configLogOutButton()
+    }
+
+    private fun configLogOutButton() {
+        val logOutBtn = view?.findViewById<SuperTextView>(R.id.log_out_btn_for_teacher)
+        logOutBtn?.setOnClickListener {
+            logOutConfirm()
+        }
+    }
+
+    private fun logOutConfirm() {
+        val navHostFragment =
+            activity?.supportFragmentManager?.findFragmentById(R.id.nav_host_for_teacher) as NavHostFragment
+        val navController = navHostFragment.navController
+        var dialog = AlertDialog.Builder(context)
+        dialog.setTitle("提示")
+        dialog.setMessage("确认退出？")
+        dialog.setPositiveButton("是的") { dialog, id ->
+            navController.navigate(R.id.action_mineForTeacher_to_mainActivity)
+        }
+        dialog.setNegativeButton("取消") { dialog, id ->
+            {}
+        }
+        dialog.show()
+    }
+
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
@@ -41,27 +70,6 @@ class MineForTeacher : Fragment() {
         return inflater.inflate(R.layout.fragment_mine_for_teacher, container, false)
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        val logOutBtn = view?.findViewById<SuperTextView>(R.id.log_out_btn_for_teacher)
-        logOutBtn?.setOnClickListener {
-            logOutConfirm()
-        }
-    }
-    private fun logOutConfirm() {
-        val navHostFragment = activity?.supportFragmentManager?.findFragmentById(R.id.nav_host_for_teacher) as NavHostFragment
-        val navController = navHostFragment.navController
-        var dialog = AlertDialog.Builder(context)
-        dialog.setTitle("提示")
-        dialog.setMessage("确认退出？")
-        dialog.setPositiveButton("是的") {
-                dialog, id -> navController.navigate(R.id.action_mineForTeacher_to_mainActivity)
-        }
-        dialog.setNegativeButton("取消") {
-                dialog, id ->{}
-        }
-        dialog.show()
-    }
     companion object {
         /**
          * Use this factory method to create a new instance of

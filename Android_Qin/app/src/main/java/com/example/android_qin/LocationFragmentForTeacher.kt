@@ -32,7 +32,6 @@ private const val ARG_PARAM2 = "param2"
  * create an instance of this fragment.
  */
 class LocationFragmentForTeacher : Fragment() {
-
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         var mMapView = view?.findViewById<MapView>(R.id.map_for_teacher)
@@ -101,9 +100,9 @@ class LocationFragmentForTeacher : Fragment() {
     }
     private fun refreshActivity(){
         val ip = getString(R.string.ip)
-        val classId = arguments?.get("classId").toString()
+        val teacherId = arguments?.get("teacherId").toString()
         Thread{
-            val url = "http://$ip:8080/activity/activityInProgress?classId=$classId"
+            val url = "http://$ip:8080/activity/searchActivityInProcess?teacherId=$teacherId"
             val urlForGetActivityInfo = URL(url)
             var connection: HttpURLConnection? = null
             var response: StringBuilder? = null
@@ -145,6 +144,7 @@ class LocationFragmentForTeacher : Fragment() {
             }
         }
         else{
+            currentClassId = responseJson["classId"].toString()
             activity?.runOnUiThread {
                 activityTitleTextView?.setLeftString("当前活动：$activityTitle")
             }
@@ -179,7 +179,7 @@ class LocationFragmentForTeacher : Fragment() {
             param2 = it.getString(ARG_PARAM2)
         }
     }
-
+    var currentClassId = ""
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?

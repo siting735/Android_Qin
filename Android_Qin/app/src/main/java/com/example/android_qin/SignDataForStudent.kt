@@ -33,10 +33,11 @@ class SignDataForStudent : Fragment() {
         getSignDataForStudent()
         configSwipeRefresh()
     }
-    private fun getSignDataForStudent(){
-        val ip =getString(R.string.ip)
+
+    private fun getSignDataForStudent() {
+        val ip = getString(R.string.ip)
         val studentId = arguments?.get("studentId").toString()
-        Thread{
+        Thread {
             val url = "http://$ip:8080/student/studentSignMessage?studentId=$studentId"
             val urlForGetSignData = URL(url)
             var connection: HttpURLConnection? = null
@@ -47,7 +48,7 @@ class SignDataForStudent : Fragment() {
                 response = ConnectionUtil.getDataFromConnection(connection)
                 connection?.disconnect()
             } catch (e: Exception) {
-                Log.e("error in sign",e.toString())
+                Log.e("error in sign", e.toString())
                 var loginFailDialog = buildConnectFailDialog()
                 activity?.runOnUiThread {
                     loginFailDialog.show()
@@ -58,30 +59,33 @@ class SignDataForStudent : Fragment() {
         }.start()
 
     }
-    private fun dealWithResponse(response: StringBuilder?){
+
+    private fun dealWithResponse(response: StringBuilder?) {
         val jsonString = response.toString()
         val responseJson = JSONObject(jsonString)
         val signDataList = responseJson["activityInfo"] as JSONArray
         updateSignRiro(responseJson)
-        for(index in 0 until signDataList.length()){
+        for (index in 0 until signDataList.length()) {
             addSignDataToLayout(signDataList[index] as JSONObject)
         }
     }
-    private fun updateSignRiro(responseJson: JSONObject){
+
+    private fun updateSignRiro(responseJson: JSONObject) {
         val signRito = responseJson["signRito"].toString()
         val signRitoTextView = view?.findViewById<SuperTextView>(R.id.sign_rito)
         activity?.runOnUiThread {
             signRitoTextView?.setCenterBottomString("$signRito%")
         }
     }
+
     @SuppressLint("ResourceAsColor")
-    private fun addSignDataToLayout(signData: JSONObject?){
-        val signDataListLayout= view?.findViewById<LinearLayout>(R.id.sign_data_list)
+    private fun addSignDataToLayout(signData: JSONObject?) {
+        val signDataListLayout = view?.findViewById<LinearLayout>(R.id.sign_data_list)
         val signDataView = SuperTextView(context)
         val activityTitle = signData?.get("activityTitle")?.toString()
         val signState = signData?.get("signState")?.toString()
         signDataView.setLeftBottomString(activityTitle)
-        when(signState){
+        when (signState) {
             "1" -> {
                 signDataView.setRightString("已打卡")
                 signDataView.setRightTextColor(R.color.blue)
@@ -91,44 +95,47 @@ class SignDataForStudent : Fragment() {
                 signDataView.setRightTextColor(R.color.blue)
             }
         }
-        var layoutParams = LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, dip2px(100f))
-        layoutParams.setMargins(dip2px(10f),dip2px(10f),dip2px(10f),0)
+        var layoutParams =
+            LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, dip2px(100f))
+        layoutParams.setMargins(dip2px(10f), dip2px(10f), dip2px(10f), 0)
         signDataView.layoutParams = layoutParams
         activity?.runOnUiThread {
             signDataListLayout?.addView(signDataView)
         }
     }
+
     private fun buildConnectFailDialog(): AlertDialog.Builder {
         val loginFailDialog = AlertDialog.Builder(this.requireContext())
         loginFailDialog.setTitle("提示信息")
         loginFailDialog.setMessage("连接服务器失败")
-        loginFailDialog.setPositiveButton("确定") {
-                dialog, id ->{}
+        loginFailDialog.setPositiveButton("确定") { dialog, id ->
+            {}
         }
         return loginFailDialog
     }
-    private fun configSwipeRefresh(){
-        val swipe= view?.findViewById<androidx.swiperefreshlayout.widget.SwipeRefreshLayout>(R.id.sign_data_swipe)
+
+    private fun configSwipeRefresh() {
+        val swipe =
+            view?.findViewById<androidx.swiperefreshlayout.widget.SwipeRefreshLayout>(R.id.sign_data_swipe)
         swipe?.setOnRefreshListener {
             removeOriginSignDatas()
             getSignDataForStudent()
-            swipe.isRefreshing=false
+            swipe.isRefreshing = false
         }
     }
-    private fun removeOriginSignDatas(){
-        val signDataList= view?.findViewById<LinearLayout>(R.id.sign_data_list)
+
+    private fun removeOriginSignDatas() {
+        val signDataList = view?.findViewById<LinearLayout>(R.id.sign_data_list)
         activity?.runOnUiThread {
             signDataList?.removeAllViews()
         }
     }
-    private fun dip2px(dpValue:Float): Int {
+
+    private fun dip2px(dpValue: Float): Int {
         val scale = context?.resources?.displayMetrics?.density;
         return (dpValue * scale!! + 0.5f).toInt()
     }
-    private fun px2dip(pxValue:Float):Int{
-        val scale = context?.resources?.displayMetrics?.density;
-        return (pxValue / scale!! + 0.5f).toInt()
-    }
+
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null

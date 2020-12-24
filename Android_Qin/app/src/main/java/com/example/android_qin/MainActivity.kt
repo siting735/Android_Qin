@@ -202,6 +202,4 @@ class MainActivity : AppCompatActivity() {
         const val STUDENT = 0
         const val TEACHER = 1
     }
-    private val teacher = 1
-    private val student = 0
 }

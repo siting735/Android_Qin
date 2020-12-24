@@ -28,16 +28,15 @@
         </Toolbar>
 
         <LinearLayout
-            android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="9">
+            android:layout_weight="9"
+            android:orientation="vertical">
 
             <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
                 android:id="@+id/sign_data_swipe_for_teacher"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="2">
+                android:layout_height="80dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -53,24 +52,24 @@
                         app:sDividerLineType="both"
                         app:sLeftTextIsBold="true"
                         app:sLeftTextSize="25sp"
-                        app:sLeftTextString="班级列表：" />
-
-                    <androidx.core.widget.NestedScrollView
-                        android:layout_width="match_parent"
-                        android:layout_weight="4"
-                        android:layout_height="0dp"
-                        android:fillViewport="true"
-                        android:scrollbars="vertical">
-
-                        <LinearLayout
-                            android:id="@+id/class_list"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:orientation="vertical"></LinearLayout>
-                    </androidx.core.widget.NestedScrollView>
+                        app:sLeftTextString="班级列表" />
                 </LinearLayout>
 
             </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+            <androidx.core.widget.NestedScrollView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="4"
+                android:fillViewport="true"
+                android:scrollbars="vertical">
+
+                <LinearLayout
+                    android:id="@+id/class_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"></LinearLayout>
+            </androidx.core.widget.NestedScrollView>
         </LinearLayout>
     </LinearLayout>
 

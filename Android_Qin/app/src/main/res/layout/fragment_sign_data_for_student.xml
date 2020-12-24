@@ -5,41 +5,73 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".SignDataForStudent">
-    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        android:id="@+id/sign_data_swipe"
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <Toolbar
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:background="@color/xui_config_color_titlebar"
+            android:titleTextColor="@color/white">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="统计"
+                android:textColor="@color/white"
+                android:textSize="20sp" />
+        </Toolbar>
+
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="9"
             android:orientation="vertical">
 
-            <com.xuexiang.xui.widget.textview.supertextview.SuperTextView
-                android:id="@+id/sign_rito"
+            <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+                android:id="@+id/sign_data_swipe"
                 android:layout_width="match_parent"
-                android:layout_height="150dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginRight="10dp"
-                app:sCenterBottomTextIsBold="true"
-                app:sCenterBottomTextSize="60dp"
-                app:sCenterTextString="考勤率为:"
-                app:sDividerLineType="both" />
-           <androidx.core.widget.NestedScrollView
+                android:layout_height="0dp"
+                android:layout_weight="2">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <com.xuexiang.xui.widget.textview.supertextview.SuperTextView
+                        android:id="@+id/sign_rito"
+                        android:layout_width="match_parent"
+                        android:layout_height="150dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginRight="10dp"
+                        app:sCenterBottomTextIsBold="true"
+                        app:sCenterBottomTextSize="60dp"
+                        app:sCenterTextString="考勤率为:"
+                        app:sDividerLineType="both" />
+                </LinearLayout>
+            </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+            <androidx.core.widget.NestedScrollView
                 android:layout_width="match_parent"
-                android:layout_height="400dp"
-                android:scrollbars="vertical"
-                android:fillViewport="true">
+                android:layout_height="0dp"
+                android:layout_weight="4"
+                android:fillViewport="true"
+                android:scrollbars="vertical">
+
                 <LinearLayout
                     android:id="@+id/sign_data_list"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:orientation="vertical">
-                </LinearLayout>
+                    android:orientation="vertical"></LinearLayout>
             </androidx.core.widget.NestedScrollView>
         </LinearLayout>
-
-    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-
+    </LinearLayout>
 
 </FrameLayout>

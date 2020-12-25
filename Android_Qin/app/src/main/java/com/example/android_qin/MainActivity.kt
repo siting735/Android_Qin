@@ -25,7 +25,6 @@ import java.net.HttpURLConnection
 import java.net.URL
 
 class MainActivity : AppCompatActivity() {
-    var identity = 0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initUI()
@@ -35,18 +34,20 @@ class MainActivity : AppCompatActivity() {
         configLoginBtn()
         configIdentity()
     }
-    private fun initUI(){
+
+    private fun initUI() {
         XUI.init(this.application)
         XUI.debug(true)
     }
+
     private fun configIdentity() {
         val identityView = findViewById<MaterialSpinner>(R.id.identity)
         identityView.setItems("我是学生", "我是教师")
-        identityView.selectedIndex = STUDENT
+        identityView.selectedIndex = 0
         identityView.setOnItemSelectedListener { view, position, id, item ->
-            if (view.selectedIndex == STUDENT) {
+            if (view.selectedIndex == 0) {
                 identity = STUDENT
-            } else if (view.selectedIndex == TEACHER) {
+            } else if (view.selectedIndex == 1) {
                 identity = TEACHER
             }
         }
@@ -69,10 +70,10 @@ class MainActivity : AppCompatActivity() {
     private fun errorTip(loginState: Any) {
         loadingDialog?.cancel()
         when (loginState) {
-            3 -> runOnUiThread {
+            NO_USER -> runOnUiThread {
                 Toast.makeText(this, "用户名不存在", Toast.LENGTH_LONG).show()
             }
-            4 -> runOnUiThread {
+            WRONG_PASSWORD -> runOnUiThread {
                 Toast.makeText(this, "密码错误", Toast.LENGTH_LONG).show()
             }
             else -> runOnUiThread {
@@ -80,6 +81,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
+
     private fun toTeacherPage(loginInfo: JSONObject) {
         val intent = Intent(this, TeacherActivity::class.java).apply {}
         intent.putExtra("teacherId", loginInfo["teacherId"].toString())
@@ -97,32 +99,17 @@ class MainActivity : AppCompatActivity() {
         startActivity(intent)
     }
 
-    var loadingDialog: AlertDialog? = null
+    var loginFailDialog: AlertDialog.Builder? = null
     private fun login() {
-        val ip = getString(R.string.ip)
         Thread {
-            val userName = findViewById<ClearEditText>(R.id.user_name)
-            val password = findViewById<PasswordEditText>(R.id.password)
-            var urlForLogin: URL? = null
+            buildRequestForLogin()
             configLoadingProgress()
-            urlForLogin = if(identity == STUDENT){
-                URL("http://$ip:8080/student/login?username=" + userName.text + "&password=" + password.text)
-            } else{
-                URL("http://$ip:8080/teacher/login?username=" + userName.text + "&password=" + password.text)
-            }
-            var connection: HttpURLConnection? = null
-            var response: StringBuilder? = null
             try {
-                connection = urlForLogin.openConnection() as HttpURLConnection
-                connection?.requestMethod = "GET"
-                response = ConnectionUtil.getDataFromConnection(connection)
-                connection?.disconnect()
+                response = ConnectionUtil.getDataByUrl(urlForLogin)
             } catch (e: Exception) {
-                var loginFailDialog = buildConnectFailDialog()
+                buildConnectFailDialog()
                 runOnUiThread {
-                    loginFailDialog.show()
-                    Log.e("error in location", e.toString())
-                    Log.i("fail dialog", "i am main")
+                    loginFailDialog?.show()
                 }
                 Thread.currentThread().join()
             }
@@ -131,36 +118,32 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun dealWithResponse(response: StringBuilder?) {
-        val jsonString = response.toString()
-        val loginInfo = JSONObject(jsonString)
+        val loginInfo = JSONObject(response.toString())
         var loginState = loginInfo["loginState"]
         if (loginState is String) {
             loginState = loginState.toInt()
         }
-        Log.i("loginState", loginState.toString())
         when (loginState) {
-            1 -> {
-                //transport data
+            STUDENT -> {
                 toStudentPage(loginInfo)
             }
-            2 -> {
-                //transport data
+            TEACHER -> {
                 toTeacherPage(loginInfo)
             }
             else -> errorTip(loginState)
         }
     }
 
-    private fun buildConnectFailDialog(): AlertDialog.Builder {
-        val loginFailDialog = AlertDialog.Builder(this)
-        loginFailDialog.setTitle("提示信息")
-        loginFailDialog.setMessage("连接服务器失败")
-        loginFailDialog.setPositiveButton("确定") { dialog, id ->
-            loadingDialog?.cancel()
+    private fun buildConnectFailDialog() {
+        if (loginFailDialog == null) {
+            val loginFailDialog = AlertDialog.Builder(this)
+            loginFailDialog.setTitle("提示信息")
+            loginFailDialog.setMessage("连接服务器失败")
+            loginFailDialog.setPositiveButton("确定") { dialog, id ->
+                loadingDialog?.cancel()
+            }
         }
-        return loginFailDialog
     }
-
 
     private fun configLoadingProgress() {
         var loadingDialogBuilder = AlertDialog.Builder(this)
@@ -172,6 +155,7 @@ class MainActivity : AppCompatActivity() {
             loadingDialog!!.show()
         }
     }
+
     private fun grantPermission() {
         if (ContextCompat.checkSelfPermission(
                 this,
@@ -198,8 +182,35 @@ class MainActivity : AppCompatActivity() {
             Toast.makeText(this, "already get permission", Toast.LENGTH_SHORT).show()
         }
     }
+
+    private fun buildRequestForLogin() {
+        if (ip == null) {
+            ip = getString(R.string.ip)
+        }
+        if (userName == null || password == null) {
+            userName = findViewById(R.id.user_name)
+            password = findViewById(R.id.password)
+        }
+        urlForLogin = if (identity == STUDENT) {
+            URL("http://$ip:8080/student/login?username=" + userName?.text + "&password=" + password?.text)
+        } else {
+            URL("http://$ip:8080/teacher/login?username=" + userName?.text + "&password=" + password?.text)
+        }
+    }
+
+    var loadingDialog: AlertDialog? = null
+    var identity = STUDENT
+    var ip: String? = null
+    var userName: ClearEditText? = null
+    var password: PasswordEditText? = null
+    var urlForLogin: URL? = null
+    var connection: HttpURLConnection? = null
+    var response: StringBuilder? = null
+
     companion object {
-        const val STUDENT = 0
-        const val TEACHER = 1
+        const val STUDENT = 1
+        const val TEACHER = 2
+        const val NO_USER = 3
+        const val WRONG_PASSWORD = 4
     }
 }

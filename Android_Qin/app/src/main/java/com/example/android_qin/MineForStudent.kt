@@ -9,16 +9,6 @@ import android.view.ViewGroup
 import androidx.navigation.fragment.NavHostFragment
 import com.xuexiang.xui.widget.textview.supertextview.SuperTextView
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [MineForStudent.newInstance] factory method to
- * create an instance of this fragment.
- */
 class MineForStudent : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
@@ -36,7 +26,7 @@ class MineForStudent : Fragment() {
         var dialog = AlertDialog.Builder(context)
         dialog.setTitle("提示")
         dialog.setMessage("确认退出？")
-        dialog.setPositiveButton("是的") {
+        dialog.setPositiveButton("确定") {
                 dialog, id -> navController.navigate(R.id.action_mineForStudent_to_mainActivity2)
         }
         dialog.setNegativeButton("取消") {
@@ -44,16 +34,10 @@ class MineForStudent : Fragment() {
         }
         dialog.show()
     }
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
+        arguments?.let {}
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -62,22 +46,10 @@ class MineForStudent : Fragment() {
         return inflater.inflate(R.layout.fragment_mine_for_student, container, false)
     }
     companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment MineForStudent.
-         */
-        // TODO: Rename and change types and number of parameters
         @JvmStatic
         fun newInstance(param1: String, param2: String) =
                 MineForStudent().apply {
-                    arguments = Bundle().apply {
-                        putString(ARG_PARAM1, param1)
-                        putString(ARG_PARAM2, param2)
-                    }
+                    arguments = Bundle().apply {}
                 }
     }
 }

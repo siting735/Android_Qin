@@ -153,12 +153,14 @@ class LocationFragmentForStudent : Fragment() {
         val activityTitleTextView = view?.findViewById<SuperTextView>(R.id.activity_title)
         if(activityTitle == ""){
             activity?.runOnUiThread {
-                activityTitleTextView?.setLeftString("当前活动：无")
+                activityTitleTextView?.setLeftString("暂无活动")
+                activityTitleTextView?.setRightIcon(R.drawable.no_activity)
             }
         }
         else{
             activity?.runOnUiThread {
-                activityTitleTextView?.setLeftString("当前活动：$activityTitle")
+                activityTitleTextView?.setLeftString("$activityTitle")
+                activityTitleTextView?.setRightIcon(R.drawable.activity_running)
             }
         }
     }

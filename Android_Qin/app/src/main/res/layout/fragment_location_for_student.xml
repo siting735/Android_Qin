@@ -52,9 +52,10 @@
                         android:layout_weight="1"
                         app:sDividerLineType="both"
                         app:sLeftMaxEms="30"
+                        app:sRightIconRes="@drawable/activity_running"
                         app:sLeftTextIsBold="true"
                         app:sLeftTextSize="25sp"
-                        app:sLeftTextString="当前活动：" />
+                        app:sLeftTextString="" />
                 </LinearLayout>
             </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 

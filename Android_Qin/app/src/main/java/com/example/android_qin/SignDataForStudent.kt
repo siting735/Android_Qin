@@ -88,11 +88,9 @@ class SignDataForStudent : Fragment() {
         when (signState) {
             "1" -> {
                 signDataView.setRightString("已打卡")
-                signDataView.setRightTextColor(R.color.blue)
             }
-            "2" -> {
+            "0" -> {
                 signDataView.setRightString("未打卡")
-                signDataView.setRightTextColor(R.color.blue)
             }
         }
         var layoutParams =

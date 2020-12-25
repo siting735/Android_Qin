@@ -68,14 +68,17 @@ class LocationFragmentForStudent : Fragment() {
 
     private fun dealWithResponseForRefreshActivity(response: StringBuilder?) {
         buildDataForRefreshActivity()
-        if (activityTitle == "") {
+        if (activityTitle.toString() == "") {
             activity?.runOnUiThread {
+                Log.i("refresh","no activity")
                 activityTitleTextView?.setLeftString("暂无活动")
                 activityTitleTextView?.setRightIcon(R.drawable.no_activity)
             }
         } else {
+            Log.i("refresh","activity running")
             activity?.runOnUiThread {
-                activityTitleTextView?.setLeftString("$activityTitle")
+                activityTitleTextView?.setLeftString(activityTitle.toString())
+                Log.i("in refresh", activityTitle.toString())
                 activityTitleTextView?.setRightIcon(R.drawable.activity_running)
             }
         }
@@ -257,16 +260,14 @@ class LocationFragmentForStudent : Fragment() {
         if (ip == null) {
             ip = getString(R.string.ip)
         }
-        if (classId == null) {
-            classId = arguments?.get("classId").toString()
-        }
+        classId = arguments?.get("classId").toString()
         urlForRefreshActivity = URL("http://$ip:8080/activity/activityInProgress?classId=$classId")
     }
 
     private fun buildDataForRefreshActivity() {
         responseJson = JSONObject(response.toString())
         activityTitle = responseJson!!["activityTitle"].toString()
-        if (activityTitleTextView != null) {
+        if (activityTitleTextView == null) {
             activityTitleTextView = view?.findViewById(R.id.activity_title)
         }
 
@@ -295,11 +296,11 @@ class LocationFragmentForStudent : Fragment() {
         }
     }
 
-    private var ip: String? = null
+    var ip: String? = null
     private var deviceId: String? = null
-    private var responseJson: JSONObject? = null
-    private var activityTitle: String? = null
-    private var activityTitleTextView: SuperTextView? = null
+    var responseJson: JSONObject? = null
+    var activityTitle: String? = null
+    var activityTitleTextView: SuperTextView? = null
     var classId: String? = null
     var studentLongitude: String? = null
     var studentLatitude: String? = null

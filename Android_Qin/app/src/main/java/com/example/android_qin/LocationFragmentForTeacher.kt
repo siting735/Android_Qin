@@ -1,6 +1,6 @@
 package com.example.android_qin
 
-import android.annotation.SuppressLint
+
 import android.app.AlertDialog
 import android.os.Build
 import android.os.Bundle
@@ -21,8 +21,6 @@ import com.amap.api.location.AMapLocationListener
 import com.amap.api.maps2d.AMap
 import com.amap.api.maps2d.MapView
 import com.amap.api.maps2d.model.MyLocationStyle
-import com.xuexiang.xui.widget.edittext.ClearEditText
-import com.xuexiang.xui.widget.edittext.PasswordEditText
 import com.xuexiang.xui.widget.textview.supertextview.SuperTextView
 import org.json.JSONObject
 import java.lang.Exception
@@ -318,14 +316,17 @@ class LocationFragmentForTeacher : Fragment() {
             activityTitleTextView = view?.findViewById(R.id.activity_title_for_teacher)
         }
     }
-    private fun buildDataForLaunchActivity(){
+
+    private fun buildDataForLaunchActivity() {
         responseJson = JSONObject(response.toString())
         activityState = responseJson!!["activityState"].toString()
     }
-    private fun buildDataForEndActivity(){
+
+    private fun buildDataForEndActivity() {
         responseJson = JSONObject(response.toString())
         activityState = responseJson!!["activityState"].toString()
     }
+
     var activityState: String? = null
     var currentClassId: String? = null
     var currentActivityId: String? = null

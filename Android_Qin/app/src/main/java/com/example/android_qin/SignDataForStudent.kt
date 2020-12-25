@@ -16,8 +16,7 @@ import org.json.JSONObject
 import java.lang.Exception
 import java.net.HttpURLConnection
 import java.net.URL
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+
 class SignDataForStudent : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
@@ -26,23 +25,14 @@ class SignDataForStudent : Fragment() {
     }
 
     private fun getSignDataForStudent() {
-        val ip = getString(R.string.ip)
-        val studentId = arguments?.get("studentId").toString()
         Thread {
-            val url = "http://$ip:8080/student/studentSignMessage?studentId=$studentId"
-            val urlForGetSignData = URL(url)
-            var connection: HttpURLConnection? = null
-            var response: StringBuilder? = null
+            buildRequestForGetSignData()
             try {
-                connection = urlForGetSignData.openConnection() as HttpURLConnection
-                connection?.requestMethod = "GET"
-                response = ConnectionUtil.getDataFromConnection(connection)
-                connection?.disconnect()
+                response = ConnectionUtil.getDataByUrl(urlForGetSignData)
             } catch (e: Exception) {
-                Log.e("error in sign", e.toString())
-                var loginFailDialog = buildConnectFailDialog()
+                buildConnectFailDialog()
                 activity?.runOnUiThread {
-                    loginFailDialog.show()
+                    loginFailDialog?.show()
                 }
                 Thread.currentThread().join()
             }
@@ -52,18 +42,15 @@ class SignDataForStudent : Fragment() {
     }
 
     private fun dealWithResponse(response: StringBuilder?) {
-        val jsonString = response.toString()
-        val responseJson = JSONObject(jsonString)
-        val signDataList = responseJson["activityInfo"] as JSONArray
+        buildDataForSignList()
         updateSignRito(responseJson)
-        for (index in 0 until signDataList.length()) {
-            addSignDataToLayout(signDataList[index] as JSONObject)
+        for (index in 0 until signDataJsonList!!.length()) {
+            addSignDataToLayout(signDataJsonList!![index] as JSONObject)
         }
     }
 
-    private fun updateSignRito(responseJson: JSONObject) {
-        val signRito = responseJson["signRito"].toString()
-        val signRitoTextView = view?.findViewById<SuperTextView>(R.id.sign_rito)
+    private fun updateSignRito(responseJson: JSONObject?) {
+        buildDataForUpdateSignRito()
         activity?.runOnUiThread {
             signRitoTextView?.setCenterBottomString("$signRito%")
         }
@@ -71,38 +58,11 @@ class SignDataForStudent : Fragment() {
 
     @SuppressLint("ResourceAsColor")
     private fun addSignDataToLayout(signData: JSONObject?) {
-        val signDataListLayout = view?.findViewById<LinearLayout>(R.id.sign_data_list)
         val signDataView = SuperTextView(context)
-        val activityTitle = signData?.get("activityTitle")?.toString()
-        val signState = signData?.get("signState")?.toString()
-        signDataView.setLeftBottomString(activityTitle)
-        signDataView.useShape()
-        signDataView.setShapeCornersRadius(dip2px(10f).toFloat())
-        when (signState) {
-            "1" -> {
-                signDataView.setRightString("已打卡")
-            }
-            "0" -> {
-                signDataView.setRightString("未打卡")
-            }
-        }
-        var layoutParams =
-            LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, dip2px(100f))
-        layoutParams.setMargins(dip2px(10f), dip2px(10f), dip2px(10f), 0)
-        signDataView.layoutParams = layoutParams
+        buildSignDataView(signDataView,signData)
         activity?.runOnUiThread {
             signDataListLayout?.addView(signDataView)
         }
-    }
-
-    private fun buildConnectFailDialog(): AlertDialog.Builder {
-        val loginFailDialog = AlertDialog.Builder(this.requireContext())
-        loginFailDialog.setTitle("提示信息")
-        loginFailDialog.setMessage("连接服务器失败")
-        loginFailDialog.setPositiveButton("确定") { dialog, id ->
-            {}
-        }
-        return loginFailDialog
     }
 
     private fun configSwipeRefresh() {
@@ -127,15 +87,9 @@ class SignDataForStudent : Fragment() {
         return (dpValue * scale!! + 0.5f).toInt()
     }
 
-    private var param1: String? = null
-    private var param2: String? = null
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
+        arguments?.let {}
     }
 
     override fun onCreateView(
@@ -145,13 +99,80 @@ class SignDataForStudent : Fragment() {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_sign_data_for_student, container, false)
     }
+
+    private fun buildRequestForGetSignData() {
+        if (ip == null) {
+            ip = getString(R.string.ip)
+        }
+        studentId = arguments?.get("studentId").toString()
+        urlForGetSignData = URL("http://$ip:8080/student/studentSignMessage?studentId=$studentId")
+    }
+
+    private fun buildDataForSignList() {
+        responseJson = JSONObject(response.toString())
+        signDataJsonList = responseJson!!["activityInfo"] as JSONArray
+    }
+    private fun buildDataForUpdateSignRito(){
+        if (signRitoTextView == null){
+            signRitoTextView = view?.findViewById(R.id.sign_rito)
+        }
+        signRito = responseJson!!["signRito"].toString()
+    }
+    private fun buildSignDataView(signDataView: SuperTextView?,signData: JSONObject?){
+        if (signDataListLayout == null){
+            signDataListLayout = view?.findViewById<LinearLayout>(R.id.sign_data_list)
+        }
+        activityTitle = signData?.get("activityTitle")?.toString()
+        signState = signData?.get("signState")?.toString()
+        signDataView?.setLeftBottomString(activityTitle)
+        signDataView?.useShape()
+        signDataView?.setShapeCornersRadius(dip2px(10f).toFloat())
+        when (signState) {
+            SIGN -> {
+                signDataView?.setRightString("已打卡")
+            }
+            UNSIGN -> {
+                signDataView?.setRightString("未打卡")
+            }
+        }
+        if(layoutParams == null){
+            layoutParams=LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, dip2px(100f))
+            layoutParams?.setMargins(dip2px(10f), dip2px(10f), dip2px(10f), 0)
+            Log.i("layout params", layoutParams.toString())
+        }
+        signDataView!!.layoutParams = layoutParams
+    }
+    private fun buildConnectFailDialog() {
+        if (loginFailDialog == null) {
+            loginFailDialog = AlertDialog.Builder(this.requireContext())
+            loginFailDialog?.setTitle("提示信息")
+            loginFailDialog?.setMessage("连接服务器失败")
+            loginFailDialog?.setPositiveButton("确定") { dialog, id ->
+                {}
+            }
+        }
+    }
+    var signDataListLayout: LinearLayout? = null
+    var activityTitle: String? = null
+    var signState: String? = null
+    var layoutParams: LinearLayout.LayoutParams? = null
+    var signRito: String? = null
+    var signRitoTextView: SuperTextView? = null
+    var ip: String? = null
+    var studentId: String? = null
+    var urlForGetSignData: URL? = null
+    var connection: HttpURLConnection? = null
+    var response: StringBuilder? = null
+    var loginFailDialog: AlertDialog.Builder? = null
+    var signDataJsonList: JSONArray? = null
+    var responseJson: JSONObject? = null
+
     companion object {
+        const val UNSIGN = "0"
+        const val SIGN = "1"
         fun newInstance(param1: String, param2: String) =
             SignDataForStudent().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
+                arguments = Bundle().apply {}
             }
     }
 }

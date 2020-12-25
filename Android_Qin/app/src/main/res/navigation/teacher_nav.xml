@@ -34,4 +34,9 @@
         android:name="com.example.android_qin.MainActivity"
         android:label="activity_main"
         tools:layout="@layout/activity_main" />
+    <fragment
+        android:id="@+id/signStateForTeacher"
+        android:name="com.example.android_qin.SignStateForTeacher"
+        android:label="fragment_sign_state_for_teacher"
+        tools:layout="@layout/fragment_sign_state_for_teacher" />
 </navigation>

@@ -14,6 +14,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.Toast
 import androidx.core.content.ContextCompat
+import androidx.navigation.fragment.NavHostFragment
 import com.amap.api.location.AMapLocationClient
 import com.amap.api.location.AMapLocationClientOption
 import com.amap.api.location.AMapLocationListener
@@ -203,6 +204,9 @@ class LocationFragmentForStudent : Fragment() {
         val jsonString = response.toString()
         val responseJson = JSONObject(jsonString)
         val signState = responseJson["signState"] as Int
+        val navHostFragment =
+            activity?.supportFragmentManager?.findFragmentById(R.id.nav_host_for_student) as NavHostFragment
+        val navController = navHostFragment.navController
         if(signState == 0){
             activity?.runOnUiThread {
                 Toast.makeText(context,"签到失败",Toast.LENGTH_LONG).show()
@@ -210,7 +214,8 @@ class LocationFragmentForStudent : Fragment() {
         }
         else{
             activity?.runOnUiThread {
-                Toast.makeText(context,"签到成功",Toast.LENGTH_LONG).show()
+                // page is waiting t build
+                navController.navigate(R.id.signStateForStudent)
             }
         }
     }

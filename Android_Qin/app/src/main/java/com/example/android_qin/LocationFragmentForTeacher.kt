@@ -1,5 +1,6 @@
 package com.example.android_qin
 
+import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.os.Build
 import android.os.Bundle
@@ -40,15 +41,17 @@ private const val ARG_PARAM2 = "param2"
  * create an instance of this fragment.
  */
 class LocationFragmentForTeacher : Fragment() {
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         var mMapView = view?.findViewById<MapView>(R.id.map_for_teacher)
         //在activity执行onCreate时执行mMapView.onCreate(savedInstanceState)，创建地图
-        var aMap: AMap?=null
+        var aMap: AMap? = null
         if (aMap == null) {
             aMap = mMapView?.map
         }
-        var myLocationStyle: MyLocationStyle = MyLocationStyle() //初始化定位蓝点样式类//连续定位、且将视角移动到地图中心点，定位点依照设备方向旋转，并且会跟随设备移动。（1秒1次定位）如果不设置myLocationType，默认也会执行此种模式。
+        var myLocationStyle: MyLocationStyle =
+            MyLocationStyle() //初始化定位蓝点样式类//连续定位、且将视角移动到地图中心点，定位点依照设备方向旋转，并且会跟随设备移动。（1秒1次定位）如果不设置myLocationType，默认也会执行此种模式。
         myLocationStyle.interval(2000) //设置连续定位模式下的定位间隔，只在连续定位模式下生效，单次定位模式下不会生效。单位为毫秒。
         myLocationStyle.showMyLocation(true)
         aMap!!.setMyLocationStyle(myLocationStyle) //设置定位蓝点的Style
@@ -60,14 +63,222 @@ class LocationFragmentForTeacher : Fragment() {
         configSignBtn()
         configSwipeRefresh()
     }
+
+    private fun refreshActivity() {
+        val ip = getString(R.string.ip)
+        val teacherId = arguments?.get("teacherId").toString()
+        Thread {
+            val url = "http://$ip:8080/activity/searchActivityInProcess?teacherId=$teacherId"
+            val urlForGetActivityInfo = URL(url)
+            var connection: HttpURLConnection? = null
+            var response: StringBuilder? = null
+            try {
+                connection = urlForGetActivityInfo.openConnection() as HttpURLConnection
+                connection?.requestMethod = "GET"
+                response = ConnectionUtil.getDataFromConnection(connection)
+                connection?.disconnect()
+            } catch (e: Exception) {
+                var loginFailDialog = buildConnectFailDialog()
+                activity?.runOnUiThread {
+                    loginFailDialog.show()
+                    Log.i("fail dialog reason in location", e.toString())
+                    Log.i("ip in location", ip.toString())
+                    Log.i("ip res id", getString(R.string.ip))
+                }
+                Thread.currentThread().join()
+            }
+            dealWithResponseForRefreshActivity(response)
+        }.start()
+    }
+
+    private fun buildConnectFailDialog(): androidx.appcompat.app.AlertDialog.Builder {
+        val loginFailDialog = androidx.appcompat.app.AlertDialog.Builder(requireContext())
+        loginFailDialog.setTitle("提示信息")
+        loginFailDialog.setMessage("连接服务器失败")
+        loginFailDialog.setPositiveButton("确定") { dialog, id ->
+            {}
+        }
+        return loginFailDialog
+    }
+
+    private fun dealWithResponseForRefreshActivity(response: StringBuilder?) {
+        val jsonString = response.toString()
+        val responseJson = JSONObject(jsonString)
+        val activityTitle = responseJson["activityTitle"].toString()
+        val activityTitleTextView = view?.findViewById<SuperTextView>(R.id.activity_title)
+        if (activityTitle == "") {
+            activity?.runOnUiThread {
+                currentClassId = ""
+                activityTitleTextView?.setLeftString("暂无活动")
+                activityTitleTextView?.setRightIcon(R.drawable.no_activity)
+            }
+        } else {
+            currentClassId = responseJson["classId"].toString()
+            activityId = responseJson["activityId"].toString()
+            activity?.runOnUiThread {
+                activityTitleTextView?.setLeftString("$activityTitle")
+                activityTitleTextView?.setRightIcon(R.drawable.activity_running)
+            }
+        }
+    }
+
+    private fun configSwipeRefresh() {
+        val swipe =
+            view?.findViewById<androidx.swiperefreshlayout.widget.SwipeRefreshLayout>(R.id.location_swipe_for_teacher)
+        swipe?.setOnRefreshListener {
+            Log.i("swipe", "location for teacher")
+            swipe.isRefreshing = false
+        }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun configSignBtn() {
+        val signBtn = view?.findViewById<Button>(R.id.sign_btn_for_teacher)
+        signBtn?.setOnClickListener {
+            if (currentClassId == "") {
+                launchSignActivityConfirm()
+            } else {
+                endSignActivityConfirm()
+            }
+            Log.i("sign in teacher", "i am in")
+        }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun launchSignActivityConfirm() {
+        var dialog = AlertDialog.Builder(context)
+        dialog.setTitle("提示")
+        dialog.setMessage("确认发起活动？")
+        dialog.setPositiveButton("是的") { dialog, id ->
+            launchActivity()
+        }
+        dialog.setNegativeButton("取消") { dialog, id ->
+            {}
+        }
+        dialog.show()
+    }
+
+    private fun endSignActivityConfirm() {
+        var dialog = AlertDialog.Builder(context)
+        dialog.setTitle("提示")
+        dialog.setMessage("确认结束当前活动？")
+        dialog.setPositiveButton("是的") { dialog, id ->
+            endActivity()
+        }
+        dialog.setNegativeButton("取消") { dialog, id ->
+            {}
+        }
+        dialog.show()
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun launchActivity() {
+        val ip = getString(R.string.ip)
+        Thread {
+            val teacherLongitude = locationInfo["teacherLongitude"]
+            val teacherLatitude = locationInfo["teacherLatitude"]
+            var urlForLogin: URL? = null
+            val current = LocalDateTime.now()
+            val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")
+            val activityTitle = current.format(formatter)
+            urlForLogin =
+                URL("http://$ip:8080/activity/launchActivity?classId=$currentClassId&activityTitle=$activityTitle&teacherLongitude=$teacherLatitude&teacherLatitude=$teacherLatitude")
+            var connection: HttpURLConnection? = null
+            var response: StringBuilder? = null
+            try {
+                connection = urlForLogin.openConnection() as HttpURLConnection
+                connection?.requestMethod = "GET"
+                response = ConnectionUtil.getDataFromConnection(connection)
+                connection?.disconnect()
+            } catch (e: Exception) {
+                var loginFailDialog = buildConnectFailDialog()
+                activity?.runOnUiThread {
+                    loginFailDialog.show()
+                    Log.e("error in location", e.toString())
+                    Log.i("fail dialog", "i am main")
+                }
+                Thread.currentThread().join()
+            }
+            dealWithResponseForLaunchActivity(response)
+        }.start()
+    }
+
+    private fun endActivity() {
+        Thread {
+            val ip = getString(R.string.ip)
+            var urlForLogin: URL? = null
+            urlForLogin =
+                URL("http://$ip:8080/sign/changeSignToStop?classId=$currentClassId&activityId=$activityId")
+            var connection: HttpURLConnection? = null
+            var response: StringBuilder? = null
+            try {
+                connection = urlForLogin.openConnection() as HttpURLConnection
+                connection?.requestMethod = "GET"
+                response = ConnectionUtil.getDataFromConnection(connection)
+                connection?.disconnect()
+            } catch (e: Exception) {
+                var loginFailDialog = buildConnectFailDialog()
+                activity?.runOnUiThread {
+                    loginFailDialog.show()
+                    Log.e("error in location", e.toString())
+                    Log.i("fail dialog", "i am main")
+                }
+                Thread.currentThread().join()
+            }
+            dealWithResponseForEndActivity(response)
+        }.start()
+    }
+
+    private fun dealWithResponseForLaunchActivity(response: StringBuilder?) {
+        val jsonString = response.toString()
+        val responseJson = JSONObject(jsonString)
+        val activityState = responseJson["activityState"].toString()
+        if (activityState == "0") {
+            activity?.runOnUiThread {
+                Toast.makeText(requireContext(), "发布失败", Toast.LENGTH_LONG).show()
+            }
+        }
+        val activityId = responseJson["activityId"].toString()
+        activity?.runOnUiThread {
+            Toast.makeText(requireContext(), "发布成功", Toast.LENGTH_LONG).show()
+        }
+        refreshActivity()
+    }
+
+    private fun dealWithResponseForEndActivity(response: StringBuilder?) {
+        val jsonString = response.toString()
+        val responseJson = JSONObject(jsonString)
+        val activityState = responseJson["activityState"].toString()
+        val navHostFragment =
+            activity?.supportFragmentManager?.findFragmentById(R.id.nav_host_for_teacher) as NavHostFragment
+        val navController = navHostFragment.navController
+        if(activityState == "0"){
+            activity?.runOnUiThread {
+                Toast.makeText(requireContext(),"结束活动失败",Toast.LENGTH_LONG).show()
+            }
+        }
+        else{
+            // need bundle and page is waiting to build
+            navController.navigate(R.id.signStateForTeacher)
+        }
+
+    }
+
+    override fun onStart() {
+        super.onStart()
+        refreshActivity()
+    }
+
     //声明AMapLocationClient类对象
     var mLocationClient: AMapLocationClient? = null
+
     //声明定位回调监听器
     var mLocationListener: AMapLocationListener? = null
+
     //声明AMapLocationClientOption对象
     var mLocationOption: AMapLocationClientOption? = null
-    private val locationInfo = ArrayMap<String,String>()
-    private fun getLocationInfo(){
+    private val locationInfo = ArrayMap<String, String>()
+    private fun getLocationInfo() {
         mLocationClient = AMapLocationClient(context)
         mLocationOption = AMapLocationClientOption()
         mLocationOption!!.setLocationPurpose(AMapLocationClientOption.AMapLocationPurpose.Transport)
@@ -91,12 +302,14 @@ class LocationFragmentForTeacher : Fragment() {
                     Log.d("定位成功", "定位成功")
                     locationInfo["teacherLongitude"] = aMapLocation.longitude.toString()
                     locationInfo["teacherLatitude"] = aMapLocation.latitude.toString()
-                    Log.i("locationInfo",locationInfo.toString())
+                    Log.i("locationInfo", locationInfo.toString())
                 } else {
                     //定位失败时，可通过ErrCode（错误码）信息来确定失败的原因，errInfo是错误信息，详见错误码表。
-                    Log.e("AmapError", "location Error, ErrCode:"
-                            + aMapLocation.errorCode + ", errInfo:"
-                            + aMapLocation.errorInfo)
+                    Log.e(
+                        "AmapError", "location Error, ErrCode:"
+                                + aMapLocation.errorCode + ", errInfo:"
+                                + aMapLocation.errorInfo
+                    )
                     Toast.makeText(context, "定位失败", Toast.LENGTH_LONG)
                 }
             }
@@ -106,159 +319,7 @@ class LocationFragmentForTeacher : Fragment() {
         mLocationClient!!.startLocation()
         Log.d("getGPSInfo", "getGPSInfo")
     }
-    private fun refreshActivity(){
-        val ip = getString(R.string.ip)
-        val teacherId = arguments?.get("teacherId").toString()
-        Thread{
-            val url = "http://$ip:8080/activity/searchActivityInProcess?teacherId=$teacherId"
-            val urlForGetActivityInfo = URL(url)
-            var connection: HttpURLConnection? = null
-            var response: StringBuilder? = null
-            try {
-                connection = urlForGetActivityInfo.openConnection() as HttpURLConnection
-                connection?.requestMethod = "GET"
-                response = ConnectionUtil.getDataFromConnection(connection)
-                connection?.disconnect()
-            } catch (e: Exception) {
-                var loginFailDialog = buildConnectFailDialog()
-                activity?.runOnUiThread {
-                    loginFailDialog.show()
-                    Log.i("fail dialog reason in location",e.toString())
-                    Log.i("ip in location",ip.toString())
-                    Log.i("ip res id",getString(R.string.ip))
-                }
-                Thread.currentThread().join()
-            }
-            dealWithResponseForRefreshActivity(response)
-        }.start()
-    }
-    private fun buildConnectFailDialog(): androidx.appcompat.app.AlertDialog.Builder {
-        val loginFailDialog = androidx.appcompat.app.AlertDialog.Builder(requireContext())
-        loginFailDialog.setTitle("提示信息")
-        loginFailDialog.setMessage("连接服务器失败")
-        loginFailDialog.setPositiveButton("确定") {
-                dialog, id ->{}
-        }
-        return loginFailDialog
-    }
-    private fun dealWithResponseForRefreshActivity(response: StringBuilder?){
-        val jsonString = response.toString()
-        val responseJson = JSONObject(jsonString)
-        val activityTitle = responseJson["activityTitle"].toString()
-        val activityTitleTextView = view?.findViewById<SuperTextView>(R.id.activity_title)
-        if(activityTitle == ""){
-            activity?.runOnUiThread {
-                currentClassId = ""
-                activityTitleTextView?.setLeftString("当前活动：无")
-            }
-        }
-        else{
-            currentClassId = responseJson["classId"].toString()
-            activity?.runOnUiThread {
-                activityTitleTextView?.setLeftString("当前活动：$activityTitle")
-            }
-        }
-    }
-    private fun configSwipeRefresh(){
-        val swipe= view?.findViewById<androidx.swiperefreshlayout.widget.SwipeRefreshLayout>(R.id.location_swipe_for_teacher)
-        swipe?.setOnRefreshListener {
-            Log.i("swipe","location for teacher")
-            swipe.isRefreshing=false
-        }
-    }
-    @RequiresApi(Build.VERSION_CODES.O)
-    private fun configSignBtn(){
-        val signBtn= view?.findViewById<Button>(R.id.sign_btn_for_teacher)
-        signBtn?.setOnClickListener {
-            if(currentClassId == ""){
-                launchSignActivityConfirm()
-            }
-            else{
-                endSignActivityConfirm()
-            }
-            Log.i("sign in teacher","i am in")
-        }
-    }
-    @RequiresApi(Build.VERSION_CODES.O)
-    private fun launchSignActivityConfirm(){
-        var dialog = AlertDialog.Builder(context)
-        dialog.setTitle("提示")
-        dialog.setMessage("确认发起活动？")
-        dialog.setPositiveButton("是的") {
-                dialog, id -> launchActivity()
-        }
-        dialog.setNegativeButton("取消") {
-                dialog, id ->{}
-        }
-        dialog.show()
-    }
-    private fun endSignActivityConfirm(){
-        var dialog = AlertDialog.Builder(context)
-        dialog.setTitle("提示")
-        dialog.setMessage("确认结束当前活动？")
-        dialog.setPositiveButton("是的") {
-                dialog, id -> endActivity()
-        }
-        dialog.setNegativeButton("取消") {
-                dialog, id ->{}
-        }
-        dialog.show()
-    }
-    @RequiresApi(Build.VERSION_CODES.O)
-    private fun launchActivity(){
-        val ip = getString(R.string.ip)
-        Thread {
-            val teacherLongitude = locationInfo["teacherLongitude"]
-            val teacherLatitude = locationInfo["teacherLatitude"]
-            var urlForLogin: URL? = null
-            val current = LocalDateTime.now()
-            val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")
-            val activityTitle = current.format(formatter)
-            urlForLogin = URL("http://$ip:8080/activity/launchActivity?classId=$currentClassId&activityTitle=$activityTitle&teacherLongitude=$teacherLatitude&teacherLatitude=$teacherLatitude")
-            var connection: HttpURLConnection? = null
-            var response: StringBuilder? = null
-            try {
-                connection = urlForLogin.openConnection() as HttpURLConnection
-                connection?.requestMethod = "GET"
-                response = ConnectionUtil.getDataFromConnection(connection)
-                connection?.disconnect()
-            } catch (e: Exception) {
-                var loginFailDialog = buildConnectFailDialog()
-                activity?.runOnUiThread {
-                    loginFailDialog.show()
-                    Log.e("error in location", e.toString())
-                    Log.i("fail dialog", "i am main")
-                }
-                Thread.currentThread().join()
-            }
-            dealWithResponseForLaunchActivity(response)
-        }.start()
-    }
-    private fun endActivity(){
 
-    }
-    private fun dealWithResponseForLaunchActivity(response:StringBuilder?){
-        val jsonString = response.toString()
-        val responseJson = JSONObject(jsonString)
-        val activityState = responseJson["activityState"].toString()
-        if(activityState == "0"){
-            activity?.runOnUiThread {
-                Toast.makeText(requireContext(),"发布失败",Toast.LENGTH_LONG).show()
-            }
-        }
-        val activityId = responseJson["activityId"].toString()
-        activity?.runOnUiThread {
-            Toast.makeText(requireContext(),"发布成功",Toast.LENGTH_LONG).show()
-        }
-        refreshActivity()
-    }
-    private fun dealWithResponseForEndActivity(response:StringBuilder?){
-
-    }
-    override fun onStart() {
-        super.onStart()
-        refreshActivity()
-    }
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
@@ -270,7 +331,9 @@ class LocationFragmentForTeacher : Fragment() {
             param2 = it.getString(ARG_PARAM2)
         }
     }
+
     var currentClassId = ""
+    var activityId = ""
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?

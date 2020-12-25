@@ -1,6 +1,7 @@
 package com.example.android_qin
 
 import android.app.AlertDialog
+import android.os.Build
 import android.os.Bundle
 import android.util.ArrayMap
 import android.util.Log
@@ -10,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.navigation.fragment.NavHostFragment
 import com.amap.api.location.AMapLocationClient
 import com.amap.api.location.AMapLocationClientOption
@@ -24,6 +26,8 @@ import org.json.JSONObject
 import java.lang.Exception
 import java.net.HttpURLConnection
 import java.net.URL
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -85,8 +89,8 @@ class LocationFragmentForTeacher : Fragment() {
                 if (aMapLocation.errorCode == 0) {
                     //可在其中解析amapLocation获取相应内容。
                     Log.d("定位成功", "定位成功")
-                    locationInfo["studentLongitude"] = aMapLocation.longitude.toString()
-                    locationInfo["studentLatitude"] = aMapLocation.latitude.toString()
+                    locationInfo["teacherLongitude"] = aMapLocation.longitude.toString()
+                    locationInfo["teacherLatitude"] = aMapLocation.latitude.toString()
                     Log.i("locationInfo",locationInfo.toString())
                 } else {
                     //定位失败时，可通过ErrCode（错误码）信息来确定失败的原因，errInfo是错误信息，详见错误码表。
@@ -162,6 +166,7 @@ class LocationFragmentForTeacher : Fragment() {
             swipe.isRefreshing=false
         }
     }
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun configSignBtn(){
         val signBtn= view?.findViewById<Button>(R.id.sign_btn_for_teacher)
         signBtn?.setOnClickListener {
@@ -174,6 +179,7 @@ class LocationFragmentForTeacher : Fragment() {
             Log.i("sign in teacher","i am in")
         }
     }
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun launchSignActivityConfirm(){
         var dialog = AlertDialog.Builder(context)
         dialog.setTitle("提示")
@@ -198,11 +204,17 @@ class LocationFragmentForTeacher : Fragment() {
         }
         dialog.show()
     }
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun launchActivity(){
         val ip = getString(R.string.ip)
         Thread {
+            val teacherLongitude = locationInfo["teacherLongitude"]
+            val teacherLatitude = locationInfo["teacherLatitude"]
             var urlForLogin: URL? = null
-            urlForLogin = URL("http://$ip:8080/activity/launchActivity?")
+            val current = LocalDateTime.now()
+            val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")
+            val activityTitle = current.format(formatter)
+            urlForLogin = URL("http://$ip:8080/activity/launchActivity?classId=$currentClassId&activityTitle=$activityTitle&teacherLongitude=$teacherLatitude&teacherLatitude=$teacherLatitude")
             var connection: HttpURLConnection? = null
             var response: StringBuilder? = null
             try {
@@ -226,7 +238,19 @@ class LocationFragmentForTeacher : Fragment() {
 
     }
     private fun dealWithResponseForLaunchActivity(response:StringBuilder?){
-
+        val jsonString = response.toString()
+        val responseJson = JSONObject(jsonString)
+        val activityState = responseJson["activityState"].toString()
+        if(activityState == "0"){
+            activity?.runOnUiThread {
+                Toast.makeText(requireContext(),"发布失败",Toast.LENGTH_LONG).show()
+            }
+        }
+        val activityId = responseJson["activityId"].toString()
+        activity?.runOnUiThread {
+            Toast.makeText(requireContext(),"发布成功",Toast.LENGTH_LONG).show()
+        }
+        refreshActivity()
     }
     private fun dealWithResponseForEndActivity(response:StringBuilder?){
 

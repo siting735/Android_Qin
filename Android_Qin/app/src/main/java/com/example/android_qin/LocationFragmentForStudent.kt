@@ -174,8 +174,9 @@ class LocationFragmentForStudent : Fragment() {
         val deviceId = getDeviceId()
         Log.i("deviceId",deviceId)
         Thread{
-            val studentLongitude = locationInfo["studentLongitude"]
-            val studentLatitude = locationInfo["studentLatitude"]
+            val studentLongitude = locationInfo["studentLongitude"].toString()
+            val studentLatitude = locationInfo["studentLatitude"].toString()
+            Log.i("locationInfo in sign",studentLatitude)
             val url = "http://$ip:8080/sign/studentSign?studentId=$studentId&studentLongitude=$studentLongitude&studentLatitude=$studentLatitude&deviceId=$deviceId"
             val urlForGetSignData = URL(url)
             var connection: HttpURLConnection? = null

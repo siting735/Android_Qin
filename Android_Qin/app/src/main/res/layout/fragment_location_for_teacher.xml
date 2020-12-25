@@ -52,6 +52,7 @@
                         android:layout_weight="1.5"
                         app:sDividerLineType="both"
                         app:sLeftMaxEms="30"
+                        app:sRightIconRes="@drawable/activity_running"
                         app:sLeftTextIsBold="true"
                         app:sLeftTextSize="25sp"
                         app:sLeftTextString="当前活动：" />

@@ -36,8 +36,7 @@
             <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
                 android:id="@+id/location_swipe_for_teacher"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1.5">
+                android:layout_height="100dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -47,9 +46,8 @@
                     <com.xuexiang.xui.widget.textview.supertextview.SuperTextView
                         android:id="@+id/activity_title"
                         android:layout_width="match_parent"
-                        android:layout_height="0dp"
+                        android:layout_height="match_parent"
                         android:layout_margin="10dp"
-                        android:layout_weight="1.5"
                         app:sDividerLineType="both"
                         app:sLeftMaxEms="30"
                         app:sRightIconRes="@drawable/activity_running"

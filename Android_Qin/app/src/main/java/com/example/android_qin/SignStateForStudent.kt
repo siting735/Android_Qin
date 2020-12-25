@@ -17,6 +17,12 @@ private const val ARG_PARAM2 = "param2"
  * create an instance of this fragment.
  */
 class SignStateForStudent : Fragment() {
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+
+    }
+
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null

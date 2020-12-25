@@ -36,8 +36,7 @@
             <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
                 android:id="@+id/sign_data_swipe"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="2">
+                android:layout_height="150dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -47,7 +46,7 @@
                     <com.xuexiang.xui.widget.textview.supertextview.SuperTextView
                         android:id="@+id/sign_rito"
                         android:layout_width="match_parent"
-                        android:layout_height="150dp"
+                        android:layout_height="match_parent"
                         android:layout_marginLeft="10dp"
                         android:layout_marginTop="10dp"
                         android:layout_marginRight="10dp"

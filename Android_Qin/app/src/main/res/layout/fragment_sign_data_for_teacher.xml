@@ -36,7 +36,7 @@
             <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
                 android:id="@+id/sign_data_swipe_for_teacher"
                 android:layout_width="match_parent"
-                android:layout_height="80dp">
+                android:layout_height="100dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -45,10 +45,8 @@
 
                     <com.xuexiang.xui.widget.textview.supertextview.SuperTextView
                         android:layout_width="match_parent"
-                        android:layout_height="70dp"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginRight="10dp"
+                        android:layout_height="match_parent"
+                        android:layout_margin="10dp"
                         app:sDividerLineType="both"
                         app:sLeftTextIsBold="true"
                         app:sLeftTextSize="25sp"
@@ -60,7 +58,7 @@
             <androidx.core.widget.NestedScrollView
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="4"
+                android:layout_weight="5"
                 android:fillViewport="true"
                 android:scrollbars="vertical">
 

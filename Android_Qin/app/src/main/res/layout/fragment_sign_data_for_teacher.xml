@@ -47,13 +47,14 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_margin="10dp"
+                        android:paddingLeft="5dp"
                         app:sDividerLineType="both"
+                        app:sLeftIconRes="@drawable/list"
                         app:sLeftTextIsBold="true"
-                        app:sLeftTextSize="25sp"
-                        android:paddingLeft="10dp"
-                        app:sUseShape="true"
+                        app:sLeftTextSize="23sp"
+                        app:sLeftTextString="班级列表"
                         app:sShapeCornersRadius="10dp"
-                        app:sLeftTextString="班级列表" />
+                        app:sUseShape="true" />
                 </LinearLayout>
 
             </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
@@ -69,7 +70,9 @@
                     android:id="@+id/class_list"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:orientation="vertical"></LinearLayout>
+                    android:orientation="vertical">
+
+                </LinearLayout>
             </androidx.core.widget.NestedScrollView>
         </LinearLayout>
     </LinearLayout>

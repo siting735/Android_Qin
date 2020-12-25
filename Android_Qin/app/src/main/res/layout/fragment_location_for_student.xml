@@ -54,7 +54,7 @@
                         app:sUseShape="true"
                         app:sShapeCornersRadius="10dp"
                         app:sLeftTextIsBold="true"
-                        app:sLeftTextSize="25sp"
+                        app:sLeftTextSize="23sp"
                         app:sLeftTextString="" />
                 </LinearLayout>
             </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

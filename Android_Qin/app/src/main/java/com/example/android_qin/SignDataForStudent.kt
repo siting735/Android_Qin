@@ -59,7 +59,7 @@ class SignDataForStudent : Fragment() {
     @SuppressLint("ResourceAsColor")
     private fun addSignDataToLayout(signData: JSONObject?) {
         val signDataView = SuperTextView(context)
-        buildSignDataView(signDataView,signData)
+        buildSignDataView(signDataView, signData)
         activity?.runOnUiThread {
             signDataListLayout?.addView(signDataView)
         }
@@ -112,14 +112,16 @@ class SignDataForStudent : Fragment() {
         responseJson = JSONObject(response.toString())
         signDataJsonList = responseJson!!["activityInfo"] as JSONArray
     }
-    private fun buildDataForUpdateSignRito(){
-        if (signRitoTextView == null){
+
+    private fun buildDataForUpdateSignRito() {
+        if (signRitoTextView == null) {
             signRitoTextView = view?.findViewById(R.id.sign_rito)
         }
         signRito = responseJson!!["signRito"].toString()
     }
-    private fun buildSignDataView(signDataView: SuperTextView?,signData: JSONObject?){
-        if (signDataListLayout == null){
+
+    private fun buildSignDataView(signDataView: SuperTextView?, signData: JSONObject?) {
+        if (signDataListLayout == null) {
             signDataListLayout = view?.findViewById<LinearLayout>(R.id.sign_data_list)
         }
         activityTitle = signData?.get("activityTitle")?.toString()
@@ -135,13 +137,14 @@ class SignDataForStudent : Fragment() {
                 signDataView?.setRightString("未打卡")
             }
         }
-        if(layoutParams == null){
-            layoutParams=LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, dip2px(100f))
+        if (layoutParams == null) {
+            layoutParams =
+                LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, dip2px(100f))
             layoutParams?.setMargins(dip2px(10f), dip2px(10f), dip2px(10f), 0)
-            Log.i("layout params", layoutParams.toString())
         }
         signDataView!!.layoutParams = layoutParams
     }
+
     private fun buildConnectFailDialog() {
         if (loginFailDialog == null) {
             loginFailDialog = AlertDialog.Builder(this.requireContext())
@@ -152,6 +155,7 @@ class SignDataForStudent : Fragment() {
             }
         }
     }
+
     var signDataListLayout: LinearLayout? = null
     var activityTitle: String? = null
     var signState: String? = null

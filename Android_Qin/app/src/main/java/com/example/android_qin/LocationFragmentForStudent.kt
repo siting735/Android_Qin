@@ -241,7 +241,7 @@ class LocationFragmentForStudent : Fragment() {
 
     private fun buildMap() {
         mMapView = view?.findViewById<MapView>(R.id.map_for_student)
-        var aMap: AMap? = null  //创建地图
+        var aMap: AMap? = null
         if (aMap == null) {
             aMap = mMapView?.map
         }
@@ -268,7 +268,7 @@ class LocationFragmentForStudent : Fragment() {
         responseJson = JSONObject(response.toString())
         activityTitle = responseJson!!["activityTitle"].toString()
         if (activityTitleTextView == null) {
-            activityTitleTextView = view?.findViewById(R.id.activity_title)
+            activityTitleTextView = view?.findViewById(R.id.activity_title_for_student)
         }
 
     }

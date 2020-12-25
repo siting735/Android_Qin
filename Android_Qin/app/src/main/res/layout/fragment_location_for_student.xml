@@ -44,7 +44,7 @@
                     android:orientation="vertical">
 
                     <com.xuexiang.xui.widget.textview.supertextview.SuperTextView
-                        android:id="@+id/activity_title"
+                        android:id="@+id/activity_title_for_student"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_margin="10dp"

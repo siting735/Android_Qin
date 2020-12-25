@@ -54,6 +54,9 @@
                 android:layout_marginLeft="10dp"
                 android:layout_marginTop="20dp"
                 android:layout_marginRight="10dp"
+                android:paddingLeft="10dp"
+                app:sUseShape="true"
+                app:sShapeCornersRadius="10dp"
                 app:sDividerLineType="both"
                 app:sLeftTextIsBold="true"
                 app:sLeftTextString="账号管理" />
@@ -64,6 +67,9 @@
                 android:layout_marginLeft="10dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginRight="10dp"
+                android:paddingLeft="10dp"
+                app:sUseShape="true"
+                app:sShapeCornersRadius="10dp"
                 app:sDividerLineType="both"
                 app:sLeftTextIsBold="true"
                 app:sLeftTextString="关于" />
@@ -77,6 +83,8 @@
                 android:layout_marginRight="10dp"
                 android:textAlignment="center"
                 app:sCenterTextIsBold="true"
+                app:sUseShape="true"
+                app:sShapeCornersRadius="10dp"
                 app:sCenterTextString="退出登录"
                 app:sDividerLineType="both" />
         </LinearLayout>

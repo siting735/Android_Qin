@@ -53,6 +53,8 @@
                         app:sCenterBottomTextIsBold="true"
                         app:sCenterBottomTextSize="60dp"
                         app:sCenterTextString="考勤率为:"
+                        app:sUseShape="true"
+                        app:sShapeCornersRadius="10dp"
                         app:sDividerLineType="both" />
                 </LinearLayout>
             </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

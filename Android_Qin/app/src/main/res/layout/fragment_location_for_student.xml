@@ -51,6 +51,8 @@
                         app:sDividerLineType="both"
                         app:sLeftMaxEms="30"
                         app:sRightIconRes="@drawable/activity_running"
+                        app:sUseShape="true"
+                        app:sShapeCornersRadius="10dp"
                         app:sLeftTextIsBold="true"
                         app:sLeftTextSize="25sp"
                         app:sLeftTextString="" />

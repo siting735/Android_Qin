@@ -50,6 +50,9 @@
                         app:sDividerLineType="both"
                         app:sLeftTextIsBold="true"
                         app:sLeftTextSize="25sp"
+                        android:paddingLeft="10dp"
+                        app:sUseShape="true"
+                        app:sShapeCornersRadius="10dp"
                         app:sLeftTextString="班级列表" />
                 </LinearLayout>
 

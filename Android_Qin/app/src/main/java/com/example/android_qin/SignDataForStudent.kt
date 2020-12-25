@@ -85,6 +85,8 @@ class SignDataForStudent : Fragment() {
         val activityTitle = signData?.get("activityTitle")?.toString()
         val signState = signData?.get("signState")?.toString()
         signDataView.setLeftBottomString(activityTitle)
+        signDataView.useShape()
+        signDataView.setShapeCornersRadius(dip2px(10f).toFloat())
         when (signState) {
             "1" -> {
                 signDataView.setRightString("已打卡")

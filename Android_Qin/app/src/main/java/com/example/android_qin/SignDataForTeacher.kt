@@ -71,6 +71,8 @@ class SignDataForTeacher : Fragment() {
         val navHostFragment = activity?.supportFragmentManager?.findFragmentById(R.id.nav_host_for_teacher) as NavHostFragment
         val navController = navHostFragment.navController
         classInfoView.setLeftString(className)
+        classInfoView.useShape()
+        classInfoView.setShapeCornersRadius(dip2px(10f).toFloat())
         var layoutParams = LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, dip2px(60f))
         layoutParams.setMargins(dip2px(10f),dip2px(10f),dip2px(10f),0)
         classInfoView.layoutParams = layoutParams

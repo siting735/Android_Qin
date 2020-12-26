@@ -1,25 +1,20 @@
-package com.example.android_qin
+package com.example.android_qin.sign_data
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
-import androidx.core.view.marginBottom
-import androidx.fragment.app.FragmentManager
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import com.example.android_qin.R
 import com.example.android_qin.listener.GetInClassListener
 import com.xuexiang.xui.widget.textview.supertextview.SuperTextView
 import org.json.JSONArray
 import org.json.JSONObject
-import java.lang.Exception
-import java.net.HttpURLConnection
-import java.net.URL
 
 class SignDataForTeacher : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {

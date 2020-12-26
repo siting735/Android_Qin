@@ -1,4 +1,4 @@
-package com.example.android_qin
+package com.example.android_qin.mine
 
 import android.app.AlertDialog
 import android.os.Bundle
@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.NavHostFragment
+import com.example.android_qin.R
 import com.xuexiang.xui.widget.textview.supertextview.SuperTextView
 
 class MineForStudent : Fragment() {

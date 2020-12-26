@@ -7,17 +7,17 @@
 
     <fragment
         android:id="@+id/locationFragmentForTeacher"
-        android:name="com.example.android_qin.LocationFragmentForTeacher"
+        android:name="com.example.android_qin.sign.LocationFragmentForTeacher"
         android:label="fragment_location_for_teacher"
         tools:layout="@layout/fragment_location_for_teacher" />
     <fragment
         android:id="@+id/signDataForTeacher"
-        android:name="com.example.android_qin.SignDataForTeacher"
+        android:name="com.example.android_qin.sign_data.SignDataForTeacher"
         android:label="fragment_sign_data_for_teacher"
         tools:layout="@layout/fragment_sign_data_for_teacher" />
     <fragment
         android:id="@+id/mineForTeacher"
-        android:name="com.example.android_qin.MineForTeacher"
+        android:name="com.example.android_qin.mine.MineForTeacher"
         android:label="fragment_mine_for_teacher"
         tools:layout="@layout/fragment_mine_for_teacher" >
         <action
@@ -26,7 +26,7 @@
     </fragment>
     <fragment
         android:id="@+id/signDataForEachClass"
-        android:name="com.example.android_qin.SignDataForEachClass"
+        android:name="com.example.android_qin.sign_data.SignDataForEachClass"
         android:label="fragment_sign_data_for_each_class"
         tools:layout="@layout/fragment_sign_data_for_each_class" />
     <activity

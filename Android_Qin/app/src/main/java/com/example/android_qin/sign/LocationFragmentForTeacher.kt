@@ -1,4 +1,4 @@
-package com.example.android_qin
+package com.example.android_qin.sign
 
 
 import android.app.AlertDialog
@@ -21,6 +21,8 @@ import com.amap.api.location.AMapLocationListener
 import com.amap.api.maps2d.AMap
 import com.amap.api.maps2d.MapView
 import com.amap.api.maps2d.model.MyLocationStyle
+import com.example.android_qin.R
+import com.example.android_qin.util.ConnectionUtil
 import com.xuexiang.xui.widget.textview.supertextview.SuperTextView
 import org.json.JSONObject
 import java.lang.Exception

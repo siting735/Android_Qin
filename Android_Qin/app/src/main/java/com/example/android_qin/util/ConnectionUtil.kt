@@ -1,4 +1,4 @@
-package com.example.android_qin
+package com.example.android_qin.util
 
 import java.net.HttpURLConnection
 import java.net.URL

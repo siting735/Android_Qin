@@ -1,20 +1,16 @@
 package com.example.android_qin
 
 import android.Manifest
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.DialogFragment
-import androidx.fragment.app.DialogFragment.STYLE_NORMAL
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.example.android_qin.util.ConnectionUtil
 import com.xuexiang.xui.XUI
 import com.xuexiang.xui.widget.edittext.ClearEditText
 import com.xuexiang.xui.widget.edittext.PasswordEditText

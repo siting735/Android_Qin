@@ -1,4 +1,4 @@
-package com.example.android_qin
+package com.example.android_qin.sign_data
 
 import android.os.Bundle
 import android.util.Log
@@ -8,6 +8,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.appcompat.app.AlertDialog
+import com.example.android_qin.R
+import com.example.android_qin.util.ConnectionUtil
 import com.xuexiang.xui.widget.textview.supertextview.SuperTextView
 import org.json.JSONArray
 import org.json.JSONObject

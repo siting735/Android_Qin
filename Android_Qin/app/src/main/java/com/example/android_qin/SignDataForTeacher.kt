@@ -13,6 +13,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import com.example.android_qin.listener.GetInClassListener
 import com.xuexiang.xui.widget.textview.supertextview.SuperTextView
 import org.json.JSONArray
 import org.json.JSONObject
@@ -56,16 +57,11 @@ class SignDataForTeacher : Fragment() {
     }
 
     private fun addClassInfoViewToLayout(classInfo: JSONObject) {
-        Log.i("addView","+1")
         val classInfoView = SuperTextView(context)
         buildNavHost()
         buildClassInfoView(classInfoView, classInfo)
-        classInfoView?.setOnClickListener {
-            val classInfoBundle = buildBundleForClassInfo(classId, className)
-            Log.i("bundle",classInfoBundle.toString())
-            Log.i("listener","+1")
-            navController?.navigate(R.id.signDataForEachClass, classInfoBundle)
-        }
+        val classInfoViewListener = GetInClassListener(classId,className,navController)
+        classInfoView!!.setOnClickListener(classInfoViewListener)
         activity?.runOnUiThread {
             classListLayout?.addView(classInfoView)
         }

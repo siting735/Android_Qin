@@ -11,13 +11,10 @@ class TeacherActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_teacher)
-        teacherId = intent.getStringExtra("teacherId").toString()
-        teacherName = intent.getStringExtra("teacherName").toString()
-        classesInfoString = intent.getStringExtra("classesInfo").toString()
-        classesInfo = JSONArray(classesInfoString)
-        Log.i("classesInfo in teacher",classesInfo.toString())
+        buildDataForBundle()
         configTabBar()
     }
+
     private fun configTabBar(){
         var tabSegment=findViewById<TabSegment>(R.id.teacher_tab_bar)
         tabSegment.mode = TabSegment.MODE_FIXED
@@ -51,6 +48,14 @@ class TeacherActivity : AppCompatActivity() {
     override fun onBackPressed() {
         //invalid back button
     }
+
+    private fun buildDataForBundle(){
+        teacherId = intent.getStringExtra("teacherId").toString()
+        teacherName = intent.getStringExtra("teacherName").toString()
+        classesInfoString = intent.getStringExtra("classesInfo").toString()
+        classesInfo = JSONArray(classesInfoString)
+    }
+
     var teacherId = ""
     var teacherName = ""
     var classesInfoString = ""

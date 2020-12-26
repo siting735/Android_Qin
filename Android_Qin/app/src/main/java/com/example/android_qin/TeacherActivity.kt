@@ -8,10 +8,6 @@ import com.xuexiang.xui.widget.tabbar.TabSegment
 import org.json.JSONArray
 
 class TeacherActivity : AppCompatActivity() {
-    var teacherId = ""
-    var teacherName = ""
-    var classesInfoString = ""
-    var classesInfo:JSONArray? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_teacher)
@@ -55,4 +51,8 @@ class TeacherActivity : AppCompatActivity() {
     override fun onBackPressed() {
         //invalid back button
     }
+    var teacherId = ""
+    var teacherName = ""
+    var classesInfoString = ""
+    var classesInfo:JSONArray? = null
 }

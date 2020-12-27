@@ -31,7 +31,7 @@ class MineForTeacher : Fragment() {
         var dialog = AlertDialog.Builder(context)
         dialog.setTitle("提示")
         dialog.setMessage("确认退出？")
-        dialog.setPositiveButton("是的") { dialog, id ->
+        dialog.setPositiveButton("确定") { dialog, id ->
             navController.navigate(R.id.action_mineForTeacher_to_mainActivity)
         }
         dialog.setNegativeButton("取消") { dialog, id ->

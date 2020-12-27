@@ -44,9 +44,9 @@ class SignDataForTeacher : Fragment() {
             try {
                 response = ConnectionUtil.getDataByUrl(urlForGetClassInfos)
             } catch (e: Exception) {
-                buildConnectFailDialog()
+                ConnectionUtil.buildConnectFailDialog(requireContext())
                 activity?.runOnUiThread {
-                    loginFailDialog?.show()
+                    ConnectionUtil.connectFailDialog?.show()
                 }
                 Thread.currentThread().join()
             }
@@ -135,17 +135,6 @@ class SignDataForTeacher : Fragment() {
         urlForGetClassInfos = URL("http://$ip:8080/teacher/teacherClasses?teacherId=$teacherId")
     }
 
-    private fun buildConnectFailDialog() {
-        if (loginFailDialog == null) {
-            loginFailDialog = AlertDialog.Builder(this.requireContext())
-            loginFailDialog?.setTitle("提示信息")
-            loginFailDialog?.setMessage("连接服务器失败")
-            loginFailDialog?.setPositiveButton("确定") { dialog, id ->
-                {}
-            }
-        }
-    }
-
     private fun removeOriginClassInfos() {
         val classList = view?.findViewById<LinearLayout>(R.id.class_list)
         activity?.runOnUiThread {
@@ -165,7 +154,6 @@ class SignDataForTeacher : Fragment() {
     var teacherId: String? = null
     var urlForGetClassInfos: URL? = null
     var response: StringBuilder? = null
-    var loginFailDialog: AlertDialog.Builder? = null
     var responseJson: JSONObject? = null
     var classInfos: JSONArray? = null
 

@@ -30,7 +30,6 @@ import java.net.HttpURLConnection
 import java.net.URL
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
-import kotlin.math.log
 
 class LocationFragmentForTeacher : Fragment() {
     @RequiresApi(Build.VERSION_CODES.O)
@@ -60,9 +59,9 @@ class LocationFragmentForTeacher : Fragment() {
             try {
                 response = ConnectionUtil.getDataByUrl(urlForRefreshActivity)
             } catch (e: Exception) {
-                buildConnectFailDialog()
+                ConnectionUtil.buildConnectFailDialog(requireContext())
                 activity?.runOnUiThread {
-                    loginFailDialog?.show()
+                    ConnectionUtil.connectFailDialog?.show()
                 }
                 Thread.currentThread().join()
             }
@@ -118,9 +117,9 @@ class LocationFragmentForTeacher : Fragment() {
             try {
                 response = ConnectionUtil.getDataByUrl(urlForLaunchActivity)
             } catch (e: Exception) {
-                buildConnectFailDialog()
+                ConnectionUtil.buildConnectFailDialog(requireContext())
                 activity?.runOnUiThread {
-                    loginFailDialog?.show()
+                    ConnectionUtil.connectFailDialog?.show()
                 }
                 Thread.currentThread().join()
             }
@@ -134,9 +133,9 @@ class LocationFragmentForTeacher : Fragment() {
             try {
                 response = ConnectionUtil.getDataByUrl(urlForEndActivity)
             } catch (e: Exception) {
-                buildConnectFailDialog()
+                ConnectionUtil.buildConnectFailDialog(requireContext())
                 activity?.runOnUiThread {
-                    loginFailDialog?.show()
+                    ConnectionUtil.connectFailDialog?.show()
                 }
                 Thread.currentThread().join()
             }
@@ -288,17 +287,6 @@ class LocationFragmentForTeacher : Fragment() {
             URL("http://$ip:8080/activity/searchActivityInProcess?teacherId=$teacherId")
     }
 
-    private fun buildConnectFailDialog() {
-        if (loginFailDialog == null) {
-            val loginFailDialog = androidx.appcompat.app.AlertDialog.Builder(requireContext())
-            loginFailDialog.setTitle("提示信息")
-            loginFailDialog.setMessage("连接服务器失败")
-            loginFailDialog.setPositiveButton("确定") { dialog, id ->
-                {}
-            }
-        }
-    }
-
     private fun buildNavHost() {
         if (navHostFragment == null) {
             navHostFragment =
@@ -347,7 +335,6 @@ class LocationFragmentForTeacher : Fragment() {
     var urlForRefreshActivity: URL? = null
     var connection: HttpURLConnection? = null
     var response: StringBuilder? = null
-    var loginFailDialog: AlertDialog.Builder? = null
     private var confirmDialogForLaunch: AlertDialog.Builder? = null
     var confirmDialogForEnd: AlertDialog.Builder? = null
     var urlForEndActivity: URL? = null

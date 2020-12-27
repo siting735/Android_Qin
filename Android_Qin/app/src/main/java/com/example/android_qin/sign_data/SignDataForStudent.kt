@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import android.widget.ProgressBar
 import androidx.appcompat.app.AlertDialog
 import com.example.android_qin.R
 import com.example.android_qin.StudentActivity
@@ -27,13 +28,14 @@ class SignDataForStudent : Fragment() {
 
     private fun getSignDataForStudent() {
         Thread {
+            removeOriginSignDatas()
             buildRequestForGetSignData()
             try {
                 response = ConnectionUtil.getDataByUrl(urlForGetSignData)
             } catch (e: Exception) {
-                buildConnectFailDialog()
+                ConnectionUtil.buildConnectFailDialog(requireContext())
                 activity?.runOnUiThread {
-                    loginFailDialog?.show()
+                    ConnectionUtil.connectFailDialog?.show()
                 }
                 Thread.currentThread().join()
             }
@@ -71,7 +73,6 @@ class SignDataForStudent : Fragment() {
         val swipe =
             view?.findViewById<androidx.swiperefreshlayout.widget.SwipeRefreshLayout>(R.id.sign_data_swipe)
         swipe?.setOnRefreshListener {
-            removeOriginSignDatas()
             getSignDataForStudent()
             swipe.isRefreshing = false
         }
@@ -146,17 +147,6 @@ class SignDataForStudent : Fragment() {
         signDataView!!.layoutParams = layoutParams
     }
 
-    private fun buildConnectFailDialog() {
-        if (loginFailDialog == null) {
-            loginFailDialog = AlertDialog.Builder(this.requireContext())
-            loginFailDialog?.setTitle("提示信息")
-            loginFailDialog?.setMessage("连接服务器失败")
-            loginFailDialog?.setPositiveButton("确定") { dialog, id ->
-                {}
-            }
-        }
-    }
-
     var signDataListLayout: LinearLayout? = null
     var activityTitle: String? = null
     var signState: String? = null
@@ -168,13 +158,11 @@ class SignDataForStudent : Fragment() {
     var urlForGetSignData: URL? = null
     var connection: HttpURLConnection? = null
     var response: StringBuilder? = null
-    var loginFailDialog: AlertDialog.Builder? = null
     var signDataJsonList: JSONArray? = null
     var responseJson: JSONObject? = null
 
     companion object {
         const val UNSIGN = "0"
         const val SIGN = "1"
-
     }
 }

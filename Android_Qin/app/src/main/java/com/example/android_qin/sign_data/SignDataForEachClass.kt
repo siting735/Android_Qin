@@ -60,25 +60,15 @@ class SignDataForEachClass : Fragment() {
                 connection?.disconnect()
             } catch (e: Exception) {
                 Log.e("error in sign", e.toString())
-                var loginFailDialog = buildConnectFailDialog()
+                ConnectionUtil.buildConnectFailDialog(requireContext())
                 activity?.runOnUiThread {
-                    loginFailDialog.show()
+                    ConnectionUtil.connectFailDialog?.show()
                 }
                 Thread.currentThread().join()
             }
             dealWithResponse(response)
         }.start()
         Log.i("classId in each class", classId)
-    }
-
-    private fun buildConnectFailDialog(): AlertDialog.Builder {
-        val loginFailDialog = AlertDialog.Builder(this.requireContext())
-        loginFailDialog.setTitle("提示信息")
-        loginFailDialog.setMessage("连接服务器失败")
-        loginFailDialog.setPositiveButton("确定") { dialog, id ->
-            {}
-        }
-        return loginFailDialog
     }
 
     private fun dealWithResponse(response: StringBuilder?) {

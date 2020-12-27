@@ -123,9 +123,9 @@ class MainActivity : AppCompatActivity() {
             try {
                 response = ConnectionUtil.getDataByUrl(urlForLogin)
             } catch (e: Exception) {
-                buildConnectFailDialog()
+                ConnectionUtil.buildConnectFailDialog(applicationContext)
                 runOnUiThread {
-                    loginFailDialog?.show()
+                    ConnectionUtil.connectFailDialog?.show()
                 }
                 Thread.currentThread().join()
             }
@@ -147,17 +147,6 @@ class MainActivity : AppCompatActivity() {
                 toTeacherPage(loginInfo)
             }
             else -> errorTip(loginState)
-        }
-    }
-
-    private fun buildConnectFailDialog() {
-        if (loginFailDialog == null) {
-            val loginFailDialog = AlertDialog.Builder(this)
-            loginFailDialog.setTitle("提示信息")
-            loginFailDialog.setMessage("连接服务器失败")
-            loginFailDialog.setPositiveButton("确定") { dialog, id ->
-                loadingDialog?.cancel()
-            }
         }
     }
 
@@ -231,7 +220,6 @@ class MainActivity : AppCompatActivity() {
     var urlForLogin: URL? = null
     var connection: HttpURLConnection? = null
     var response: StringBuilder? = null
-    var loginFailDialog: AlertDialog.Builder? = null
 
     companion object {
         const val STUDENT = 1

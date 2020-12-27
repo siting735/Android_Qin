@@ -23,6 +23,7 @@ import com.amap.api.maps2d.AMap
 import com.amap.api.maps2d.MapView
 import com.amap.api.maps2d.model.MyLocationStyle
 import com.example.android_qin.R
+import com.example.android_qin.StudentActivity
 import com.example.android_qin.util.ConnectionUtil
 import com.xuexiang.xui.widget.textview.supertextview.SuperTextView
 import org.json.JSONObject
@@ -57,9 +58,9 @@ class LocationFragmentForStudent : Fragment() {
             try {
                 response = ConnectionUtil.getDataByUrl(urlForRefreshActivity)
             } catch (e: Exception) {
-                buildConnectFailDialog()
+                ConnectionUtil.buildConnectFailDialog(requireContext())
                 activity?.runOnUiThread {
-                    loginFailDialog?.show()
+                    ConnectionUtil.connectFailDialog?.show()
                 }
                 Thread.currentThread().join()
             }
@@ -98,9 +99,9 @@ class LocationFragmentForStudent : Fragment() {
                 response = ConnectionUtil.getDataByUrl(urlForSign)
             } catch (e: Exception) {
                 Log.e("error in sign", e.toString())
-                buildConnectFailDialog()
+                ConnectionUtil.buildConnectFailDialog(requireContext())
                 activity?.runOnUiThread {
-                    loginFailDialog?.show()
+                    ConnectionUtil.connectFailDialog?.show()
                 }
                 Thread.currentThread().join()
             }
@@ -230,17 +231,6 @@ class LocationFragmentForStudent : Fragment() {
         mLocationClient!!.startLocation()
     }
 
-    private fun buildConnectFailDialog() {
-        if (loginFailDialog == null) {
-            val loginFailDialog = AlertDialog.Builder(requireContext())
-            loginFailDialog.setTitle("提示信息")
-            loginFailDialog.setMessage("连接服务器失败")
-            loginFailDialog.setPositiveButton("确定") { dialog, id ->
-                {}
-            }
-        }
-    }
-
     private fun buildMap() {
         mMapView = view?.findViewById<MapView>(R.id.map_for_student)
         var aMap: AMap? = null
@@ -313,7 +303,6 @@ class LocationFragmentForStudent : Fragment() {
     var urlForSign: URL? = null
     var connection: HttpURLConnection? = null
     var response: StringBuilder? = null
-    var loginFailDialog: AlertDialog.Builder? = null
     var mMapView: MapView? = null
     var myLocationStyle: MyLocationStyle? = null
     var mLocationClient: AMapLocationClient? = null

@@ -26,28 +26,25 @@ import java.net.URL
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        initUI()
+        grantPermission()
+        buildAnimationAndUI()
+    }
+
+    private fun buildAnimationAndUI() {
         val view = View.inflate(this, R.layout.start, null)
         setContentView(view)
-        val aa = AlphaAnimation(0.3f, 1.0f)
-        aa.duration = 3000
-        view.startAnimation(aa)
-        aa.setAnimationListener(object : Animation.AnimationListener {
+        val alphaAnimation = AlphaAnimation(0.3f, 1.0f)
+        alphaAnimation.duration = 3000
+        view.startAnimation(alphaAnimation)
+        alphaAnimation.setAnimationListener(object : Animation.AnimationListener {
             override fun onAnimationEnd(arg0: Animation?) {
-                initUI()
-                setContentView(R.layout.activity_main)
-                grantPermission()
-                checkLocalAccount()
-                configLoginBtn()
-                configIdentity()
+                buildUI()
             }
+
             override fun onAnimationRepeat(animation: Animation?) {}
             override fun onAnimationStart(animation: Animation?) {}
         })
-    }
-
-    private fun initUI() {
-        XUI.init(this.application)
-        XUI.debug(true)
     }
 
     private fun configIdentity() {
@@ -61,6 +58,13 @@ class MainActivity : AppCompatActivity() {
                 identity = TEACHER
             }
         }
+    }
+
+    private fun buildUI() {
+        setContentView(R.layout.activity_main)
+        checkLocalAccount()
+        configLoginBtn()
+        configIdentity()
     }
 
     private fun checkLocalAccount() {
@@ -166,6 +170,11 @@ class MainActivity : AppCompatActivity() {
             loadingDialog = loadingDialogBuilder.create()
             loadingDialog!!.show()
         }
+    }
+
+    private fun initUI() {
+        XUI.init(this.application)
+        XUI.debug(true)
     }
 
     private fun grantPermission() {

@@ -1,8 +1,12 @@
 package com.example.android_qin
 
 
+import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.AttributeSet
+import android.util.Log
+import android.view.View
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import com.example.android_qin.listener.GetInClassListener
@@ -15,14 +19,22 @@ class TeacherActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_teacher)
+    }
+
+    override fun onStart() {
+        super.onStart()
+        NavUtil.buildNavHost(supportFragmentManager)
         configTabBar()
     }
 
     private fun configTabBar() {
         var tabSegment = findViewById<TabSegment>(R.id.teacher_tab_bar)
-        NavUtil.buildNavHost(supportFragmentManager)
-        TabBarUtil.configTabBar(tabSegment, TabBarUtil.TEACHER)
-        toDefaultPage()
+        if (tabBarState == 0){
+            TabBarUtil.configTabBar(tabSegment, TabBarUtil.TEACHER)
+            tabBarState = 1
+            toDefaultPage()
+        }
+
     }
 
     override fun onBackPressed() {
@@ -34,7 +46,7 @@ class TeacherActivity : AppCompatActivity() {
     }
 
     private fun toDefaultPage() {
-        NavUtil.navController?.popBackStack()
+        // NavUtil.navController?.popBackStack()
         NavUtil.navController?.navigate(R.id.locationFragmentForTeacher)
     }
 
@@ -46,5 +58,6 @@ class TeacherActivity : AppCompatActivity() {
         var classesInfoString: String? = null
         var currentClassId: String? = null
         var currentClassName: String? = null
+        var tabBarState = 0
     }
 }

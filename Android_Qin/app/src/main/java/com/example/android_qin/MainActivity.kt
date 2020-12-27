@@ -14,6 +14,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.example.android_qin.util.ConnectionUtil
+import com.example.android_qin.util.NavUtil
 import com.xuexiang.xui.XUI
 import com.xuexiang.xui.widget.edittext.ClearEditText
 import com.xuexiang.xui.widget.edittext.PasswordEditText
@@ -26,7 +27,6 @@ import java.net.URL
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        initUI()
         grantPermission()
         buildAnimationAndUI()
     }
@@ -61,6 +61,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun buildUI() {
+        initUI()
         setContentView(R.layout.activity_main)
         checkLocalAccount()
         configLoginBtn()
@@ -102,7 +103,6 @@ class MainActivity : AppCompatActivity() {
         TeacherActivity.teacherName = loginInfo["teacherName"].toString()
         TeacherActivity.classesInfoString = loginInfo["classesInfo"].toString()
         startActivity(intent)
-        finish()
     }
 
     private fun toStudentPage(loginInfo: JSONObject) {
@@ -112,7 +112,6 @@ class MainActivity : AppCompatActivity() {
         StudentActivity.classId = loginInfo["classId"].toString()
         StudentActivity.className = loginInfo["className"].toString()
         startActivity(intent)
-        finish()
     }
 
 

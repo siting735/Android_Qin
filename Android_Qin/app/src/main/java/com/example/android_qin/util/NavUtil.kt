@@ -11,10 +11,7 @@ class NavUtil {
     companion object{
         var navHostFragment: NavHostFragment? = null
         var navController: NavController? = null
-        fun buildNavHost(fragmentManager:FragmentManager?): Unit{
-            if (navHostFragment != null) {
-                return Unit
-            }
+        fun buildNavHost(fragmentManager:FragmentManager?){
             if (MainActivity.identity == MainActivity.STUDENT) {
                 navHostFragment =
                     fragmentManager?.findFragmentById(R.id.nav_host_for_student) as NavHostFragment

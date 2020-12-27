@@ -21,14 +21,9 @@
         android:label="fragment_mine_for_student"
         tools:layout="@layout/fragment_mine_for_student" >
         <action
-            android:id="@+id/action_mineForStudent_to_mainActivity2"
-            app:destination="@id/mainActivity2" />
+            android:id="@+id/action_mineForStudent_to_locationFragmentForStudent"
+            app:destination="@id/locationFragmentForStudent" />
     </fragment>
-    <activity
-        android:id="@+id/mainActivity2"
-        android:name="com.example.android_qin.MainActivity"
-        android:label="activity_main"
-        tools:layout="@layout/activity_main" />
     <fragment
         android:id="@+id/signStateForStudent"
         android:name="com.example.android_qin.sign.SignStateForStudent"
@@ -38,4 +33,9 @@
             android:id="@+id/action_signStateForStudent_to_signDataForStudent"
             app:destination="@id/signDataForStudent" />
     </fragment>
+    <activity
+        android:id="@+id/mainActivity"
+        android:name="com.example.android_qin.MainActivity"
+        android:label="activity_main"
+        tools:layout="@layout/activity_main" />
 </navigation>

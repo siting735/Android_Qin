@@ -15,6 +15,7 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.amap.api.location.AMapLocationClient
 import com.amap.api.location.AMapLocationClientOption
 import com.amap.api.location.AMapLocationListener
@@ -40,11 +41,6 @@ class LocationFragmentForTeacher : Fragment() {
         super.onActivityCreated(savedInstanceState)
         buildMap()
         mMapView?.onCreate(savedInstanceState)
-    }
-
-    @RequiresApi(Build.VERSION_CODES.O)
-    override fun onStart() {
-        super.onStart()
         getLocationInfo()
         configSignBtn()
         configSwipeRefresh()
@@ -87,8 +83,9 @@ class LocationFragmentForTeacher : Fragment() {
 
     private fun configSwipeRefresh() {
         val swipe =
-            view?.findViewById<androidx.swiperefreshlayout.widget.SwipeRefreshLayout>(R.id.location_swipe_for_teacher)
+            view?.findViewById<SwipeRefreshLayout>(R.id.location_swipe_for_teacher)
         swipe?.setOnRefreshListener {
+            mLocationClient!!.startLocation()
             refreshActivity()
             swipe.isRefreshing = false
         }
@@ -189,6 +186,7 @@ class LocationFragmentForTeacher : Fragment() {
         mLocationListener = AMapLocationListener { aMapLocation ->
             if (aMapLocation != null) {
                 if (aMapLocation.errorCode == 0) {
+                    mLocationClient!!.stopLocation()
                     Log.d("定位成功", "定位成功")
                     locationInfo["studentLongitude"] = aMapLocation.longitude.toString()
                     locationInfo["studentLatitude"] = aMapLocation.latitude.toString()

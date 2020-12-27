@@ -1,13 +1,17 @@
 package com.example.android_qin.mine
 
 import android.app.AlertDialog
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.NavHostFragment
+import com.example.android_qin.MainActivity
 import com.example.android_qin.R
+import com.example.android_qin.TeacherActivity
+import com.example.android_qin.util.NavUtil
 import com.xuexiang.xui.widget.textview.supertextview.SuperTextView
 
 class MineForTeacher : Fragment() {
@@ -25,14 +29,12 @@ class MineForTeacher : Fragment() {
     }
 
     private fun logOutConfirm() {
-        val navHostFragment =
-            activity?.supportFragmentManager?.findFragmentById(R.id.nav_host_for_teacher) as NavHostFragment
-        val navController = navHostFragment.navController
         var dialog = AlertDialog.Builder(context)
         dialog.setTitle("提示")
         dialog.setMessage("确认退出？")
         dialog.setPositiveButton("确定") { dialog, id ->
-            navController.navigate(R.id.action_mineForTeacher_to_mainActivity)
+            NavUtil.navController?.popBackStack()
+            NavUtil.navController?.navigate(R.id.mainActivity)
         }
         dialog.setNegativeButton("取消") { dialog, id ->
             {}
@@ -40,20 +42,10 @@ class MineForTeacher : Fragment() {
         dialog.show()
     }
 
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {}
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_mine_for_teacher, container, false)
     }
 

@@ -14,11 +14,7 @@
         android:id="@+id/mineForTeacher"
         android:name="com.example.android_qin.mine.MineForTeacher"
         android:label="fragment_mine_for_teacher"
-        tools:layout="@layout/fragment_mine_for_teacher" >
-        <action
-            android:id="@+id/action_mineForTeacher_to_mainActivity"
-            app:destination="@id/mainActivity" />
-    </fragment>
+        tools:layout="@layout/fragment_mine_for_teacher" />
     <fragment
         android:id="@+id/signDataForEachClass"
         android:name="com.example.android_qin.sign_data.SignDataForEachClass"
@@ -28,11 +24,6 @@
             android:id="@+id/action_signDataForEachClass_to_signDataForTeacher"
             app:destination="@id/signDataForTeacher" />
     </fragment>
-    <activity
-        android:id="@+id/mainActivity"
-        android:name="com.example.android_qin.MainActivity"
-        android:label="activity_main"
-        tools:layout="@layout/activity_main" />
     <fragment
         android:id="@+id/signStateForTeacher"
         android:name="com.example.android_qin.sign.SignStateForTeacher"

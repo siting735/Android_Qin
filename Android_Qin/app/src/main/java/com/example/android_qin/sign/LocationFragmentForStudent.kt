@@ -214,6 +214,7 @@ class LocationFragmentForStudent : Fragment() {
         mLocationListener = AMapLocationListener { aMapLocation ->
             if (aMapLocation != null) {
                 if (aMapLocation.errorCode == 0) {
+                    mLocationClient!!.stopLocation()
                     Log.d("定位成功", "定位成功")
                     locationInfo["studentLongitude"] = aMapLocation.longitude.toString()
                     locationInfo["studentLatitude"] = aMapLocation.latitude.toString()

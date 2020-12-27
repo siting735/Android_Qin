@@ -32,6 +32,7 @@ class MineForStudent : Fragment() {
         dialog.setTitle("提示")
         dialog.setMessage("确认退出？")
         dialog.setPositiveButton("确定") { dialog, id ->
+            MainActivity.LOG_OUT = true
             NavUtil.navController?.popBackStack()
             NavUtil.navController?.navigate(R.id.mainActivity)
         }

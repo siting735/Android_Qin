@@ -29,7 +29,7 @@ class TeacherActivity : AppCompatActivity() {
 
     private fun configTabBar() {
         var tabSegment = findViewById<TabSegment>(R.id.teacher_tab_bar)
-        if (tabBarState == 0){
+        if (tabBarState == 0) {
             TabBarUtil.configTabBar(tabSegment, TabBarUtil.TEACHER)
             tabBarState = 1
             toDefaultPage()

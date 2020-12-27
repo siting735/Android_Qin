@@ -1,6 +1,7 @@
 package com.example.android_qin
 
 import android.Manifest
+import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
@@ -24,20 +25,35 @@ import java.lang.Exception
 import java.net.HttpURLConnection
 import java.net.URL
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : Activity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        initUI()
         grantPermission()
         buildAnimationAndUI()
     }
 
-    private fun buildAnimationAndUI() {
+    override fun onStart() {
+        super.onStart()
+        if (LOG_OUT) {
+            if (!cancelAnimation){
+                alphaAnimation?.cancel()
+                cancelAnimation = true
+            }
+            buildUI()
+        }
+    }
+
+    private fun buildAnimationAndUI(): Unit{
+        if (LOG_OUT) {
+            return Unit
+        }
         val view = View.inflate(this, R.layout.start, null)
         setContentView(view)
-        val alphaAnimation = AlphaAnimation(0.3f, 1.0f)
-        alphaAnimation.duration = 3000
+        alphaAnimation = AlphaAnimation(0.3f, 1.0f)
+        alphaAnimation?.duration = 3000
         view.startAnimation(alphaAnimation)
-        alphaAnimation.setAnimationListener(object : Animation.AnimationListener {
+        alphaAnimation?.setAnimationListener(object : Animation.AnimationListener {
             override fun onAnimationEnd(arg0: Animation?) {
                 buildUI()
             }
@@ -61,7 +77,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun buildUI() {
-        initUI()
         setContentView(R.layout.activity_main)
         checkLocalAccount()
         configLoginBtn()
@@ -193,9 +208,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun buildRequestForLogin() {
-        if (ip == null) {
-            ip = getString(R.string.ip)
-        }
         if (userName == null || password == null) {
             userName = findViewById(R.id.user_name)
             password = findViewById(R.id.password)
@@ -212,11 +224,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     var loadingDialog: AlertDialog? = null
-    var ip: String? = null
     var userName: ClearEditText? = null
     var password: PasswordEditText? = null
     var urlForLogin: URL? = null
-    var connection: HttpURLConnection? = null
     var response: StringBuilder? = null
 
     companion object {
@@ -224,7 +234,10 @@ class MainActivity : AppCompatActivity() {
         const val TEACHER = 2
         const val NO_USER = 3
         const val WRONG_PASSWORD = 4
-        var identity = STUDENT
+        var LOG_OUT = false
         const val ip = "10.60.0.13"
+        var identity = STUDENT
+        var alphaAnimation: AlphaAnimation? = null
+        var cancelAnimation = false
     }
 }

@@ -42,5 +42,9 @@
         android:id="@+id/signDataForTeacher"
         android:name="com.example.android_qin.sign_data.SignDataForTeacher"
         android:label="fragment_sign_data_for_teacher"
-        tools:layout="@layout/fragment_sign_data_for_teacher" />
+        tools:layout="@layout/fragment_sign_data_for_teacher" >
+        <action
+            android:id="@+id/action_signDataForTeacher_to_signDataForEachClass"
+            app:destination="@id/signDataForEachClass" />
+    </fragment>
 </navigation>

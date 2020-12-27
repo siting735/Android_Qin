@@ -36,16 +36,23 @@ class TabBarUtil {
             tabSegment.setOnTabClickListener {
                 when (it) {
                     TEACHER_SIGN_PAGE -> {
+                        navController?.popBackStack()
                         navController?.navigate(
                             R.id.locationFragmentForTeacher,
                             teacherInfo
                         )
                     }
-                    TEACHER_SIGN_DATA_PAGE -> navController?.navigate(
-                        R.id.signDataForTeacher,
-                        teacherInfo
-                    )
-                    TEACHER_MINE_PAGE -> navController?.navigate(R.id.mineForTeacher, teacherInfo)
+                    TEACHER_SIGN_DATA_PAGE -> {
+                        navController?.popBackStack()
+                        navController?.navigate(
+                            R.id.signDataForTeacher,
+                            teacherInfo
+                        )
+                    }
+                    TEACHER_MINE_PAGE -> {
+                        navController?.popBackStack()
+                        navController?.navigate(R.id.mineForTeacher, teacherInfo)
+                    }
                 }
             }
         }
@@ -57,15 +64,24 @@ class TabBarUtil {
         ) {
             tabSegment.setOnTabClickListener {
                 when (it) {
-                    STUDENT_SIGN_PAGE -> navController?.navigate(
-                        R.id.locationFragmentForStudent,
-                        studentInfo
-                    )
-                    STUDENT_SIGN_DATA_PAGE -> navController?.navigate(
-                        R.id.signDataForStudent,
-                        studentInfo
-                    )
-                    STUDENT_MINE_PAGE -> navController?.navigate(R.id.mineForStudent, studentInfo)
+                    STUDENT_SIGN_PAGE -> {
+                        navController?.popBackStack()
+                        navController?.navigate(
+                            R.id.locationFragmentForStudent,
+                            studentInfo
+                        )
+                    }
+                    STUDENT_SIGN_DATA_PAGE -> {
+                        navController?.popBackStack()
+                        navController?.navigate(
+                            R.id.signDataForStudent,
+                            studentInfo
+                        )
+                    }
+                    STUDENT_MINE_PAGE -> {
+                        navController?.popBackStack()
+                        navController?.navigate(R.id.mineForStudent, studentInfo)
+                    }
                 }
             }
         }

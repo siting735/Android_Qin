@@ -16,7 +16,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:navigationIcon="@drawable/get_in"
+            android:navigationIcon="@drawable/back"
             android:background="@color/xui_config_color_titlebar"
             android:titleTextColor="@color/white">
 

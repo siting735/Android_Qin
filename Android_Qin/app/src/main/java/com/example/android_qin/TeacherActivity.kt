@@ -1,13 +1,8 @@
 package com.example.android_qin
 
-import android.annotation.SuppressLint
-import android.content.Context
+
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.AttributeSet
-import android.util.Log
-import android.view.View
-import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import com.example.android_qin.listener.GetInClassListener
@@ -23,19 +18,20 @@ class TeacherActivity : AppCompatActivity() {
         configTabBar()
     }
 
-    override fun onBackPressed() {
-        if (GetInClassListener.pageState == CLASS_INFO) {
-            super.onBackPressed()
-            GetInClassListener.pageState = 0
-        }
-    }
-
     private fun configTabBar() {
         var tabSegment = findViewById<TabSegment>(R.id.teacher_tab_bar)
         val teacherInfo = buildBundleForTeacher()
         buildNavHost()
         TabBarUtil.configTabBar(tabSegment, navController, teacherInfo, TabBarUtil.TEACHER)
         toDefaultPage(teacherInfo)
+    }
+
+    override fun onBackPressed() {
+        if (GetInClassListener.pageState == CLASS_INFO) {
+            navController?.popBackStack()
+            navController?.navigate(R.id.signDataForTeacher)
+            GetInClassListener.pageState = 0
+        }
     }
 
     private fun toDefaultPage(teacherInfo: Bundle) {
@@ -60,8 +56,10 @@ class TeacherActivity : AppCompatActivity() {
     }
 
 
+
     private fun buildDataForBundle() {
         teacherId = intent.getStringExtra("teacherId").toString()
+        GetInClassListener.teacherId = teacherId
         teacherName = intent.getStringExtra("teacherName").toString()
         classesInfoString = intent.getStringExtra("classesInfo").toString()
         classesInfo = JSONArray(classesInfoString)

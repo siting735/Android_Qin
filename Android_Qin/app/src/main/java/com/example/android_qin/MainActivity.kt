@@ -97,7 +97,7 @@ class MainActivity : AppCompatActivity() {
         finish()
     }
 
-    var loginFailDialog: AlertDialog.Builder? = null
+
     private fun login() {
         Thread {
             buildRequestForLogin()
@@ -196,6 +196,10 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    override fun onBackPressed() {
+        // super.onBackPressed()
+    }
+
     var loadingDialog: AlertDialog? = null
     var identity = STUDENT
     var ip: String? = null
@@ -204,6 +208,7 @@ class MainActivity : AppCompatActivity() {
     var urlForLogin: URL? = null
     var connection: HttpURLConnection? = null
     var response: StringBuilder? = null
+    var loginFailDialog: AlertDialog.Builder? = null
 
     companion object {
         const val STUDENT = 1

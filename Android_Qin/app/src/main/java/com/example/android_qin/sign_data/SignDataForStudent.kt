@@ -96,7 +96,6 @@ class SignDataForStudent : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_sign_data_for_student, container, false)
     }
 

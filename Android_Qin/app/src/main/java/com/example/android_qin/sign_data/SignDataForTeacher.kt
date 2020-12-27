@@ -23,12 +23,9 @@ import java.lang.StringBuilder
 import java.net.URL
 
 class SignDataForTeacher : Fragment() {
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        configSwipeRefresh()
-    }
 
     override fun onStart() {
+        configSwipeRefresh()
         getClassListByRequest()
         super.onStart()
     }
@@ -38,13 +35,6 @@ class SignDataForTeacher : Fragment() {
         swipe?.setOnRefreshListener {
             getClassListByRequest()
             swipe?.isRefreshing = false
-        }
-    }
-
-    private fun removeOriginClassInfos() {
-        val classList = view?.findViewById<LinearLayout>(R.id.class_list)
-        activity?.runOnUiThread {
-            classList?.removeAllViews()
         }
     }
 
@@ -66,7 +56,6 @@ class SignDataForTeacher : Fragment() {
 
     private fun addClassInfoViewToLayout(classInfo: JSONObject) {
         val classInfoView = SuperTextView(context)
-        buildNavHost()
         buildClassInfoView(classInfoView, classInfo)
         activity?.runOnUiThread {
             classListLayout?.addView(classInfoView)
@@ -82,7 +71,6 @@ class SignDataForTeacher : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_sign_data_for_teacher, container, false)
     }
 
@@ -106,7 +94,6 @@ class SignDataForTeacher : Fragment() {
         }
         classInfoView?.id = viewCounter
         viewCounter += 1
-        Log.i("build class info view", classInfo.toString())
         className = classInfo?.get("className")?.toString()
         classId = classInfo?.get("classId")?.toString()
         classInfoView?.setLeftIcon(R.drawable.class_icon)
@@ -120,7 +107,6 @@ class SignDataForTeacher : Fragment() {
         classInfoView!!.setOnClickListener(classInfoViewListener)
     }
 
-
     private fun buildSwipe() {
         if (swipe == null) {
             swipe = view?.findViewById(R.id.sign_data_swipe_for_teacher)
@@ -129,6 +115,7 @@ class SignDataForTeacher : Fragment() {
 
     private fun dealWithResponse(response: StringBuilder?) {
         buildDataForClassList()
+        buildNavHost()
         removeOriginClassInfos()
         for (index in 0 until classInfos!!.length()) {
             addClassInfoViewToLayout(classInfos!![index] as JSONObject)
@@ -144,7 +131,7 @@ class SignDataForTeacher : Fragment() {
         if (ip == null) {
             ip = getString(R.string.ip)
         }
-        teacherId = arguments?.get("teacherId").toString()
+        teacherId = GetInClassListener.teacherId
         urlForGetClassInfos = URL("http://$ip:8080/teacher/teacherClasses?teacherId=$teacherId")
     }
 
@@ -156,6 +143,13 @@ class SignDataForTeacher : Fragment() {
             loginFailDialog?.setPositiveButton("确定") { dialog, id ->
                 {}
             }
+        }
+    }
+
+    private fun removeOriginClassInfos() {
+        val classList = view?.findViewById<LinearLayout>(R.id.class_list)
+        activity?.runOnUiThread {
+            classList?.removeAllViews()
         }
     }
 

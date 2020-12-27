@@ -21,13 +21,14 @@ import java.net.HttpURLConnection
 import java.net.URL
 
 class SignDataForEachClass : Fragment() {
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onStart() {
         configBackButton()
         updateClassName()
         getStudentsSignData()
+        super.onStart()
     }
-    private fun configBackButton(){
+
+    private fun configBackButton() {
         val backBtn = view?.findViewById<Toolbar>(R.id.tool_bar_for_class_info)
         buildNavHost()
         backBtn?.setNavigationOnClickListener {
@@ -35,18 +36,18 @@ class SignDataForEachClass : Fragment() {
         }
     }
 
-    private fun updateClassName(){
+    private fun updateClassName() {
         val className = arguments?.get("className").toString()
         val classNameView = view?.findViewById<SuperTextView>(R.id.class_name)
         activity?.runOnUiThread {
             classNameView?.setLeftString(className)
         }
     }
+
     private fun getStudentsSignData() {
         val classId = arguments?.get("classId").toString()
-
-        val ip =getString(R.string.ip)
-        Thread{
+        val ip = getString(R.string.ip)
+        Thread {
             val url = "http://$ip:8080/teacher/signRitoOfStudents?classId=$classId"
             val urlForGetSignData = URL(url)
             var connection: HttpURLConnection? = null
@@ -57,7 +58,7 @@ class SignDataForEachClass : Fragment() {
                 response = ConnectionUtil.getDataFromConnection(connection)
                 connection?.disconnect()
             } catch (e: Exception) {
-                Log.e("error in sign",e.toString())
+                Log.e("error in sign", e.toString())
                 var loginFailDialog = buildConnectFailDialog()
                 activity?.runOnUiThread {
                     loginFailDialog.show()
@@ -73,21 +74,22 @@ class SignDataForEachClass : Fragment() {
         val loginFailDialog = AlertDialog.Builder(this.requireContext())
         loginFailDialog.setTitle("提示信息")
         loginFailDialog.setMessage("连接服务器失败")
-        loginFailDialog.setPositiveButton("确定") {
-                dialog, id ->{}
+        loginFailDialog.setPositiveButton("确定") { dialog, id ->
+            {}
         }
         return loginFailDialog
     }
-    private fun dealWithResponse(response:StringBuilder?){
-        val jsonString = response.toString()
-        val responseJson = JSONObject(jsonString)
+
+    private fun dealWithResponse(response: StringBuilder?) {
+        val responseJson = JSONObject(response.toString())
         val signDataList = responseJson["signRitoOfStudents"] as JSONArray
-        for(index in 0 until signDataList.length()){
+        for (index in 0 until signDataList.length()) {
             addSignDataToLayout(signDataList[index] as JSONObject)
         }
     }
-    private fun addSignDataToLayout(signData: JSONObject?){
-        val signDataListLayout= view?.findViewById<LinearLayout>(R.id.students_sign_data_list)
+
+    private fun addSignDataToLayout(signData: JSONObject?) {
+        val signDataListLayout = view?.findViewById<LinearLayout>(R.id.students_sign_data_list)
         val signDataView = SuperTextView(context)
         val studentId = signData?.get("studentId")?.toString()
         val studentName = signData?.get("studentName")?.toString()
@@ -96,30 +98,28 @@ class SignDataForEachClass : Fragment() {
         signDataView.setLeftString(studentName)
         signDataView.setRightString("出勤率：")
         signDataView.setRightBottomString("$signRito%")
-        var layoutParams = LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, dip2px(100f))
-        layoutParams.setMargins(dip2px(10f),dip2px(10f),dip2px(10f),0)
+        var layoutParams =
+            LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, dip2px(100f))
+        layoutParams.setMargins(dip2px(10f), dip2px(10f), dip2px(10f), 0)
         signDataView.layoutParams = layoutParams
         activity?.runOnUiThread {
             signDataListLayout?.addView(signDataView)
         }
     }
 
-    private fun dip2px(dpValue:Float): Int {
+    private fun dip2px(dpValue: Float): Int {
         val scale = context?.resources?.displayMetrics?.density;
         return (dpValue * scale!! + 0.5f).toInt()
     }
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {}
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_sign_data_for_each_class, container, false)
     }
 
@@ -137,8 +137,6 @@ class SignDataForEachClass : Fragment() {
     companion object {
         @JvmStatic
         fun newInstance(param1: String, param2: String) =
-            SignDataForEachClass().apply {
-                arguments = Bundle().apply {}
-            }
+            SignDataForEachClass().apply {}
     }
 }

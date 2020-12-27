@@ -47,33 +47,12 @@ class LocationFragmentForTeacher : Fragment() {
         configSignBtn()
         configSwipeRefresh()
         refreshActivity()
-        Log.i("default","i'm done")
     }
 
     private fun updateFragmentTag() {
         requireFragmentManager().fragments[0].tag
         locationFragmentTag = requireFragmentManager().fragments[0].tag.toString()
     }
-
-    private fun noFragment(): Boolean {
-        //checkFragment = activity?.supportFragmentManager?.findFragmentById(R.id.locationFragmentForTeacher)
-        checkFragment = fragmentManager?.fragments!![0]
-//        val fragments = fragmentManager?.fragments
-//        Log.i("fragment tag",locationFragmentTag.toString())
-//        Log.i("fragment tag in fragments", fragments!![0].tag.toString())
-//        Log.i("fragments",fragments.toString())
-        if (checkFragment == null) {
-            Log.i("in location fragment", "no fragment")
-            return true
-        } else if (checkFragment != null) {
-            Log.i("in location fragment", "has fragment")
-            checkFragment = null
-            return false
-        }
-        return true
-    }
-
-    var checkFragment: Fragment? = null
 
     private fun refreshActivity() {
         Thread {
@@ -194,7 +173,6 @@ class LocationFragmentForTeacher : Fragment() {
         }
 
     }
-
 
     private fun getLocationInfo() {
         mLocationClient = AMapLocationClient(context)
@@ -329,18 +307,10 @@ class LocationFragmentForTeacher : Fragment() {
         }
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        Log.i("on create", "i am origin")
-        super.onCreate(savedInstanceState)
-
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        Log.i("create view", "+1")
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_location_for_teacher, container, false)
     }
 
@@ -397,8 +367,6 @@ class LocationFragmentForTeacher : Fragment() {
 
         @JvmStatic
         fun newInstance(param1: String, param2: String) =
-            LocationFragmentForTeacher().apply {
-                arguments = Bundle().apply {}
-            }
+            LocationFragmentForTeacher().apply {}
     }
 }

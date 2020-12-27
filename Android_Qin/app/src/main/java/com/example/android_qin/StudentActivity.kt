@@ -17,7 +17,7 @@ class StudentActivity : AppCompatActivity() {
     }
 
     private fun configTabBar() {
-        var tabSegment = findViewById<TabSegment>(R.id.student_tab_bar)
+        tabSegment = findViewById<TabSegment>(R.id.student_tab_bar)
         buildNavHost()
         val studentInfo = buildBundleForStudent()
         TabBarUtil.configTabBar(tabSegment, navController, studentInfo, TabBarUtil.STUDENT)
@@ -54,11 +54,13 @@ class StudentActivity : AppCompatActivity() {
         }
     }
 
-    var navHostFragment: NavHostFragment? = null
-    var navController: NavController? = null
-    var studentId = ""
-    var studentName = ""
-    var classId = ""
-    var className = ""
-
+    companion object{
+        var navHostFragment: NavHostFragment? = null
+        var navController: NavController? = null
+        var studentId: String? = null
+        var studentName: String? = null
+        var classId: String? = null
+        var className: String? = null
+        var tabSegment: TabSegment? =null
+    }
 }

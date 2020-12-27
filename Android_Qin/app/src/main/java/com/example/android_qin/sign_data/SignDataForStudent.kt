@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.appcompat.app.AlertDialog
 import com.example.android_qin.R
+import com.example.android_qin.StudentActivity
 import com.example.android_qin.util.ConnectionUtil
 import com.xuexiang.xui.widget.textview.supertextview.SuperTextView
 import org.json.JSONArray
@@ -44,7 +45,8 @@ class SignDataForStudent : Fragment() {
     private fun dealWithResponse(response: StringBuilder?) {
         buildDataForSignList()
         updateSignRito(responseJson)
-        for (index in 0 until signDataJsonList!!.length()) {
+        val listLength = signDataJsonList!!.length()
+        for (index in listLength - 1 downTo 0) {
             addSignDataToLayout(signDataJsonList!![index] as JSONObject)
         }
     }
@@ -103,7 +105,7 @@ class SignDataForStudent : Fragment() {
         if (ip == null) {
             ip = getString(R.string.ip)
         }
-        studentId = arguments?.get("studentId").toString()
+        studentId = StudentActivity.studentId
         urlForGetSignData = URL("http://$ip:8080/student/studentSignMessage?studentId=$studentId")
     }
 

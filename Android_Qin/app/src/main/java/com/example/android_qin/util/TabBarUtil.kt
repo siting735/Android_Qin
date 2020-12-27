@@ -12,15 +12,15 @@ import com.xuexiang.xui.widget.tabbar.TabSegment
 class TabBarUtil {
     companion object {
         fun configTabBar(
-            tabSegment: TabSegment,
+            tabSegment: TabSegment?,
             navController: NavController?,
             infoBundle: Bundle,
             identity: Int
         ) {
             addTabsToTabSegment(tabSegment)
-            tabSegment.mode = TabSegment.MODE_FIXED
-            tabSegment.selectTab(0)
-            tabSegment.notifyDataChanged()
+            tabSegment?.mode = TabSegment.MODE_FIXED
+            tabSegment?.selectTab(0)
+            tabSegment?.notifyDataChanged()
             if (identity == STUDENT) {
                 configNavForStudent(tabSegment, navController, infoBundle)
             } else if (identity == TEACHER) {
@@ -29,11 +29,11 @@ class TabBarUtil {
         }
 
         private fun configNavForTeacher(
-            tabSegment: TabSegment,
+            tabSegment: TabSegment?,
             navController: NavController?,
             teacherInfo: Bundle
         ) {
-            tabSegment.setOnTabClickListener {
+            tabSegment?.setOnTabClickListener {
                 when (it) {
                     TEACHER_SIGN_PAGE -> {
                         navController?.popBackStack()
@@ -58,11 +58,11 @@ class TabBarUtil {
         }
 
         private fun configNavForStudent(
-            tabSegment: TabSegment,
+            tabSegment: TabSegment?,
             navController: NavController?,
             studentInfo: Bundle
         ) {
-            tabSegment.setOnTabClickListener {
+            tabSegment?.setOnTabClickListener {
                 when (it) {
                     STUDENT_SIGN_PAGE -> {
                         navController?.popBackStack()
@@ -86,10 +86,10 @@ class TabBarUtil {
             }
         }
 
-        private fun addTabsToTabSegment(tabSegment: TabSegment) {
-            tabSegment.addTab(locationTab)
-            tabSegment.addTab(dataTab)
-            tabSegment.addTab(mineTab)
+        private fun addTabsToTabSegment(tabSegment: TabSegment?) {
+            tabSegment?.addTab(locationTab)
+            tabSegment?.addTab(dataTab)
+            tabSegment?.addTab(mineTab)
         }
 
         private fun buildTabForSign(): TabSegment.Tab {

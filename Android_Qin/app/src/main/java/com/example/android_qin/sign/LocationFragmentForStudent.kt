@@ -84,8 +84,10 @@ class LocationFragmentForStudent : Fragment() {
 
     private fun configSignBtn() {
         val signBtn = view?.findViewById<Button>(R.id.sign_btn_for_student)
+        buildNavHost()
         signBtn?.setOnClickListener {
-            sign()
+            // sign()
+            navController?.navigate(R.id.signStateForStudent)
         }
     }
 
@@ -295,6 +297,8 @@ class LocationFragmentForStudent : Fragment() {
             navController = navHostFragment?.navController
         }
     }
+
+
 
     var ip: String? = null
     private var deviceId: String? = null

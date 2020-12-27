@@ -33,5 +33,9 @@
         android:id="@+id/signStateForStudent"
         android:name="com.example.android_qin.sign.SignStateForStudent"
         android:label="fragment_sign_state_for_student"
-        tools:layout="@layout/fragment_sign_state_for_student" />
+        tools:layout="@layout/fragment_sign_state_for_student" >
+        <action
+            android:id="@+id/action_signStateForStudent_to_signDataForStudent"
+            app:destination="@id/signDataForStudent" />
+    </fragment>
 </navigation>

@@ -32,6 +32,7 @@ class SignDataForEachClass : Fragment() {
         val backBtn = view?.findViewById<Toolbar>(R.id.tool_bar_for_class_info)
         buildNavHost()
         backBtn?.setNavigationOnClickListener {
+            navController?.popBackStack()
             navController?.navigate(R.id.action_signDataForEachClass_to_signDataForTeacher)
         }
     }

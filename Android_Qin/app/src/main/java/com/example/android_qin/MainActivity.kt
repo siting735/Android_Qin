@@ -98,19 +98,19 @@ class MainActivity : AppCompatActivity() {
 
     private fun toTeacherPage(loginInfo: JSONObject) {
         val intent = Intent(this, TeacherActivity::class.java).apply {}
-        intent.putExtra("teacherId", loginInfo["teacherId"].toString())
-        intent.putExtra("teacherName", loginInfo["teacherName"].toString())
-        intent.putExtra("classesInfo", loginInfo["classesInfo"].toString())
+        TeacherActivity.teacherId = loginInfo["teacherId"].toString()
+        TeacherActivity.teacherName = loginInfo["teacherName"].toString()
+        TeacherActivity.classesInfoString = loginInfo["classesInfo"].toString()
         startActivity(intent)
         finish()
     }
 
     private fun toStudentPage(loginInfo: JSONObject) {
         val intent = Intent(this, StudentActivity::class.java).apply {}
-        intent.putExtra("studentId", loginInfo["studentId"].toString())
-        intent.putExtra("studentName", loginInfo["studentName"].toString())
-        intent.putExtra("classId", loginInfo["classId"].toString())
-        intent.putExtra("className", loginInfo["className"].toString())
+        StudentActivity.studentId = loginInfo["studentId"].toString()
+        StudentActivity.studentName = loginInfo["studentName"].toString()
+        StudentActivity.classId = loginInfo["classId"].toString()
+        StudentActivity.className = loginInfo["className"].toString()
         startActivity(intent)
         finish()
     }
@@ -213,7 +213,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     var loadingDialog: AlertDialog? = null
-    var identity = STUDENT
     var ip: String? = null
     var userName: ClearEditText? = null
     var password: PasswordEditText? = null
@@ -226,5 +225,7 @@ class MainActivity : AppCompatActivity() {
         const val TEACHER = 2
         const val NO_USER = 3
         const val WRONG_PASSWORD = 4
+        var identity = STUDENT
+        const val ip = "10.60.0.13"
     }
 }

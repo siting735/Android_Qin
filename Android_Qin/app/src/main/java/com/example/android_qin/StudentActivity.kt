@@ -8,6 +8,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import com.example.android_qin.util.ConnectionUtil
+import com.example.android_qin.util.NavUtil
 import com.example.android_qin.util.TabBarUtil
 import com.xuexiang.xui.widget.tabbar.TabSegment
 import kotlin.coroutines.coroutineContext
@@ -17,55 +18,27 @@ class StudentActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_student)
-        buildDataForBundle()
         configTabBar()
     }
 
     private fun configTabBar() {
         tabSegment = findViewById<TabSegment>(R.id.student_tab_bar)
-        buildNavHost()
-        val studentInfo = buildBundleForStudent()
-        TabBarUtil.configTabBar(tabSegment, navController, studentInfo, TabBarUtil.STUDENT)
-        toDefaultPage(studentInfo)
+        NavUtil.buildNavHost(supportFragmentManager)
+        TabBarUtil.configTabBar(tabSegment, TabBarUtil.STUDENT)
+        toDefaultPage()
     }
 
-    private fun toDefaultPage(studentInfo: Bundle) {
-        navController?.popBackStack()
-        navController?.navigate(R.id.locationFragmentForStudent, studentInfo)
-    }
-
-    private fun buildBundleForStudent(): Bundle {
-        val bundle = Bundle()
-        bundle.putString("studentId", studentId)
-        bundle.putString("studentName", studentName)
-        bundle.putString("classId", classId)
-        bundle.putString("className", className)
-        return bundle
-    }
-
-    private fun buildDataForBundle() {
-        studentId = intent.getStringExtra("studentId").toString()
-        studentName = intent.getStringExtra("studentName").toString()
-        classId = intent.getStringExtra("classId").toString()
-        className = intent.getStringExtra("className").toString()
-    }
-
-
-    private fun buildNavHost() {
-        if (navHostFragment == null) {
-            navHostFragment =
-                supportFragmentManager?.findFragmentById(R.id.nav_host_for_student) as NavHostFragment
-            navController = navHostFragment?.navController
-        }
+    private fun toDefaultPage() {
+        NavUtil.navController?.popBackStack()
+        NavUtil.navController?.navigate(R.id.locationFragmentForStudent)
     }
 
     companion object {
-        var navHostFragment: NavHostFragment? = null
-        var navController: NavController? = null
         var studentId: String? = null
         var studentName: String? = null
         var classId: String? = null
         var className: String? = null
         var tabSegment: TabSegment? = null
+
     }
 }

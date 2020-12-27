@@ -12,9 +12,12 @@ import androidx.appcompat.app.AlertDialog
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import com.example.android_qin.MainActivity
 import com.example.android_qin.R
+import com.example.android_qin.TeacherActivity
 import com.example.android_qin.listener.GetInClassListener
 import com.example.android_qin.util.ConnectionUtil
+import com.example.android_qin.util.NavUtil
 import com.xuexiang.xui.widget.textview.supertextview.SuperTextView
 import org.json.JSONArray
 import org.json.JSONObject
@@ -74,14 +77,6 @@ class SignDataForTeacher : Fragment() {
         return inflater.inflate(R.layout.fragment_sign_data_for_teacher, container, false)
     }
 
-    private fun buildNavHost() {
-        if (navHostFragment == null) {
-            navHostFragment =
-                activity?.supportFragmentManager?.findFragmentById(R.id.nav_host_for_teacher) as NavHostFragment
-            navController = navHostFragment?.navController
-        }
-    }
-
     @SuppressLint("ResourceType")
     private fun buildClassInfoView(classInfoView: SuperTextView?, classInfo: JSONObject?) {
         if (classListLayout == null) {
@@ -94,16 +89,16 @@ class SignDataForTeacher : Fragment() {
         }
         classInfoView?.id = viewCounter
         viewCounter += 1
-        className = classInfo?.get("className")?.toString()
-        classId = classInfo?.get("classId")?.toString()
+        tempClassName = classInfo?.get("className")?.toString()
+        tempClassId = classInfo?.get("classId")?.toString()
         classInfoView?.setLeftIcon(R.drawable.class_icon)
-        classInfoView?.setLeftString(className)
+        classInfoView?.setLeftString(tempClassName)
         classInfoView?.useShape()
         classInfoView?.setShapeCornersRadius(dip2px(10f).toFloat())
         classInfoView?.setPadding(dip2px(14f), 0, 0, 0)
         classInfoView?.layoutParams = layoutParams
         classInfoView?.setRightIcon(R.drawable.get_in)
-        val classInfoViewListener = GetInClassListener(classId, className, navController)
+        val classInfoViewListener = GetInClassListener(tempClassId, tempClassName)
         classInfoView!!.setOnClickListener(classInfoViewListener)
     }
 
@@ -115,7 +110,7 @@ class SignDataForTeacher : Fragment() {
 
     private fun dealWithResponse(response: StringBuilder?) {
         buildDataForClassList()
-        buildNavHost()
+        NavUtil.buildNavHost(activity?.supportFragmentManager)
         removeOriginClassInfos()
         for (index in 0 until classInfos!!.length()) {
             addClassInfoViewToLayout(classInfos!![index] as JSONObject)
@@ -128,11 +123,7 @@ class SignDataForTeacher : Fragment() {
     }
 
     private fun buildRequestForGetClassInfos() {
-        if (ip == null) {
-            ip = getString(R.string.ip)
-        }
-        teacherId = GetInClassListener.teacherId
-        urlForGetClassInfos = URL("http://$ip:8080/teacher/teacherClasses?teacherId=$teacherId")
+        urlForGetClassInfos = URL("http://${MainActivity.ip}:8080/teacher/teacherClasses?teacherId=${TeacherActivity.teacherId}")
     }
 
     private fun removeOriginClassInfos() {
@@ -144,18 +135,14 @@ class SignDataForTeacher : Fragment() {
 
     var swipe: SwipeRefreshLayout? = null
     private var classListLayout: LinearLayout? = null
-    var navHostFragment: NavHostFragment? = null
-    var navController: NavController? = null
-    var className: String? = null
-    var classId: String? = null
     var layoutParams: LinearLayout.LayoutParams? = null
     var viewCounter = 0
-    var ip: String? = null
-    var teacherId: String? = null
     var urlForGetClassInfos: URL? = null
     var response: StringBuilder? = null
     var responseJson: JSONObject? = null
     var classInfos: JSONArray? = null
+    var tempClassId: String? = null
+    var tempClassName: String? = null
 
     companion object {
         const val REFRESH = 1

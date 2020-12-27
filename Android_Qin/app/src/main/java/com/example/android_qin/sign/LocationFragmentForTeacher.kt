@@ -21,8 +21,11 @@ import com.amap.api.location.AMapLocationListener
 import com.amap.api.maps2d.AMap
 import com.amap.api.maps2d.MapView
 import com.amap.api.maps2d.model.MyLocationStyle
+import com.example.android_qin.MainActivity
 import com.example.android_qin.R
+import com.example.android_qin.TeacherActivity
 import com.example.android_qin.util.ConnectionUtil
+import com.example.android_qin.util.NavUtil
 import com.xuexiang.xui.widget.textview.supertextview.SuperTextView
 import org.json.JSONObject
 import java.lang.Exception
@@ -46,11 +49,6 @@ class LocationFragmentForTeacher : Fragment() {
         configSignBtn()
         configSwipeRefresh()
         refreshActivity()
-    }
-
-    private fun updateFragmentTag() {
-        requireFragmentManager().fragments[0].tag
-        locationFragmentTag = requireFragmentManager().fragments[0].tag.toString()
     }
 
     private fun refreshActivity() {
@@ -99,14 +97,16 @@ class LocationFragmentForTeacher : Fragment() {
     @RequiresApi(Build.VERSION_CODES.O)
     private fun configSignBtn() {
         val signBtn = view?.findViewById<Button>(R.id.sign_btn_for_teacher)
+        NavUtil.buildNavHost(activity?.supportFragmentManager)
         signBtn?.setOnClickListener {
-            if (currentClassId == "") {
-                buildConfirmDialogForLaunch()
-                confirmDialogForLaunch?.show()
-            } else {
-                buildConfirmDialogForEndActivity()
-                confirmDialogForEnd?.show()
-            }
+            NavUtil.navController?.navigate(R.id.signStateForTeacher)
+//            if (currentClassId == "") {
+//                buildConfirmDialogForLaunch()
+//                confirmDialogForLaunch?.show()
+//            } else {
+//                buildConfirmDialogForEndActivity()
+//                confirmDialogForEnd?.show()
+//            }
         }
     }
 
@@ -161,14 +161,14 @@ class LocationFragmentForTeacher : Fragment() {
 
     private fun dealWithResponseForEndActivity() {
         buildDataForEndActivity()
-        buildNavHost()
+        NavUtil.buildNavHost(activity?.supportFragmentManager)
         if (activityState == END_FAIL) {
             activity?.runOnUiThread {
                 Toast.makeText(requireContext(), "结束活动失败", Toast.LENGTH_LONG).show()
             }
         } else {
             // need bundle and page is waiting to build
-            navController?.navigate(R.id.signStateForTeacher)
+            NavUtil.navController?.navigate(R.id.signStateForTeacher)
         }
 
     }
@@ -226,24 +226,18 @@ class LocationFragmentForTeacher : Fragment() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun buildRequestForLaunchActivity() {
-        if (ip == null) {
-            ip = getString(R.string.ip)
-        }
         val current = LocalDateTime.now()
         val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")
         newActivityTitle = current.format(formatter)
         teacherLatitude = locationInfo["teacherLatitude"]
         teacherLongitude = locationInfo["teacherLongitude"]
         urlForLaunchActivity =
-            URL("http://$ip:8080/activity/launchActivity?classId=$currentClassId&activityTitle=$newActivityTitle&teacherLongitude=$teacherLatitude&teacherLatitude=$teacherLatitude")
+            URL("http://${MainActivity.ip}:8080/activity/launchActivity?classId=$currentClassId&activityTitle=$newActivityTitle&teacherLongitude=$teacherLatitude&teacherLatitude=$teacherLatitude")
     }
 
     private fun buildRequestForEndActivity() {
-        if (ip == null) {
-            ip = getString(R.string.ip)
-        }
         urlForEndActivity =
-            URL("http://$ip:8080/sign/changeSignToStop?classId=$currentClassId&activityId=$currentActivityId")
+            URL("http://${MainActivity.ip}:8080/sign/changeSignToStop?classId=$currentClassId&activityId=$currentActivityId")
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -276,23 +270,11 @@ class LocationFragmentForTeacher : Fragment() {
     }
 
     private fun buildRequestForRefreshActivity() {
-        if (ip == null) {
-            ip = getString(R.string.ip)
-        }
         if (activityTitleTextView == null) {
             activityTitleTextView = view?.findViewById(R.id.activity_title_for_teacher)
         }
-        teacherId = arguments?.get("teacherId").toString()
         urlForRefreshActivity =
-            URL("http://$ip:8080/activity/searchActivityInProcess?teacherId=$teacherId")
-    }
-
-    private fun buildNavHost() {
-        if (navHostFragment == null) {
-            navHostFragment =
-                activity?.supportFragmentManager?.findFragmentById(R.id.nav_host_for_student) as NavHostFragment
-            navController = navHostFragment?.navController
-        }
+            URL("http://${MainActivity.ip}:8080/activity/searchActivityInProcess?teacherId=${TeacherActivity.teacherId}")
     }
 
     override fun onCreateView(
@@ -330,8 +312,6 @@ class LocationFragmentForTeacher : Fragment() {
     var mLocationListener: AMapLocationListener? = null
     var mLocationOption: AMapLocationClientOption? = null
     private val locationInfo = ArrayMap<String, String>()
-    private var ip: String? = null
-    var teacherId: String? = null
     var urlForRefreshActivity: URL? = null
     var connection: HttpURLConnection? = null
     var response: StringBuilder? = null
@@ -342,11 +322,8 @@ class LocationFragmentForTeacher : Fragment() {
     var teacherLongitude: String? = null
     var teacherLatitude: String? = null
     var newActivityTitle: String? = null
-    var navHostFragment: NavHostFragment? = null
-    var navController: NavController? = null
     var responseJson: JSONObject? = null
     var activityTitleTextView: SuperTextView? = null
-    var locationFragmentTag: String? = null
 
     companion object {
         const val LAUNCH_FAIL = "0"

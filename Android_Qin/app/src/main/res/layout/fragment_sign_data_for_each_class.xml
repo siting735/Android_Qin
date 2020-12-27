@@ -52,11 +52,11 @@
                         android:layout_marginLeft="10dp"
                         android:layout_marginTop="10dp"
                         android:layout_marginRight="10dp"
-                        app:sUseShape="true"
-                        app:sShapeCornersRadius="10dp"
                         app:sDividerLineType="both"
                         app:sLeftTextIsBold="true"
-                        app:sLeftTextSize="25sp" />
+                        app:sLeftTextSize="25sp"
+                        app:sShapeCornersRadius="10dp"
+                        app:sUseShape="true" />
 
                 </LinearLayout>
 
@@ -73,10 +73,12 @@
                     android:id="@+id/students_sign_data_list"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:orientation="vertical" >
+                    android:orientation="vertical">
 
                 </LinearLayout>
+
             </androidx.core.widget.NestedScrollView>
+
         </LinearLayout>
 
 

@@ -4,12 +4,13 @@ import android.os.Bundle
 import android.view.View
 import androidx.navigation.NavController
 import com.example.android_qin.R
+import com.example.android_qin.util.NavUtil
 
-class GetInClassListener(var classId: String?, var className: String?, var navController:NavController?): View.OnClickListener {
+class GetInClassListener(var classId: String?, var className: String?): View.OnClickListener {
     override fun onClick(v: View?) {
         val classInfoBundle = buildBundleForClassInfo(classId, className)
-        navController?.popBackStack()
-        navController?.navigate(R.id.signDataForEachClass, classInfoBundle)
+        NavUtil.navController?.popBackStack()
+        NavUtil.navController?.navigate(R.id.signDataForEachClass, classInfoBundle)
         pageState = 1
     }
 
@@ -21,6 +22,5 @@ class GetInClassListener(var classId: String?, var className: String?, var navCo
     }
     companion object{
         var pageState = 0
-        var teacherId:String? = null
     }
 }

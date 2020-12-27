@@ -11,8 +11,11 @@ import android.widget.Toolbar
 import androidx.appcompat.app.AlertDialog
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
+import com.example.android_qin.MainActivity
 import com.example.android_qin.R
+import com.example.android_qin.TeacherActivity
 import com.example.android_qin.util.ConnectionUtil
+import com.example.android_qin.util.NavUtil
 import com.xuexiang.xui.widget.textview.supertextview.SuperTextView
 import org.json.JSONArray
 import org.json.JSONObject
@@ -30,10 +33,10 @@ class SignDataForEachClass : Fragment() {
 
     private fun configBackButton() {
         val backBtn = view?.findViewById<Toolbar>(R.id.tool_bar_for_class_info)
-        buildNavHost()
+        NavUtil.buildNavHost(activity?.supportFragmentManager)
         backBtn?.setNavigationOnClickListener {
-            navController?.popBackStack()
-            navController?.navigate(R.id.action_signDataForEachClass_to_signDataForTeacher)
+            NavUtil.navController?.popBackStack()
+            NavUtil.navController?.navigate(R.id.signDataForTeacher)
         }
     }
 
@@ -46,10 +49,9 @@ class SignDataForEachClass : Fragment() {
     }
 
     private fun getStudentsSignData() {
-        val classId = arguments?.get("classId").toString()
-        val ip = getString(R.string.ip)
         Thread {
-            val url = "http://$ip:8080/teacher/signRitoOfStudents?classId=$classId"
+            val classId = arguments?.getString("classId")
+            val url = "http://${MainActivity.ip}:8080/teacher/signRitoOfStudents?classId=$classId"
             val urlForGetSignData = URL(url)
             var connection: HttpURLConnection? = null
             var response: StringBuilder? = null
@@ -68,7 +70,6 @@ class SignDataForEachClass : Fragment() {
             }
             dealWithResponse(response)
         }.start()
-        Log.i("classId in each class", classId)
     }
 
     private fun dealWithResponse(response: StringBuilder?) {
@@ -103,27 +104,12 @@ class SignDataForEachClass : Fragment() {
         return (dpValue * scale!! + 0.5f).toInt()
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         return inflater.inflate(R.layout.fragment_sign_data_for_each_class, container, false)
     }
-
-    private fun buildNavHost() {
-        if (navHostFragment == null) {
-            navHostFragment =
-                activity?.supportFragmentManager?.findFragmentById(R.id.nav_host_for_teacher) as NavHostFragment
-            navController = navHostFragment?.navController
-        }
-    }
-
-    var navHostFragment: NavHostFragment? = null
-    var navController: NavController? = null
 
     companion object {
 

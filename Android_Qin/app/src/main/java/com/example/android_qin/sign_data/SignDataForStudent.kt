@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.ProgressBar
 import androidx.appcompat.app.AlertDialog
+import com.example.android_qin.MainActivity
 import com.example.android_qin.R
 import com.example.android_qin.StudentActivity
 import com.example.android_qin.util.ConnectionUtil
@@ -90,11 +91,6 @@ class SignDataForStudent : Fragment() {
         return (dpValue * scale!! + 0.5f).toInt()
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {}
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -103,11 +99,7 @@ class SignDataForStudent : Fragment() {
     }
 
     private fun buildRequestForGetSignData() {
-        if (ip == null) {
-            ip = getString(R.string.ip)
-        }
-        studentId = StudentActivity.studentId
-        urlForGetSignData = URL("http://$ip:8080/student/studentSignMessage?studentId=$studentId")
+        urlForGetSignData = URL("http://${MainActivity.ip}:8080/student/studentSignMessage?studentId=${StudentActivity.studentId}")
     }
 
     private fun buildDataForSignList() {
@@ -153,8 +145,6 @@ class SignDataForStudent : Fragment() {
     var layoutParams: LinearLayout.LayoutParams? = null
     var signRito: String? = null
     var signRitoTextView: SuperTextView? = null
-    var ip: String? = null
-    var studentId: String? = null
     var urlForGetSignData: URL? = null
     var connection: HttpURLConnection? = null
     var response: StringBuilder? = null

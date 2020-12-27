@@ -12,75 +12,52 @@ import com.xuexiang.xui.widget.tabbar.TabSegment
 class TabBarUtil {
     companion object {
         fun configTabBar(
-            tabSegment: TabSegment?,
-            navController: NavController?,
-            infoBundle: Bundle,
-            identity: Int
+            tabSegment: TabSegment?, identity: Int
         ) {
             addTabsToTabSegment(tabSegment)
             tabSegment?.mode = TabSegment.MODE_FIXED
             tabSegment?.selectTab(0)
             tabSegment?.notifyDataChanged()
             if (identity == STUDENT) {
-                configNavForStudent(tabSegment, navController, infoBundle)
+                configNavForStudent(tabSegment)
             } else if (identity == TEACHER) {
-                configNavForTeacher(tabSegment, navController, infoBundle)
+                configNavForTeacher(tabSegment)
             }
         }
 
-        private fun configNavForTeacher(
-            tabSegment: TabSegment?,
-            navController: NavController?,
-            teacherInfo: Bundle
-        ) {
+        private fun configNavForTeacher(tabSegment: TabSegment?) {
             tabSegment?.setOnTabClickListener {
                 when (it) {
                     TEACHER_SIGN_PAGE -> {
-                        navController?.popBackStack()
-                        navController?.navigate(
-                            R.id.locationFragmentForTeacher,
-                            teacherInfo
-                        )
+                        NavUtil.navController?.popBackStack()
+                        NavUtil.navController?.navigate(R.id.locationFragmentForTeacher)
                     }
                     TEACHER_SIGN_DATA_PAGE -> {
-                        navController?.popBackStack()
-                        navController?.navigate(
-                            R.id.signDataForTeacher,
-                            teacherInfo
-                        )
+                        NavUtil.navController?.popBackStack()
+                        NavUtil.navController?.navigate(R.id.signDataForTeacher)
                     }
                     TEACHER_MINE_PAGE -> {
-                        navController?.popBackStack()
-                        navController?.navigate(R.id.mineForTeacher, teacherInfo)
+                        NavUtil.navController?.popBackStack()
+                        NavUtil.navController?.navigate(R.id.mineForTeacher)
                     }
                 }
             }
         }
 
-        private fun configNavForStudent(
-            tabSegment: TabSegment?,
-            navController: NavController?,
-            studentInfo: Bundle
-        ) {
+        private fun configNavForStudent(tabSegment: TabSegment?) {
             tabSegment?.setOnTabClickListener {
                 when (it) {
                     STUDENT_SIGN_PAGE -> {
-                        navController?.popBackStack()
-                        navController?.navigate(
-                            R.id.locationFragmentForStudent,
-                            studentInfo
-                        )
+                        NavUtil.navController?.popBackStack()
+                        NavUtil.navController?.navigate(R.id.locationFragmentForStudent)
                     }
                     STUDENT_SIGN_DATA_PAGE -> {
-                        navController?.popBackStack()
-                        navController?.navigate(
-                            R.id.signDataForStudent,
-                            studentInfo
-                        )
+                        NavUtil.navController?.popBackStack()
+                        NavUtil.navController?.navigate(R.id.signDataForStudent)
                     }
                     STUDENT_MINE_PAGE -> {
-                        navController?.popBackStack()
-                        navController?.navigate(R.id.mineForStudent, studentInfo)
+                        NavUtil.navController?.popBackStack()
+                        NavUtil.navController?.navigate(R.id.mineForStudent)
                     }
                 }
             }

@@ -22,9 +22,11 @@ import com.amap.api.location.AMapLocationListener
 import com.amap.api.maps2d.AMap
 import com.amap.api.maps2d.MapView
 import com.amap.api.maps2d.model.MyLocationStyle
+import com.example.android_qin.MainActivity
 import com.example.android_qin.R
 import com.example.android_qin.StudentActivity
 import com.example.android_qin.util.ConnectionUtil
+import com.example.android_qin.util.NavUtil
 import com.xuexiang.xui.widget.textview.supertextview.SuperTextView
 import org.json.JSONObject
 import java.lang.Exception
@@ -85,10 +87,10 @@ class LocationFragmentForStudent : Fragment() {
 
     private fun configSignBtn() {
         val signBtn = view?.findViewById<Button>(R.id.sign_btn_for_student)
-        buildNavHost()
+        NavUtil.buildNavHost(activity?.supportFragmentManager)
         signBtn?.setOnClickListener {
             // sign()
-            navController?.navigate(R.id.signStateForStudent)
+            NavUtil.navController?.navigate(R.id.signStateForStudent)
         }
     }
 
@@ -112,7 +114,7 @@ class LocationFragmentForStudent : Fragment() {
     private fun dealWithResponseForSign(response: StringBuilder?) {
         val responseJson = JSONObject(response.toString())
         val signState = responseJson["signState"] as Int
-        buildNavHost()
+        NavUtil.buildNavHost(activity?.supportFragmentManager)
         if (signState == 0) {
             activity?.runOnUiThread {
                 Toast.makeText(context, "签到失败", Toast.LENGTH_LONG).show()
@@ -120,7 +122,7 @@ class LocationFragmentForStudent : Fragment() {
         } else {
             activity?.runOnUiThread {
                 // page is waiting to build
-                navController?.navigate(R.id.signStateForStudent)
+                NavUtil.navController?.navigate(R.id.signStateForStudent)
             }
         }
     }
@@ -249,11 +251,8 @@ class LocationFragmentForStudent : Fragment() {
     }
 
     private fun buildRequestForRefreshActivity() {
-        if (ip == null) {
-            ip = getString(R.string.ip)
-        }
-        classId = arguments?.get("classId").toString()
-        urlForRefreshActivity = URL("http://$ip:8080/activity/activityInProgress?classId=$classId")
+        urlForRefreshActivity =
+            URL("http://${MainActivity.ip}:8080/activity/activityInProgress?classId=${StudentActivity.classId}")
     }
 
     private fun buildDataForRefreshActivity() {
@@ -266,36 +265,20 @@ class LocationFragmentForStudent : Fragment() {
     }
 
     private fun buildRequestForSign() {
-        if (ip == null) {
-            ip = getString(R.string.ip)
-        }
         if (deviceId == null) {
             deviceId = getDeviceId()
         }
-        classId = arguments?.get("classId").toString()
         studentLongitude = locationInfo["studentLongitude"].toString()
         studentLatitude = locationInfo["studentLatitude"].toString()
         studentId = arguments?.get("studentId").toString()
         urlForSign =
-            URL("http://$ip:8080/sign/studentSign?studentId=$studentId&studentLongitude=$studentLongitude&studentLatitude=$studentLatitude&deviceId=$deviceId")
+            URL("http://${MainActivity.ip}:8080/sign/studentSign?studentId=$studentId&studentLongitude=$studentLongitude&studentLatitude=$studentLatitude&deviceId=$deviceId")
     }
 
-    private fun buildNavHost() {
-        if (navHostFragment == null) {
-            navHostFragment =
-                activity?.supportFragmentManager?.findFragmentById(R.id.nav_host_for_student) as NavHostFragment
-            navController = navHostFragment?.navController
-        }
-    }
-
-
-
-    var ip: String? = null
     private var deviceId: String? = null
     var responseJson: JSONObject? = null
     var activityTitle: String? = null
     var activityTitleTextView: SuperTextView? = null
-    var classId: String? = null
     var studentLongitude: String? = null
     var studentLatitude: String? = null
     var studentId: String? = null
@@ -309,8 +292,6 @@ class LocationFragmentForStudent : Fragment() {
     var mLocationListener: AMapLocationListener? = null
     var mLocationOption: AMapLocationClientOption? = null
     private val locationInfo = ArrayMap<String, String>()
-    var navHostFragment: NavHostFragment? = null
-    var navController: NavController? = null
 
     companion object {
 

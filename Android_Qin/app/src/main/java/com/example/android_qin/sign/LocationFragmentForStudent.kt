@@ -45,6 +45,7 @@ class LocationFragmentForStudent : Fragment() {
         val swipe =
             view?.findViewById<androidx.swiperefreshlayout.widget.SwipeRefreshLayout>(R.id.location_swipe_for_student)
         swipe?.setOnRefreshListener {
+            mLocationClient?.startLocation()
             refreshActivity()
             swipe.isRefreshing = false
         }
@@ -70,15 +71,12 @@ class LocationFragmentForStudent : Fragment() {
         buildDataForRefreshActivity()
         if (activityTitle.toString() == "") {
             activity?.runOnUiThread {
-                Log.i("refresh","no activity")
                 activityTitleTextView?.setLeftString("暂无活动")
                 activityTitleTextView?.setRightIcon(R.drawable.no_activity)
             }
         } else {
-            Log.i("refresh","activity running")
             activity?.runOnUiThread {
                 activityTitleTextView?.setLeftString(activityTitle.toString())
-                Log.i("in refresh", activityTitle.toString())
                 activityTitleTextView?.setRightIcon(R.drawable.activity_running)
             }
         }
@@ -205,6 +203,7 @@ class LocationFragmentForStudent : Fragment() {
         }
         mLocationOption!!.locationMode = AMapLocationClientOption.AMapLocationMode.Hight_Accuracy
         mLocationOption!!.interval = 5000
+        // mLocationOption!!.isOnceLocation = true
         mLocationClient!!.setLocationOption(mLocationOption)
         mLocationOption!!.isMockEnable = true
         mLocationListener = AMapLocationListener { aMapLocation ->
@@ -214,6 +213,7 @@ class LocationFragmentForStudent : Fragment() {
                     locationInfo["studentLongitude"] = aMapLocation.longitude.toString()
                     locationInfo["studentLatitude"] = aMapLocation.latitude.toString()
                     Log.i("locationInfo", locationInfo.toString())
+                    mLocationClient?.stopLocation()
                 } else {
                     Log.e(
                         "AmapError", "location Error, ErrCode:"

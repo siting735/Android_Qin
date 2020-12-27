@@ -5,6 +5,9 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
+import android.view.animation.AlphaAnimation
+import android.view.animation.Animation
 import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
@@ -23,12 +26,23 @@ import java.net.URL
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        initUI()
-        setContentView(R.layout.activity_main)
-        grantPermission()
-        checkLocalAccount()
-        configLoginBtn()
-        configIdentity()
+        val view = View.inflate(this, R.layout.start, null)
+        setContentView(view)
+        val aa = AlphaAnimation(0.3f, 1.0f)
+        aa.duration = 3000
+        view.startAnimation(aa)
+        aa.setAnimationListener(object : Animation.AnimationListener {
+            override fun onAnimationEnd(arg0: Animation?) {
+                initUI()
+                setContentView(R.layout.activity_main)
+                grantPermission()
+                checkLocalAccount()
+                configLoginBtn()
+                configIdentity()
+            }
+            override fun onAnimationRepeat(animation: Animation?) {}
+            override fun onAnimationStart(animation: Animation?) {}
+        })
     }
 
     private fun initUI() {

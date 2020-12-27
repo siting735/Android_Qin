@@ -1,10 +1,16 @@
 package com.example.android_qin
 
+import android.annotation.SuppressLint
+import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.AttributeSet
 import android.util.Log
+import android.view.View
+import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
+import com.example.android_qin.listener.GetInClassListener
 import com.example.android_qin.util.TabBarUtil
 import com.xuexiang.xui.widget.tabbar.TabSegment
 import org.json.JSONArray
@@ -17,6 +23,13 @@ class TeacherActivity : AppCompatActivity() {
         configTabBar()
     }
 
+    override fun onBackPressed() {
+        if (GetInClassListener.pageState == CLASS_INFO) {
+            super.onBackPressed()
+            GetInClassListener.pageState = 0
+        }
+    }
+
     private fun configTabBar() {
         var tabSegment = findViewById<TabSegment>(R.id.teacher_tab_bar)
         val teacherInfo = buildBundleForTeacher()
@@ -26,6 +39,7 @@ class TeacherActivity : AppCompatActivity() {
     }
 
     private fun toDefaultPage(teacherInfo: Bundle) {
+        navController?.popBackStack()
         navController?.navigate(R.id.locationFragmentForTeacher, teacherInfo)
     }
 
@@ -45,9 +59,6 @@ class TeacherActivity : AppCompatActivity() {
         return bundle
     }
 
-    override fun onBackPressed() {
-        //invalid back button
-    }
 
     private fun buildDataForBundle() {
         teacherId = intent.getStringExtra("teacherId").toString()
@@ -62,4 +73,8 @@ class TeacherActivity : AppCompatActivity() {
     var classesInfo: JSONArray? = null
     var navHostFragment: NavHostFragment? = null
     var navController: NavController? = null
+
+    companion object {
+        const val CLASS_INFO = 1
+    }
 }

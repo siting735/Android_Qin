@@ -7,7 +7,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import android.widget.Toolbar
 import androidx.appcompat.app.AlertDialog
+import androidx.navigation.NavController
+import androidx.navigation.fragment.NavHostFragment
 import com.example.android_qin.R
 import com.example.android_qin.util.ConnectionUtil
 import com.xuexiang.xui.widget.textview.supertextview.SuperTextView
@@ -20,9 +23,18 @@ import java.net.URL
 class SignDataForEachClass : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        configBackButton()
         updateClassName()
         getStudentsSignData()
     }
+    private fun configBackButton(){
+        val backBtn = view?.findViewById<Toolbar>(R.id.tool_bar_for_class_info)
+        buildNavHost()
+        backBtn?.setNavigationOnClickListener {
+            navController?.navigate(R.id.action_signDataForEachClass_to_signDataForTeacher)
+        }
+    }
+
     private fun updateClassName(){
         val className = arguments?.get("className").toString()
         val classNameView = view?.findViewById<SuperTextView>(R.id.class_name)
@@ -110,6 +122,17 @@ class SignDataForEachClass : Fragment() {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_sign_data_for_each_class, container, false)
     }
+
+    private fun buildNavHost() {
+        if (navHostFragment == null) {
+            navHostFragment =
+                activity?.supportFragmentManager?.findFragmentById(R.id.nav_host_for_teacher) as NavHostFragment
+            navController = navHostFragment?.navController
+        }
+    }
+
+    var navHostFragment: NavHostFragment? = null
+    var navController: NavController? = null
 
     companion object {
         @JvmStatic

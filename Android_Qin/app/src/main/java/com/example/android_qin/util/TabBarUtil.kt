@@ -1,6 +1,8 @@
 package com.example.android_qin.util
 
 import android.os.Bundle
+import android.util.Log
+import androidx.fragment.app.FragmentManager
 import androidx.navigation.NavController
 import com.example.android_qin.R
 import com.example.android_qin.StudentActivity
@@ -33,10 +35,12 @@ class TabBarUtil {
         ) {
             tabSegment.setOnTabClickListener {
                 when (it) {
-                    TEACHER_SIGN_PAGE -> navController?.navigate(
-                        R.id.locationFragmentForTeacher,
-                        teacherInfo
-                    )
+                    TEACHER_SIGN_PAGE -> {
+                        navController?.navigate(
+                            R.id.locationFragmentForTeacher,
+                            teacherInfo
+                        )
+                    }
                     TEACHER_SIGN_DATA_PAGE -> navController?.navigate(
                         R.id.signDataForTeacher,
                         teacherInfo
@@ -110,5 +114,6 @@ class TabBarUtil {
         private const val TEACHER_MINE_PAGE = 2
         const val STUDENT = 1
         const val TEACHER = 2
+        var supportFragmentManager: FragmentManager? = null
     }
 }

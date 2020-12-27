@@ -84,6 +84,7 @@ class MainActivity : AppCompatActivity() {
         intent.putExtra("teacherName", loginInfo["teacherName"].toString())
         intent.putExtra("classesInfo", loginInfo["classesInfo"].toString())
         startActivity(intent)
+        finish()
     }
 
     private fun toStudentPage(loginInfo: JSONObject) {
@@ -93,6 +94,7 @@ class MainActivity : AppCompatActivity() {
         intent.putExtra("classId", loginInfo["classId"].toString())
         intent.putExtra("className", loginInfo["className"].toString())
         startActivity(intent)
+        finish()
     }
 
     var loginFailDialog: AlertDialog.Builder? = null

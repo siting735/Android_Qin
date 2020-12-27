@@ -25,24 +25,17 @@ import java.net.URL
 class SignDataForTeacher : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        getClassListOnInit()
         configSwipeRefresh()
     }
 
-    private fun getClassListOnInit() {
-        Thread {
-            val classesInfoString = arguments?.get("classesInfoString").toString()
-            classInfos = JSONArray(classesInfoString)
-            for (index in 0 until classInfos!!.length()) {
-                addClassInfoViewToLayout(classInfos!![index] as JSONObject)
-            }
-        }.start()
+    override fun onStart() {
+        getClassListByRequest()
+        super.onStart()
     }
 
     private fun configSwipeRefresh() {
         buildSwipe()
         swipe?.setOnRefreshListener {
-            removeOriginClassInfos()
             getClassListByRequest()
             swipe?.isRefreshing = false
         }
@@ -83,11 +76,6 @@ class SignDataForTeacher : Fragment() {
     private fun dip2px(dpValue: Float): Int {
         val scale = context?.resources?.displayMetrics?.density;
         return (dpValue * scale!! + 0.5f).toInt()
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {}
     }
 
     override fun onCreateView(
@@ -132,6 +120,7 @@ class SignDataForTeacher : Fragment() {
         classInfoView!!.setOnClickListener(classInfoViewListener)
     }
 
+
     private fun buildSwipe() {
         if (swipe == null) {
             swipe = view?.findViewById(R.id.sign_data_swipe_for_teacher)
@@ -140,11 +129,11 @@ class SignDataForTeacher : Fragment() {
 
     private fun dealWithResponse(response: StringBuilder?) {
         buildDataForClassList()
+        removeOriginClassInfos()
         for (index in 0 until classInfos!!.length()) {
             addClassInfoViewToLayout(classInfos!![index] as JSONObject)
         }
     }
-
 
     private fun buildDataForClassList() {
         responseJson = JSONObject(response.toString())

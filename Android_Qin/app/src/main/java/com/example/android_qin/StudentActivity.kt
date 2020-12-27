@@ -25,6 +25,7 @@ class StudentActivity : AppCompatActivity() {
     }
 
     private fun toDefaultPage(studentInfo: Bundle) {
+        navController?.popBackStack()
         navController?.navigate(R.id.locationFragmentForStudent, studentInfo)
     }
 
@@ -44,9 +45,6 @@ class StudentActivity : AppCompatActivity() {
         className = intent.getStringExtra("className").toString()
     }
 
-    override fun onBackPressed() {
-        //invalid back button
-    }
 
     private fun buildNavHost() {
         if (navHostFragment == null) {

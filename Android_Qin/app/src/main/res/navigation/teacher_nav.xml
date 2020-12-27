@@ -11,11 +11,6 @@
         android:label="fragment_location_for_teacher"
         tools:layout="@layout/fragment_location_for_teacher" />
     <fragment
-        android:id="@+id/signDataForTeacher"
-        android:name="com.example.android_qin.sign_data.SignDataForTeacher"
-        android:label="fragment_sign_data_for_teacher"
-        tools:layout="@layout/fragment_sign_data_for_teacher" />
-    <fragment
         android:id="@+id/mineForTeacher"
         android:name="com.example.android_qin.mine.MineForTeacher"
         android:label="fragment_mine_for_teacher"
@@ -28,7 +23,11 @@
         android:id="@+id/signDataForEachClass"
         android:name="com.example.android_qin.sign_data.SignDataForEachClass"
         android:label="fragment_sign_data_for_each_class"
-        tools:layout="@layout/fragment_sign_data_for_each_class" />
+        tools:layout="@layout/fragment_sign_data_for_each_class" >
+        <action
+            android:id="@+id/action_signDataForEachClass_to_signDataForTeacher"
+            app:destination="@id/signDataForTeacher" />
+    </fragment>
     <activity
         android:id="@+id/mainActivity"
         android:name="com.example.android_qin.MainActivity"
@@ -36,7 +35,12 @@
         tools:layout="@layout/activity_main" />
     <fragment
         android:id="@+id/signStateForTeacher"
-        android:name="com.example.android_qin.SignStateForTeacher"
+        android:name="com.example.android_qin.sign.SignStateForTeacher"
         android:label="fragment_sign_state_for_teacher"
         tools:layout="@layout/fragment_sign_state_for_teacher" />
+    <fragment
+        android:id="@+id/signDataForTeacher"
+        android:name="com.example.android_qin.sign_data.SignDataForTeacher"
+        android:label="fragment_sign_data_for_teacher"
+        tools:layout="@layout/fragment_sign_data_for_teacher" />
 </navigation>

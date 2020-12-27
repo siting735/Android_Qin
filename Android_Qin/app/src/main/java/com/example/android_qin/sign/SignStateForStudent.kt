@@ -1,4 +1,4 @@
-package com.example.android_qin.sign_data
+package com.example.android_qin.sign
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment

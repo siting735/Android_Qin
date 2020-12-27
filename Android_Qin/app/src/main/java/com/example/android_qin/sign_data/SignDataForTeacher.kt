@@ -53,7 +53,7 @@ class SignDataForTeacher : Fragment() {
                 }
                 Thread.currentThread().join()
             }
-            dealWithResponse(response)
+            dealWithResponse()
         }.start()
     }
 
@@ -108,7 +108,7 @@ class SignDataForTeacher : Fragment() {
         }
     }
 
-    private fun dealWithResponse(response: StringBuilder?) {
+    private fun dealWithResponse() {
         buildDataForClassList()
         NavUtil.buildNavHost(activity?.supportFragmentManager)
         removeOriginClassInfos()
@@ -123,7 +123,8 @@ class SignDataForTeacher : Fragment() {
     }
 
     private fun buildRequestForGetClassInfos() {
-        urlForGetClassInfos = URL("http://${MainActivity.ip}:8080/teacher/teacherClasses?teacherId=${TeacherActivity.teacherId}")
+        urlForGetClassInfos =
+            URL("http://${MainActivity.ip}:8080/teacher/teacherClasses?teacherId=${TeacherActivity.teacherId}")
     }
 
     private fun removeOriginClassInfos() {
@@ -145,7 +146,6 @@ class SignDataForTeacher : Fragment() {
     var tempClassName: String? = null
 
     companion object {
-        const val REFRESH = 1
-        const val INIT = 0
+
     }
 }

@@ -313,7 +313,6 @@ class LocationFragmentForTeacher : Fragment() {
     var mLocationOption: AMapLocationClientOption? = null
     private val locationInfo = ArrayMap<String, String>()
     var urlForRefreshActivity: URL? = null
-    var connection: HttpURLConnection? = null
     var response: StringBuilder? = null
     private var confirmDialogForLaunch: AlertDialog.Builder? = null
     var confirmDialogForEnd: AlertDialog.Builder? = null

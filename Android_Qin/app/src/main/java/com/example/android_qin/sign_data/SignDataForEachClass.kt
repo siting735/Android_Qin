@@ -50,29 +50,21 @@ class SignDataForEachClass : Fragment() {
 
     private fun getStudentsSignData() {
         Thread {
-            val classId = arguments?.getString("classId")
-            val url = "http://${MainActivity.ip}:8080/teacher/signRitoOfStudents?classId=$classId"
-            val urlForGetSignData = URL(url)
-            var connection: HttpURLConnection? = null
-            var response: StringBuilder? = null
+            buildRequest()
             try {
-                connection = urlForGetSignData.openConnection() as HttpURLConnection
-                connection?.requestMethod = "GET"
-                response = ConnectionUtil.getDataFromConnection(connection)
-                connection?.disconnect()
+                response = ConnectionUtil.getDataByUrl(urlForGetSignDatas)
             } catch (e: Exception) {
-                Log.e("error in sign", e.toString())
                 ConnectionUtil.buildConnectFailDialog(requireContext())
                 activity?.runOnUiThread {
                     ConnectionUtil.connectFailDialog?.show()
                 }
                 Thread.currentThread().join()
             }
-            dealWithResponse(response)
+            dealWithResponse()
         }.start()
     }
 
-    private fun dealWithResponse(response: StringBuilder?) {
+    private fun dealWithResponse() {
         val responseJson = JSONObject(response.toString())
         val signDataList = responseJson["signRitoOfStudents"] as JSONArray
         for (index in 0 until signDataList.length()) {
@@ -104,12 +96,21 @@ class SignDataForEachClass : Fragment() {
         return (dpValue * scale!! + 0.5f).toInt()
     }
 
+    private fun buildRequest() {
+        val classId = arguments?.getString("classId")
+        urlForGetSignDatas =
+            URL("http://${MainActivity.ip}:8080/teacher/signRitoOfStudents?classId=$classId")
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         return inflater.inflate(R.layout.fragment_sign_data_for_each_class, container, false)
     }
+
+    var response: StringBuilder? = null
+    private var urlForGetSignDatas: URL? = null
 
     companion object {
 

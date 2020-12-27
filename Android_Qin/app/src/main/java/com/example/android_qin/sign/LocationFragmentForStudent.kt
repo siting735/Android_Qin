@@ -284,7 +284,6 @@ class LocationFragmentForStudent : Fragment() {
     var studentId: String? = null
     var urlForRefreshActivity: URL? = null
     var urlForSign: URL? = null
-    var connection: HttpURLConnection? = null
     var response: StringBuilder? = null
     var mMapView: MapView? = null
     var myLocationStyle: MyLocationStyle? = null

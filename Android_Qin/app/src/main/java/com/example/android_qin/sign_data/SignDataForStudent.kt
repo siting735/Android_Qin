@@ -40,12 +40,12 @@ class SignDataForStudent : Fragment() {
                 }
                 Thread.currentThread().join()
             }
-            dealWithResponse(response)
+            dealWithResponse()
         }.start()
 
     }
 
-    private fun dealWithResponse(response: StringBuilder?) {
+    private fun dealWithResponse() {
         buildDataForSignList()
         updateSignRito(responseJson)
         val listLength = signDataJsonList!!.length()
@@ -99,7 +99,8 @@ class SignDataForStudent : Fragment() {
     }
 
     private fun buildRequestForGetSignData() {
-        urlForGetSignData = URL("http://${MainActivity.ip}:8080/student/studentSignMessage?studentId=${StudentActivity.studentId}")
+        urlForGetSignData =
+            URL("http://${MainActivity.ip}:8080/student/studentSignMessage?studentId=${StudentActivity.studentId}")
     }
 
     private fun buildDataForSignList() {
@@ -146,7 +147,6 @@ class SignDataForStudent : Fragment() {
     var signRito: String? = null
     var signRitoTextView: SuperTextView? = null
     var urlForGetSignData: URL? = null
-    var connection: HttpURLConnection? = null
     var response: StringBuilder? = null
     var signDataJsonList: JSONArray? = null
     var responseJson: JSONObject? = null

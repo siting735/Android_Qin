@@ -35,10 +35,6 @@ class LoadingStateFragment :DialogFragment(){
     }
 
     companion object {
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            LoadingStateFragment().apply {
-                arguments = Bundle().apply {}
-            }
+
     }
 }

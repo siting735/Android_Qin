@@ -47,10 +47,6 @@ class MineForStudent : Fragment() {
         return inflater.inflate(R.layout.fragment_mine_for_student, container, false)
     }
     companion object {
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-                MineForStudent().apply {
-                    arguments = Bundle().apply {}
-                }
+
     }
 }

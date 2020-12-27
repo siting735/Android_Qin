@@ -364,9 +364,5 @@ class LocationFragmentForTeacher : Fragment() {
     companion object {
         const val LAUNCH_FAIL = "0"
         const val END_FAIL = "0"
-
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            LocationFragmentForTeacher().apply {}
     }
 }

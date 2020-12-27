@@ -135,8 +135,6 @@ class SignDataForEachClass : Fragment() {
     var navController: NavController? = null
 
     companion object {
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            SignDataForEachClass().apply {}
+
     }
 }

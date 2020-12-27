@@ -173,9 +173,6 @@ class SignDataForStudent : Fragment() {
     companion object {
         const val UNSIGN = "0"
         const val SIGN = "1"
-        fun newInstance(param1: String, param2: String) =
-            SignDataForStudent().apply {
-                arguments = Bundle().apply {}
-            }
+
     }
 }

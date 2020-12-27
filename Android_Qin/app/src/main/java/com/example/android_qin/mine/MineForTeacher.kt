@@ -58,10 +58,6 @@ class MineForTeacher : Fragment() {
     }
 
     companion object {
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            MineForTeacher().apply {
-                arguments = Bundle().apply {}
-            }
+
     }
 }

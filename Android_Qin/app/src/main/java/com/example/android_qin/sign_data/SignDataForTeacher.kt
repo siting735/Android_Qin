@@ -172,11 +172,5 @@ class SignDataForTeacher : Fragment() {
     companion object {
         const val REFRESH = 1
         const val INIT = 0
-
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            SignDataForTeacher().apply {
-                arguments = Bundle().apply {}
-            }
     }
 }

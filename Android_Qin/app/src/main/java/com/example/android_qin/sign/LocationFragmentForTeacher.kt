@@ -136,7 +136,9 @@ class LocationFragmentForTeacher : Fragment() {
                 Toast.makeText(requireContext(), "结束活动失败", Toast.LENGTH_LONG).show()
             }
         } else {
-            NavUtil.navController?.navigate(R.id.signStateForTeacher)
+            activity?.runOnUiThread {
+                NavUtil.navController?.navigate(R.id.signStateForTeacher)
+            }
         }
 
     }

@@ -2,6 +2,7 @@ package com.example.android_qin.sign
 
 import android.media.Image
 import android.os.Bundle
+import android.util.Log
 import android.view.Gravity
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -31,6 +32,7 @@ class SignStateForTeacher : Fragment() {
     }
     private fun buildPage(){
         val signData = JSONObject(LocationFragmentForTeacher.response.toString())
+        Log.i("sign for each class", signData.toString())
         val signRito = signData["signRito"].toString()
         val unsignedStudentList = JSONArray(signData["unsignedStudentList"].toString())
         updateSignRito(signRito)

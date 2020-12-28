@@ -16,6 +16,7 @@ import com.example.android_qin.sign.LocationFragmentForTeacher
 import com.example.android_qin.util.ConnectionUtil
 import com.xuexiang.xui.widget.picker.widget.listener.OnOptionsSelectListener
 import com.xuexiang.xui.widget.textview.supertextview.SuperTextView
+import org.json.JSONArray
 import org.json.JSONObject
 import java.lang.Exception
 import java.net.URL
@@ -33,7 +34,8 @@ class OptionListener(val activity: FragmentActivity?, val context: Context?) :
         options3: Int
     ): Boolean {
         signView = view
-        classInfo = TeacherActivity.classList!![options1] as JSONObject
+        classList = TeacherActivity.classList
+        classInfo = classList?.get(options1) as JSONObject
         currentClassId = classInfo!!["classId"].toString()
         buildConfirmDialogForLaunch()
         activity?.runOnUiThread {
@@ -85,11 +87,12 @@ class OptionListener(val activity: FragmentActivity?, val context: Context?) :
                 Toast.makeText(context, "发布失败", Toast.LENGTH_LONG).show()
             }
         } else {
+            refreshActivity()
             currentActivityId = MainActivity.responseJson!!["activityId"].toString()
             activity?.runOnUiThread {
                 Toast.makeText(context, "发布成功", Toast.LENGTH_LONG).show()
             }
-            refreshActivity()
+
         }
 
     }
@@ -107,11 +110,11 @@ class OptionListener(val activity: FragmentActivity?, val context: Context?) :
                 }
                 Thread.currentThread().join()
             }
-            dealWithResponseForRefreshActivity(LocationFragmentForTeacher.response)
+            dealWithResponseForRefreshActivity()
         }.start()
     }
 
-    private fun dealWithResponseForRefreshActivity(response: StringBuilder?) {
+    private fun dealWithResponseForRefreshActivity() {
         buildDataForRefreshActivity()
         if (currentActivityTitle == "") {
             currentClassId = ""
@@ -174,4 +177,5 @@ class OptionListener(val activity: FragmentActivity?, val context: Context?) :
     var urlForRefreshActivity: URL? = null
     var currentActivityTitle: String? = null
     var signView: View? = null
+    var classList: JSONArray? = null
 }

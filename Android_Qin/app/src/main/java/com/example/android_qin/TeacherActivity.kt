@@ -56,6 +56,7 @@ class TeacherActivity : AppCompatActivity() {
         var teacherId: String? = null
         var teacherName: String? = null
         var classesInfoString: String? = null
+        var classList: JSONArray? = null
         var currentClassId: String? = null
         var currentClassName: String? = null
         var tabBarState = 0

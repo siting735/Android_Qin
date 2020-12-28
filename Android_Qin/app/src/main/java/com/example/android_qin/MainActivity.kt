@@ -22,6 +22,7 @@ import com.xuexiang.xui.XUI
 import com.xuexiang.xui.widget.edittext.ClearEditText
 import com.xuexiang.xui.widget.edittext.PasswordEditText
 import com.xuexiang.xui.widget.spinner.materialspinner.MaterialSpinner
+import org.json.JSONArray
 import org.json.JSONObject
 import java.lang.Exception
 import java.net.HttpURLConnection
@@ -119,6 +120,7 @@ class MainActivity : Activity() {
         TeacherActivity.teacherId = loginInfo["teacherId"].toString()
         TeacherActivity.teacherName = loginInfo["teacherName"].toString()
         TeacherActivity.classesInfoString = loginInfo["classesInfo"].toString()
+        TeacherActivity.classList = loginInfo["classesInfo"] as JSONArray
         startActivity(intent)
     }
 

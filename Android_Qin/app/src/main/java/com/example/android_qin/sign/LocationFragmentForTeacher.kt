@@ -2,6 +2,7 @@ package com.example.android_qin.sign
 
 
 import android.app.AlertDialog
+import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.util.ArrayMap
@@ -11,10 +12,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
-import androidx.navigation.NavController
-import androidx.navigation.fragment.NavHostFragment
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.amap.api.location.AMapLocationClient
 import com.amap.api.location.AMapLocationClientOption
@@ -25,12 +25,15 @@ import com.amap.api.maps2d.model.MyLocationStyle
 import com.example.android_qin.MainActivity
 import com.example.android_qin.R
 import com.example.android_qin.TeacherActivity
+import com.example.android_qin.listener.OptionListener
 import com.example.android_qin.util.ConnectionUtil
 import com.example.android_qin.util.NavUtil
+import com.xuexiang.xui.widget.picker.widget.OptionsPickerView
+import com.xuexiang.xui.widget.picker.widget.builder.OptionsPickerBuilder
+import com.xuexiang.xui.widget.picker.widget.listener.OnOptionsSelectListener
 import com.xuexiang.xui.widget.textview.supertextview.SuperTextView
 import org.json.JSONObject
 import java.lang.Exception
-import java.net.HttpURLConnection
 import java.net.URL
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -96,14 +99,14 @@ class LocationFragmentForTeacher : Fragment() {
         val signBtn = view?.findViewById<Button>(R.id.sign_btn_for_teacher)
         NavUtil.buildNavHost(activity?.supportFragmentManager)
         signBtn?.setOnClickListener {
-            NavUtil.navController?.navigate(R.id.signStateForTeacher)
-//            if (currentClassId == "") {
-//                buildConfirmDialogForLaunch()
-//                confirmDialogForLaunch?.show()
-//            } else {
-//                buildConfirmDialogForEndActivity()
-//                confirmDialogForEnd?.show()
-//            }
+            // NavUtil.navController?.navigate(R.id.signStateForTeacher)
+            if (currentClassId == "") {
+                buildConfirmDialogForLaunch()
+                confirmDialogForLaunch?.show()
+            } else {
+                buildConfirmDialogForEndActivity()
+                confirmDialogForEnd?.show()
+            }
         }
     }
 
@@ -114,6 +117,7 @@ class LocationFragmentForTeacher : Fragment() {
             try {
                 response = ConnectionUtil.getDataByUrl(urlForLaunchActivity)
             } catch (e: Exception) {
+                e.printStackTrace()
                 ConnectionUtil.buildConnectFailDialog(requireContext())
                 activity?.runOnUiThread {
                     ConnectionUtil.connectFailDialog?.show()
@@ -187,8 +191,8 @@ class LocationFragmentForTeacher : Fragment() {
                 if (aMapLocation.errorCode == 0) {
                     mLocationClient!!.stopLocation()
                     Log.d("定位成功", "定位成功")
-                    locationInfo["studentLongitude"] = aMapLocation.longitude.toString()
-                    locationInfo["studentLatitude"] = aMapLocation.latitude.toString()
+                    locationInfo["teacherLongitude"] = aMapLocation.longitude.toString()
+                    locationInfo["teacherLatitude"] = aMapLocation.latitude.toString()
                     Log.i("locationInfo", locationInfo.toString())
                 } else {
                     Log.e(
@@ -224,12 +228,12 @@ class LocationFragmentForTeacher : Fragment() {
     @RequiresApi(Build.VERSION_CODES.O)
     private fun buildRequestForLaunchActivity() {
         val current = LocalDateTime.now()
-        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-ddHH:mm")
         newActivityTitle = current.format(formatter)
         teacherLatitude = locationInfo["teacherLatitude"]
         teacherLongitude = locationInfo["teacherLongitude"]
         urlForLaunchActivity =
-            URL("http://${MainActivity.ip}:8080/activity/launchActivity?classId=$currentClassId&activityTitle=$newActivityTitle&teacherLongitude=$teacherLatitude&teacherLatitude=$teacherLatitude")
+            URL("http://${MainActivity.ip}:8080/activity/launchActivity?classId=$currentClassId&activityTitle=$newActivityTitle&teacherLongitude=$teacherLongitude&teacherLatitude=$teacherLatitude")
     }
 
     private fun buildRequestForEndActivity() {
@@ -237,19 +241,55 @@ class LocationFragmentForTeacher : Fragment() {
             URL("http://${MainActivity.ip}:8080/sign/changeSignToStop?classId=$currentClassId&activityId=$currentActivityId")
     }
 
+    private fun configPickerBuilder(){
+        optionsPickerBuilder = OptionsPickerBuilder(context, OptionListener(activity))
+        optionsPickerBuilder!!.setTitleText("选择班级")
+        optionsPickerBuilder!!.setDividerColor(Color.BLACK)
+        optionsPickerBuilder!!.setTextColorCenter(Color.BLACK)
+        optionsPickerBuilder!!.setContentTextSize(20)
+        optionsPickerBuilder!!.isDialog(true)
+    }
+
+    private fun selectClassForLaunch(){
+        configPickerBuilder()
+        optionsPickerView = optionsPickerBuilder!!.build()
+        addClassListToPicker()
+        activity?.runOnUiThread {
+            optionsPickerView!!.show()
+        }
+    }
+
+    private fun addClassListToPicker(){
+        val classList = ArrayList<String>()
+        val classListJsonArray = TeacherActivity.classList
+        val classListLength = TeacherActivity.classList!!.length()
+        if (classListLength == 0){
+            activity?.runOnUiThread {
+                Toast.makeText(context,"暂无班级",Toast.LENGTH_LONG).show()
+            }
+            return Unit
+        }
+        for (index in 0 until classListLength){
+            tempClassInfo = classListJsonArray!![index] as JSONObject
+            classList.add(tempClassInfo!!["className"].toString())
+        }
+        optionsPickerView?.setPicker(classList)
+    }
+
     @RequiresApi(Build.VERSION_CODES.O)
     private fun buildConfirmDialogForLaunch() {
-        if (confirmDialogForLaunch == null) {
-            confirmDialogForLaunch = AlertDialog.Builder(context)
-            confirmDialogForLaunch?.setTitle("提示")
-            confirmDialogForLaunch?.setMessage("确认发起活动？")
-            confirmDialogForLaunch?.setPositiveButton("确定") { dialog, id ->
-                launchActivity()
-            }
-            confirmDialogForLaunch?.setNegativeButton("取消") { dialog, id ->
-                {}
-            }
-        }
+        selectClassForLaunch()
+//        if (confirmDialogForLaunch == null) {
+//            confirmDialogForLaunch = AlertDialog.Builder(context)
+//            confirmDialogForLaunch?.setTitle("提示")
+//            confirmDialogForLaunch?.setMessage("确认发起活动？")
+//            confirmDialogForLaunch?.setPositiveButton("确定") { dialog, id ->
+//                launchActivity()
+//            }
+//            confirmDialogForLaunch?.setNegativeButton("取消") { dialog, id ->
+//                {}
+//            }
+//        }
     }
 
     private fun buildConfirmDialogForEndActivity() {
@@ -319,10 +359,13 @@ class LocationFragmentForTeacher : Fragment() {
     var newActivityTitle: String? = null
     var responseJson: JSONObject? = null
     var activityTitleTextView: SuperTextView? = null
+    var optionsPickerBuilder: OptionsPickerBuilder? = null
+    var tempClassInfo: JSONObject? = null
 
     companion object {
         const val LAUNCH_FAIL = "0"
         const val END_FAIL = "0"
         var response: StringBuilder? = null
+        var optionsPickerView: OptionsPickerView<String>? = null
     }
 }

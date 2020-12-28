@@ -25,11 +25,7 @@ import org.json.JSONObject
 class SignStateForTeacher : Fragment() {
 
     override fun onStart() {
-        // buildPage()
-        if (unsignStudentListLayout == null) {
-            unsignStudentListLayout = view?.findViewById(R.id.unsign_students_list)
-        }
-        showEmptyIcon()
+        buildPage()
         configBackButton()
         super.onStart()
     }
@@ -55,7 +51,10 @@ class SignStateForTeacher : Fragment() {
         layoutParamsForEmptyIcon?.setMargins(0, DpUtil.dip2px(context,150f), 0, 0)
         layoutParamsForEmptyIcon.gravity = Gravity.CENTER
         imageView.layoutParams = layoutParamsForEmptyIcon
-        unsignStudentListLayout?.addView(imageView)
+        activity?.runOnUiThread {
+            unsignStudentListLayout?.addView(imageView)
+        }
+
     }
 
     private fun addStudentInfoToList(studentInfo: JSONObject?){

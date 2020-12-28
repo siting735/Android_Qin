@@ -15,6 +15,8 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.example.android_qin.util.ConnectionUtil
+import com.example.android_qin.util.DpUtil
+import com.example.android_qin.util.LayoutUtil
 import com.example.android_qin.util.NavUtil
 import com.xuexiang.xui.XUI
 import com.xuexiang.xui.widget.edittext.ClearEditText
@@ -36,7 +38,7 @@ class MainActivity : Activity() {
     override fun onStart() {
         super.onStart()
         if (LOG_OUT) {
-            if (!cancelAnimation){
+            if (!cancelAnimation) {
                 alphaAnimation?.cancel()
                 cancelAnimation = true
             }
@@ -44,7 +46,7 @@ class MainActivity : Activity() {
         }
     }
 
-    private fun buildAnimationAndUI(): Unit{
+    private fun buildAnimationAndUI(): Unit {
         if (LOG_OUT) {
             return Unit
         }
@@ -179,6 +181,7 @@ class MainActivity : Activity() {
     private fun initUI() {
         XUI.init(this.application)
         XUI.debug(true)
+        LayoutUtil.buildLayoutParamsForInfoUnit(applicationContext)
     }
 
     private fun grantPermission() {

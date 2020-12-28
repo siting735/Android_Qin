@@ -117,7 +117,7 @@ class SignDataForStudent : Fragment() {
 
     private fun buildSignDataView(signDataView: SuperTextView?, signData: JSONObject?) {
         if (signDataListLayout == null) {
-            signDataListLayout = view?.findViewById<LinearLayout>(R.id.sign_data_list)
+            signDataListLayout = view?.findViewById(R.id.sign_data_list)
         }
         activityTitle = signData?.get("activityTitle")?.toString()
         signState = signData?.get("signState")?.toString()

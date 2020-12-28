@@ -164,7 +164,6 @@ class LocationFragmentForTeacher : Fragment() {
                 Toast.makeText(requireContext(), "结束活动失败", Toast.LENGTH_LONG).show()
             }
         } else {
-            // need bundle and page is waiting to build
             NavUtil.navController?.navigate(R.id.signStateForTeacher)
         }
 
@@ -311,7 +310,6 @@ class LocationFragmentForTeacher : Fragment() {
     var mLocationOption: AMapLocationClientOption? = null
     private val locationInfo = ArrayMap<String, String>()
     var urlForRefreshActivity: URL? = null
-    var response: StringBuilder? = null
     private var confirmDialogForLaunch: AlertDialog.Builder? = null
     var confirmDialogForEnd: AlertDialog.Builder? = null
     var urlForEndActivity: URL? = null
@@ -325,5 +323,6 @@ class LocationFragmentForTeacher : Fragment() {
     companion object {
         const val LAUNCH_FAIL = "0"
         const val END_FAIL = "0"
+        var response: StringBuilder? = null
     }
 }

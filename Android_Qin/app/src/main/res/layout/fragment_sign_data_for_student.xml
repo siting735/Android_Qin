@@ -52,7 +52,7 @@
                         android:layout_marginRight="10dp"
                         app:sCenterBottomTextIsBold="true"
                         app:sCenterBottomTextSize="60dp"
-                        app:sCenterTextString="考勤率为:"
+                        app:sCenterTextString="出勤率为:"
                         app:sUseShape="true"
                         app:sShapeCornersRadius="10dp"
                         app:sDividerLineType="both" />

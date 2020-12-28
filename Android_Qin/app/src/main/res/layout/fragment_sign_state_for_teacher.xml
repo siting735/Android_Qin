@@ -1,44 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".sign.SignStateForTeacher">
 
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
         <Toolbar
             android:id="@+id/activity_result"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:navigationIcon="@drawable/back"
             android:background="@color/xui_config_color_titlebar"
+            android:navigationIcon="@drawable/back"
             android:titleTextColor="@color/white">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="打卡"
+                android:text="活动情况"
                 android:textColor="@color/white"
                 android:textSize="20sp" />
         </Toolbar>
 
         <LinearLayout
-            android:orientation="vertical"
-            android:layout_weight="9"
             android:layout_width="match_parent"
-            android:layout_height="0dp">
+            android:layout_height="0dp"
+            android:layout_weight="9"
+            android:orientation="vertical">
 
             <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
                 android:id="@+id/sign_data_swipe_for_class"
                 android:layout_width="match_parent"
-                android:layout_height="80dp">
+                android:layout_height="150dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -46,21 +46,30 @@
                     android:orientation="vertical">
 
                     <com.xuexiang.xui.widget.textview.supertextview.SuperTextView
-                        android:id="@+id/class_name"
+                        android:id="@+id/sign_rito"
                         android:layout_width="match_parent"
-                        android:layout_height="70dp"
+                        android:layout_height="match_parent"
                         android:layout_marginLeft="10dp"
                         android:layout_marginTop="10dp"
                         android:layout_marginRight="10dp"
-                        app:sUseShape="true"
-                        app:sShapeCornersRadius="10dp"
+                        app:sCenterBottomTextIsBold="true"
+                        app:sCenterBottomTextSize="60dp"
+                        app:sCenterBottomTextString="100%"
+                        app:sCenterTextString="出勤率为:"
                         app:sDividerLineType="both"
-                        app:sLeftTextIsBold="true"
-                        app:sLeftTextSize="25sp" />
+                        app:sShapeCornersRadius="10dp"
+                        app:sUseShape="true" />
 
                 </LinearLayout>
 
             </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:text="未到学生名单："
+                android:textSize="15sp" />
 
             <androidx.core.widget.NestedScrollView
                 android:layout_width="match_parent"
@@ -73,9 +82,10 @@
                     android:id="@+id/unsign_students_list"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:orientation="vertical" >
+                    android:orientation="vertical">
 
                 </LinearLayout>
+
             </androidx.core.widget.NestedScrollView>
 
         </LinearLayout>

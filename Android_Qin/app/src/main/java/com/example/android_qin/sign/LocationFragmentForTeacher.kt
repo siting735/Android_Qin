@@ -2,6 +2,7 @@ package com.example.android_qin.sign
 
 
 import android.app.AlertDialog
+import android.content.Context
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
@@ -75,8 +76,8 @@ class LocationFragmentForTeacher : Fragment() {
                 activityTitleTextView?.setRightIcon(R.drawable.no_activity)
             }
         } else {
-            currentClassId = responseJson!!["classId"].toString()
-            currentActivityId = responseJson!!["activityId"].toString()
+            currentClassId = MainActivity.responseJson!!["classId"].toString()
+            currentActivityId = MainActivity.responseJson!!["activityId"].toString()
             activity?.runOnUiThread {
                 activityTitleTextView?.setLeftString(currentActivityTitle.toString())
                 activityTitleTextView?.setRightIcon(R.drawable.activity_running)
@@ -101,8 +102,7 @@ class LocationFragmentForTeacher : Fragment() {
         signBtn?.setOnClickListener {
             // NavUtil.navController?.navigate(R.id.signStateForTeacher)
             if (currentClassId == "") {
-                buildConfirmDialogForLaunch()
-                confirmDialogForLaunch?.show()
+                selectClassForLaunch()
             } else {
                 buildConfirmDialogForEndActivity()
                 confirmDialogForEnd?.show()
@@ -111,23 +111,6 @@ class LocationFragmentForTeacher : Fragment() {
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    private fun launchActivity() {
-        Thread {
-            buildRequestForLaunchActivity()
-            try {
-                response = ConnectionUtil.getDataByUrl(urlForLaunchActivity)
-            } catch (e: Exception) {
-                e.printStackTrace()
-                ConnectionUtil.buildConnectFailDialog(requireContext())
-                activity?.runOnUiThread {
-                    ConnectionUtil.connectFailDialog?.show()
-                }
-                Thread.currentThread().join()
-            }
-            dealWithResponseForLaunchActivity()
-        }.start()
-    }
-
     private fun endActivity() {
         Thread {
             buildRequestForEndActivity()
@@ -144,21 +127,6 @@ class LocationFragmentForTeacher : Fragment() {
         }.start()
     }
 
-    private fun dealWithResponseForLaunchActivity() {
-        buildDataForLaunchActivity()
-        if (activityState == LAUNCH_FAIL) {
-            activity?.runOnUiThread {
-                Toast.makeText(requireContext(), "发布失败", Toast.LENGTH_LONG).show()
-            }
-        } else {
-            currentActivityId = responseJson!!["activityId"].toString()
-            activity?.runOnUiThread {
-                Toast.makeText(requireContext(), "发布成功", Toast.LENGTH_LONG).show()
-            }
-            refreshActivity()
-        }
-
-    }
 
     private fun dealWithResponseForEndActivity() {
         buildDataForEndActivity()
@@ -225,24 +193,14 @@ class LocationFragmentForTeacher : Fragment() {
 
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
-    private fun buildRequestForLaunchActivity() {
-        val current = LocalDateTime.now()
-        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-ddHH:mm")
-        newActivityTitle = current.format(formatter)
-        teacherLatitude = locationInfo["teacherLatitude"]
-        teacherLongitude = locationInfo["teacherLongitude"]
-        urlForLaunchActivity =
-            URL("http://${MainActivity.ip}:8080/activity/launchActivity?classId=$currentClassId&activityTitle=$newActivityTitle&teacherLongitude=$teacherLongitude&teacherLatitude=$teacherLatitude")
-    }
-
     private fun buildRequestForEndActivity() {
         urlForEndActivity =
             URL("http://${MainActivity.ip}:8080/sign/changeSignToStop?classId=$currentClassId&activityId=$currentActivityId")
     }
 
-    private fun configPickerBuilder(){
-        optionsPickerBuilder = OptionsPickerBuilder(context, OptionListener(activity))
+    private fun configPickerBuilder() {
+        optionsPickerBuilder =
+            OptionsPickerBuilder(context, OptionListener(requireActivity(), requireContext()))
         optionsPickerBuilder!!.setTitleText("选择班级")
         optionsPickerBuilder!!.setDividerColor(Color.BLACK)
         optionsPickerBuilder!!.setTextColorCenter(Color.BLACK)
@@ -250,7 +208,7 @@ class LocationFragmentForTeacher : Fragment() {
         optionsPickerBuilder!!.isDialog(true)
     }
 
-    private fun selectClassForLaunch(){
+    private fun selectClassForLaunch() {
         configPickerBuilder()
         optionsPickerView = optionsPickerBuilder!!.build()
         addClassListToPicker()
@@ -259,17 +217,17 @@ class LocationFragmentForTeacher : Fragment() {
         }
     }
 
-    private fun addClassListToPicker(){
+    private fun addClassListToPicker() {
         val classList = ArrayList<String>()
         val classListJsonArray = TeacherActivity.classList
         val classListLength = TeacherActivity.classList!!.length()
-        if (classListLength == 0){
+        if (classListLength == 0) {
             activity?.runOnUiThread {
-                Toast.makeText(context,"暂无班级",Toast.LENGTH_LONG).show()
+                Toast.makeText(context, "暂无班级", Toast.LENGTH_LONG).show()
             }
             return Unit
         }
-        for (index in 0 until classListLength){
+        for (index in 0 until classListLength) {
             tempClassInfo = classListJsonArray!![index] as JSONObject
             classList.add(tempClassInfo!!["className"].toString())
         }
@@ -277,20 +235,6 @@ class LocationFragmentForTeacher : Fragment() {
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    private fun buildConfirmDialogForLaunch() {
-        selectClassForLaunch()
-//        if (confirmDialogForLaunch == null) {
-//            confirmDialogForLaunch = AlertDialog.Builder(context)
-//            confirmDialogForLaunch?.setTitle("提示")
-//            confirmDialogForLaunch?.setMessage("确认发起活动？")
-//            confirmDialogForLaunch?.setPositiveButton("确定") { dialog, id ->
-//                launchActivity()
-//            }
-//            confirmDialogForLaunch?.setNegativeButton("取消") { dialog, id ->
-//                {}
-//            }
-//        }
-    }
 
     private fun buildConfirmDialogForEndActivity() {
         if (confirmDialogForEnd == null) {
@@ -322,21 +266,16 @@ class LocationFragmentForTeacher : Fragment() {
     }
 
     private fun buildDataForRefreshActivity() {
-        responseJson = JSONObject(response.toString())
-        currentActivityTitle = responseJson!!["activityTitle"].toString()
+        MainActivity.responseJson = JSONObject(response.toString())
+        currentActivityTitle = MainActivity.responseJson!!["activityTitle"].toString()
         if (activityTitleTextView == null) {
             activityTitleTextView = view?.findViewById(R.id.activity_title_for_teacher)
         }
     }
 
-    private fun buildDataForLaunchActivity() {
-        responseJson = JSONObject(response.toString())
-        activityState = responseJson!!["activityState"].toString()
-    }
-
     private fun buildDataForEndActivity() {
-        responseJson = JSONObject(response.toString())
-        activityState = responseJson!!["activityState"].toString()
+        MainActivity.responseJson = JSONObject(response.toString())
+        activityState = MainActivity.responseJson!!["activityState"].toString()
     }
 
     var activityState: String? = null
@@ -348,16 +287,9 @@ class LocationFragmentForTeacher : Fragment() {
     var mLocationClient: AMapLocationClient? = null
     var mLocationListener: AMapLocationListener? = null
     var mLocationOption: AMapLocationClientOption? = null
-    private val locationInfo = ArrayMap<String, String>()
     var urlForRefreshActivity: URL? = null
-    private var confirmDialogForLaunch: AlertDialog.Builder? = null
     var confirmDialogForEnd: AlertDialog.Builder? = null
     var urlForEndActivity: URL? = null
-    var urlForLaunchActivity: URL? = null
-    var teacherLongitude: String? = null
-    var teacherLatitude: String? = null
-    var newActivityTitle: String? = null
-    var responseJson: JSONObject? = null
     var activityTitleTextView: SuperTextView? = null
     var optionsPickerBuilder: OptionsPickerBuilder? = null
     var tempClassInfo: JSONObject? = null
@@ -367,5 +299,6 @@ class LocationFragmentForTeacher : Fragment() {
         const val END_FAIL = "0"
         var response: StringBuilder? = null
         var optionsPickerView: OptionsPickerView<String>? = null
+        val locationInfo = ArrayMap<String, String>()
     }
 }

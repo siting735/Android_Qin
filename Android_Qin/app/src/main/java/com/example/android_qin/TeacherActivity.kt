@@ -14,6 +14,7 @@ import com.example.android_qin.util.NavUtil
 import com.example.android_qin.util.TabBarUtil
 import com.xuexiang.xui.widget.tabbar.TabSegment
 import org.json.JSONArray
+import org.json.JSONObject
 
 class TeacherActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -57,8 +58,6 @@ class TeacherActivity : AppCompatActivity() {
         var teacherName: String? = null
         var classesInfoString: String? = null
         var classList: JSONArray? = null
-        var currentClassId: String? = null
-        var currentClassName: String? = null
         var tabBarState = 0
     }
 }

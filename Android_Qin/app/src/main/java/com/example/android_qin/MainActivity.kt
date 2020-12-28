@@ -245,5 +245,6 @@ class MainActivity : Activity() {
         var identity = STUDENT
         var alphaAnimation: AlphaAnimation? = null
         var cancelAnimation = false
+        var responseJson: JSONObject? = null
     }
 }

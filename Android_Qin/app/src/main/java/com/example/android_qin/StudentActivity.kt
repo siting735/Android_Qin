@@ -5,6 +5,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.AttributeSet
+import android.util.Log
 import android.view.View
 import android.widget.ProgressBar
 import androidx.appcompat.app.AlertDialog
@@ -28,6 +29,7 @@ class StudentActivity : AppCompatActivity() {
         super.onStart()
         NavUtil.buildNavHost(supportFragmentManager)
         configTabBar()
+        Log.i("student activity","on start")
     }
 
     private fun configTabBar() {
@@ -37,7 +39,6 @@ class StudentActivity : AppCompatActivity() {
             tabBarState = 1
             toDefaultPage()
         }
-
     }
 
     private fun toDefaultPage() {

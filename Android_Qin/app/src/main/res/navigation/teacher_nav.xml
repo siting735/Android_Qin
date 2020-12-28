@@ -39,7 +39,7 @@
             app:destination="@id/signDataForEachClass" />
     </fragment>
     <activity
-        android:id="@+id/mainActivity"
+        android:id="@+id/mainActivity2"
         android:name="com.example.android_qin.MainActivity"
         android:label="activity_main"
         tools:layout="@layout/activity_main" />

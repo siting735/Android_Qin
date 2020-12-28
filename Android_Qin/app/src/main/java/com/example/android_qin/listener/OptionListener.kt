@@ -23,7 +23,7 @@ import java.net.URL
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
-class OptionListener(val activity: FragmentActivity?, val context: Context?) :
+class OptionListener(val activity: FragmentActivity?, val context: Context?, val signView:View?) :
     OnOptionsSelectListener {
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -33,10 +33,9 @@ class OptionListener(val activity: FragmentActivity?, val context: Context?) :
         options2: Int,
         options3: Int
     ): Boolean {
-        signView = view
         classList = TeacherActivity.classList
         classInfo = classList?.get(options1) as JSONObject
-        currentClassId = classInfo!!["classId"].toString()
+        LocationFragmentForTeacher.currentClassId = classInfo!!["classId"].toString()
         buildConfirmDialogForLaunch()
         activity?.runOnUiThread {
             LocationFragmentForTeacher.optionsPickerView?.dialog?.cancel()
@@ -87,8 +86,7 @@ class OptionListener(val activity: FragmentActivity?, val context: Context?) :
                 Toast.makeText(context, "发布失败", Toast.LENGTH_LONG).show()
             }
         } else {
-            refreshActivity()
-            currentActivityId = MainActivity.responseJson!!["activityId"].toString()
+            updateActivityState()
             activity?.runOnUiThread {
                 Toast.makeText(context, "发布成功", Toast.LENGTH_LONG).show()
             }
@@ -97,60 +95,29 @@ class OptionListener(val activity: FragmentActivity?, val context: Context?) :
 
     }
 
-    private fun refreshActivity() {
-        Thread {
-            buildRequestForRefreshActivity()
-            try {
-                LocationFragmentForTeacher.response =
-                    ConnectionUtil.getDataByUrl(urlForRefreshActivity)
-            } catch (e: Exception) {
-                ConnectionUtil.buildConnectFailDialog(context)
-                activity?.runOnUiThread {
-                    ConnectionUtil.connectFailDialog?.show()
-                }
-                Thread.currentThread().join()
-            }
-            dealWithResponseForRefreshActivity()
-        }.start()
-    }
-
-    private fun dealWithResponseForRefreshActivity() {
-        buildDataForRefreshActivity()
-        if (currentActivityTitle == "") {
-            currentClassId = ""
-            activity?.runOnUiThread {
-                activityTitleTextView?.setLeftString("暂无活动")
-                activityTitleTextView?.setRightIcon(R.drawable.no_activity)
-            }
+    private fun updateActivityState(){
+        if (activityTitleTextView == null) {
+            activityTitleTextView = signView?.findViewById(R.id.activity_title_for_teacher)
+        }
+        if (newActivityTitle == null) {
+            return Unit
         } else {
-            currentClassId = MainActivity.responseJson!!["classId"].toString()
-            currentActivityId = MainActivity.responseJson!!["activityId"].toString()
+            reFormatActivityTitle()
             activity?.runOnUiThread {
-                activityTitleTextView?.setLeftString(currentActivityTitle.toString())
+                activityTitleTextView?.setLeftString(newActivityTitle.toString())
                 activityTitleTextView?.setRightIcon(R.drawable.activity_running)
             }
         }
     }
 
-    private fun buildDataForRefreshActivity() {
-        MainActivity.responseJson = JSONObject(LocationFragmentForTeacher.response.toString())
-        currentActivityTitle = MainActivity.responseJson!!["activityTitle"].toString()
-        if (activityTitleTextView == null) {
-            activityTitleTextView = signView?.findViewById(R.id.activity_title_for_teacher)
-        }
-    }
-
-    private fun buildRequestForRefreshActivity() {
-        if (activityTitleTextView == null) {
-            activityTitleTextView = signView?.findViewById(R.id.activity_title_for_teacher)
-        }
-        urlForRefreshActivity =
-            URL("http://${MainActivity.ip}:8080/activity/searchActivityInProcess?teacherId=${TeacherActivity.teacherId}")
+    private fun reFormatActivityTitle(){
+        newActivityTitle = newActivityTitle!!.replaceRange(10,newActivityTitle!!.length," " + newActivityTitle!!.removeRange(0,10))
     }
 
     private fun buildDataForLaunchActivity() {
         MainActivity.responseJson = JSONObject(LocationFragmentForTeacher.response.toString())
         activityState = MainActivity.responseJson!!["activityState"].toString()
+        LocationFragmentForTeacher.currentActivityId = MainActivity.responseJson!!["activityId"].toString()
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -161,21 +128,16 @@ class OptionListener(val activity: FragmentActivity?, val context: Context?) :
         teacherLatitude = LocationFragmentForTeacher.locationInfo["teacherLatitude"]
         teacherLongitude = LocationFragmentForTeacher.locationInfo["teacherLongitude"]
         urlForLaunchActivity =
-            URL("http://${MainActivity.ip}:8080/activity/launchActivity?classId=$currentClassId&activityTitle=$newActivityTitle&teacherLongitude=$teacherLongitude&teacherLatitude=$teacherLatitude")
+            URL("http://${MainActivity.ip}:8080/activity/launchActivity?classId=${LocationFragmentForTeacher.currentClassId}&activityTitle=$newActivityTitle&teacherLongitude=$teacherLongitude&teacherLatitude=$teacherLatitude")
     }
 
-    private var currentClassId: String? = null
     private var newActivityTitle: String? = null
-    private var activityTitleTextView: SuperTextView? = null
     var teacherLatitude: String? = null
     var teacherLongitude: String? = null
     var urlForLaunchActivity: URL? = null
     var confirmDialogForLaunch: AlertDialog.Builder? = null
     var classInfo: JSONObject? = null
     var activityState: String? = null
-    var currentActivityId: String? = null
-    var urlForRefreshActivity: URL? = null
-    var currentActivityTitle: String? = null
-    var signView: View? = null
     var classList: JSONArray? = null
+    private var activityTitleTextView: SuperTextView? = null
 }

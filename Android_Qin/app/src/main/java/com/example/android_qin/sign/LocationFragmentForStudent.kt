@@ -60,6 +60,7 @@ class LocationFragmentForStudent : Fragment() {
             try {
                 response = ConnectionUtil.getDataByUrl(urlForRefreshActivity)
             } catch (e: Exception) {
+                e.printStackTrace()
                 ConnectionUtil.buildConnectFailDialog(requireContext())
                 activity?.runOnUiThread {
                     ConnectionUtil.connectFailDialog?.show()

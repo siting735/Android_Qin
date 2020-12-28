@@ -32,7 +32,6 @@ class SignStateForTeacher : Fragment() {
     }
     private fun buildPage(){
         val signData = JSONObject(LocationFragmentForTeacher.response.toString())
-        Log.i("sign for each class", signData.toString())
         val signRito = signData["signRito"].toString()
         val unsignedStudentList = JSONArray(signData["unsignedStudentList"].toString())
         updateSignRito(signRito)
@@ -76,7 +75,7 @@ class SignStateForTeacher : Fragment() {
         studentInfoView?.setRightString(studentId)
         studentInfoView?.setLeftString(studentName)
         studentInfoView?.useShape()
-        studentInfoView?.setShapeCornersRadius(DpUtil.dip2px(context,10f).toFloat())
+        studentInfoView?.setShapeCornersRadius(DpUtil.dip2px(requireContext(),10f).toFloat())
         studentInfoView!!.layoutParams = LayoutUtil.layoutParamsForInfoUnit
     }
 

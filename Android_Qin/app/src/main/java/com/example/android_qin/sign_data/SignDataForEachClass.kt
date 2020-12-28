@@ -15,6 +15,7 @@ import com.example.android_qin.MainActivity
 import com.example.android_qin.R
 import com.example.android_qin.TeacherActivity
 import com.example.android_qin.util.ConnectionUtil
+import com.example.android_qin.util.DpUtil
 import com.example.android_qin.util.NavUtil
 import com.xuexiang.xui.widget.textview.supertextview.SuperTextView
 import org.json.JSONArray
@@ -74,7 +75,7 @@ class SignDataForEachClass : Fragment() {
 
     private fun addSignDataToLayout(signData: JSONObject?) {
         val signDataListLayout = view?.findViewById<LinearLayout>(R.id.students_sign_data_list)
-        val signDataView = SuperTextView(context)
+        var signDataView = SuperTextView(context)
         val studentId = signData?.get("studentId")?.toString()
         val studentName = signData?.get("studentName")?.toString()
         val signRito = signData?.get("signRito")?.toString()
@@ -85,7 +86,9 @@ class SignDataForEachClass : Fragment() {
         var layoutParams =
             LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, dip2px(100f))
         layoutParams.setMargins(dip2px(10f), dip2px(10f), dip2px(10f), 0)
+        signDataView.setShapeCornersRadius(DpUtil.dip2px(context,5f).toFloat())
         signDataView.layoutParams = layoutParams
+        signDataView = signDataView.useShape()
         activity?.runOnUiThread {
             signDataListLayout?.addView(signDataView)
         }

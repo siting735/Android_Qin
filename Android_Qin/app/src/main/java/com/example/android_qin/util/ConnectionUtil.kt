@@ -2,20 +2,22 @@ package com.example.android_qin.util
 
 import android.content.Context
 import androidx.appcompat.app.AlertDialog
+import java.io.BufferedReader
+import java.io.InputStream
 import java.net.HttpURLConnection
 import java.net.URL
 
 class ConnectionUtil {
     companion object {
-        fun getDataByUrl(url: URL?): StringBuilder {
-            val connection = url?.openConnection() as HttpURLConnection
+        fun getDataByUrl(url: URL?): StringBuilder?{
+            connection = url?.openConnection() as HttpURLConnection
             connection?.requestMethod = "GET"
-            val inputStream = connection?.inputStream
-            val reader = inputStream?.bufferedReader()
-            val response = StringBuilder()
+            inputStream = connection?.inputStream
+            reader = inputStream?.bufferedReader()
+            response = StringBuilder()
             while (true) {
                 val line = reader?.readLine() ?: break
-                response.append(line)
+                response?.append(line)
             }
             reader?.close()
             connection?.disconnect()
@@ -32,7 +34,10 @@ class ConnectionUtil {
                 }
             }
         }
-
+        var connection: HttpURLConnection? = null
+        var inputStream: InputStream? = null
+        var reader: BufferedReader? = null
+        var response: StringBuilder? = null
         var connectFailDialog: AlertDialog.Builder? = null
     }
 }

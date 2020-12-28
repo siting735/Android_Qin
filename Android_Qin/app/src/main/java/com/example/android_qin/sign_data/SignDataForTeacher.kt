@@ -58,8 +58,8 @@ class SignDataForTeacher : Fragment() {
     }
 
     private fun addClassInfoViewToLayout(classInfo: JSONObject) {
-        val classInfoView = SuperTextView(context)
-        buildClassInfoView(classInfoView, classInfo)
+        var classInfoView = SuperTextView(context)
+        classInfoView = buildClassInfoView(classInfoView, classInfo)
         activity?.runOnUiThread {
             classListLayout?.addView(classInfoView)
         }
@@ -78,7 +78,7 @@ class SignDataForTeacher : Fragment() {
     }
 
     @SuppressLint("ResourceType")
-    private fun buildClassInfoView(classInfoView: SuperTextView?, classInfo: JSONObject?) {
+    private fun buildClassInfoView(classInfoView: SuperTextView?, classInfo: JSONObject?) :SuperTextView{
         if (classListLayout == null) {
             classListLayout = view?.findViewById(R.id.class_list)
         }
@@ -93,13 +93,13 @@ class SignDataForTeacher : Fragment() {
         tempClassId = classInfo?.get("classId")?.toString()
         classInfoView?.setLeftIcon(R.drawable.class_icon)
         classInfoView?.setLeftString(tempClassName)
-        classInfoView?.useShape()
-        classInfoView?.setShapeCornersRadius(dip2px(10f).toFloat())
+        classInfoView?.setShapeCornersRadius(dip2px(5f).toFloat())
         classInfoView?.setPadding(dip2px(14f), 0, 0, 0)
         classInfoView?.layoutParams = layoutParams
         classInfoView?.setRightIcon(R.drawable.get_in)
         val classInfoViewListener = GetInClassListener(tempClassId, tempClassName)
         classInfoView!!.setOnClickListener(classInfoViewListener)
+        return classInfoView?.useShape()
     }
 
     private fun buildSwipe() {

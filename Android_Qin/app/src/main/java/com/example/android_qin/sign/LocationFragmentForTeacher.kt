@@ -202,7 +202,7 @@ class LocationFragmentForTeacher : Fragment() {
 
     private fun configPickerBuilder() {
         optionsPickerBuilder =
-            OptionsPickerBuilder(context, OptionListener(requireActivity(), requireContext()))
+            OptionsPickerBuilder(context, OptionListener(requireActivity(), requireContext(), view))
         optionsPickerBuilder!!.setTitleText("选择班级")
         optionsPickerBuilder!!.setDividerColor(Color.BLACK)
         optionsPickerBuilder!!.setTextColorCenter(Color.BLACK)
@@ -270,6 +270,7 @@ class LocationFragmentForTeacher : Fragment() {
     private fun buildDataForRefreshActivity() {
         MainActivity.responseJson = JSONObject(response.toString())
         currentActivityTitle = MainActivity.responseJson!!["activityTitle"].toString()
+        Log.i("currentActivityTitle", currentActivityTitle.toString())
         if (activityTitleTextView == null) {
             activityTitleTextView = view?.findViewById(R.id.activity_title_for_teacher)
         }
@@ -281,8 +282,6 @@ class LocationFragmentForTeacher : Fragment() {
     }
 
     var activityState: String? = null
-    var currentClassId: String? = null
-    var currentActivityId: String? = null
     var currentActivityTitle: String? = null
     var mMapView: MapView? = null
     var myLocationStyle: MyLocationStyle? = null
@@ -292,9 +291,9 @@ class LocationFragmentForTeacher : Fragment() {
     var urlForRefreshActivity: URL? = null
     var confirmDialogForEnd: AlertDialog.Builder? = null
     var urlForEndActivity: URL? = null
-    var activityTitleTextView: SuperTextView? = null
     var optionsPickerBuilder: OptionsPickerBuilder? = null
     var tempClassInfo: JSONObject? = null
+    var activityTitleTextView: SuperTextView? = null
 
     companion object {
         const val LAUNCH_FAIL = "0"
@@ -302,5 +301,8 @@ class LocationFragmentForTeacher : Fragment() {
         var response: StringBuilder? = null
         var optionsPickerView: OptionsPickerView<String>? = null
         val locationInfo = ArrayMap<String, String>()
+        var currentClassId: String? = null
+        var currentActivityId: String? = null
+
     }
 }

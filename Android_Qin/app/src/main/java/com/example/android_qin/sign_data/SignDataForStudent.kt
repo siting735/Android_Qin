@@ -115,15 +115,14 @@ class SignDataForStudent : Fragment() {
         signRito = responseJson!!["signRito"].toString()
     }
 
-    private fun buildSignDataView(signDataView: SuperTextView?, signData: JSONObject?) {
+    private fun buildSignDataView(signDataView: SuperTextView?, signData: JSONObject?):SuperTextView{
         if (signDataListLayout == null) {
             signDataListLayout = view?.findViewById(R.id.sign_data_list)
         }
         activityTitle = signData?.get("activityTitle")?.toString()
         signState = signData?.get("signState")?.toString()
         signDataView?.setLeftBottomString(activityTitle)
-        signDataView?.useShape()
-        signDataView?.setShapeCornersRadius(dip2px(10f).toFloat())
+        signDataView?.setShapeCornersRadius(dip2px(5f).toFloat())
         when (signState) {
             SIGN -> {
                 signDataView?.setRightString("已打卡")
@@ -138,6 +137,7 @@ class SignDataForStudent : Fragment() {
             layoutParams?.setMargins(dip2px(10f), dip2px(10f), dip2px(10f), 0)
         }
         signDataView!!.layoutParams = layoutParams
+        return signDataView?.useShape()
     }
 
     var signDataListLayout: LinearLayout? = null

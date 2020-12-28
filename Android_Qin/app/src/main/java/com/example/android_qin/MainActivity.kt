@@ -138,6 +138,7 @@ class MainActivity : Activity() {
                 response = ConnectionUtil.getDataByUrl(urlForLogin)
             } catch (e: Exception) {
                 ConnectionUtil.buildConnectFailDialog(applicationContext)
+                loadingDialog?.cancel()
                 runOnUiThread {
                     ConnectionUtil.connectFailDialog?.show()
                 }

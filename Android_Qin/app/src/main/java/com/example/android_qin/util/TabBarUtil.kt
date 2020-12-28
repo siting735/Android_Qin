@@ -74,7 +74,7 @@ class TabBarUtil {
                 getDrawable(R.drawable.location),
                 getDrawable(R.drawable.location_chosen),
                 "打卡",
-                true
+                false
             )
         }
 
@@ -83,16 +83,16 @@ class TabBarUtil {
                 getDrawable(R.drawable.data),
                 getDrawable(R.drawable.data_chosen),
                 "统计",
-                true
+                false
             )
         }
 
         private fun buildTabForMine(): TabSegment.Tab {
             return TabSegment.Tab(
                 getDrawable(R.drawable.mine),
-                getDrawable(R.drawable.mine),
+                getDrawable(R.drawable.mine_chosen),
                 "我的",
-                true
+                false
             )
         }
 
@@ -107,6 +107,5 @@ class TabBarUtil {
         private const val TEACHER_MINE_PAGE = 2
         const val STUDENT = 1
         const val TEACHER = 2
-        var supportFragmentManager: FragmentManager? = null
     }
 }

@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.example.android_qin.MainActivity
 import com.example.android_qin.R
+import com.example.android_qin.TeacherActivity
 import com.example.android_qin.util.NavUtil
 import com.xuexiang.xui.widget.textview.supertextview.SuperTextView
 
@@ -31,7 +32,7 @@ class MineForTeacher : Fragment() {
         dialog.setMessage("确认退出？")
         dialog.setPositiveButton("确定") { dialog, id ->
             MainActivity.LOG_OUT = true
-            NavUtil.navController?.popBackStack()
+            TeacherActivity.tabBarState = 0
             MainActivity.identity = MainActivity.STUDENT
             NavUtil.navController?.navigate(R.id.mainActivity2)
 

@@ -29,7 +29,6 @@ class StudentActivity : AppCompatActivity() {
         super.onStart()
         NavUtil.buildNavHost(supportFragmentManager)
         configTabBar()
-        Log.i("student activity","on start")
     }
 
     private fun configTabBar() {

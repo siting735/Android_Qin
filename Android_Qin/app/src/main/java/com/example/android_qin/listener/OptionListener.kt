@@ -23,7 +23,7 @@ import java.net.URL
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
-class OptionListener(val activity: FragmentActivity?, val context: Context?, val signView:View?) :
+class OptionListener(val activity: FragmentActivity?, val context: Context?, val signView: View?) :
     OnOptionsSelectListener {
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -33,19 +33,19 @@ class OptionListener(val activity: FragmentActivity?, val context: Context?, val
         options2: Int,
         options3: Int
     ): Boolean {
-        classList = TeacherActivity.classList
-        classInfo = classList?.get(options1) as JSONObject
-        LocationFragmentForTeacher.currentClassId = classInfo!!["classId"].toString()
-        buildConfirmDialogForLaunch()
+        buildConfirmDialogForLaunch(options1)
         activity?.runOnUiThread {
-            LocationFragmentForTeacher.optionsPickerView?.dialog?.cancel()
+            cancelPickerDialog()
             confirmDialogForLaunch?.show()
         }
         return true
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    fun buildConfirmDialogForLaunch() {
+    fun buildConfirmDialogForLaunch(option: Int) {
+        classList = TeacherActivity.classList
+        classInfo = classList?.get(option) as JSONObject
+        LocationFragmentForTeacher.currentClassId = classInfo!!["classId"].toString()
         if (confirmDialogForLaunch == null) {
             confirmDialogForLaunch = AlertDialog.Builder(context)
             confirmDialogForLaunch?.setTitle("提示")
@@ -78,7 +78,6 @@ class OptionListener(val activity: FragmentActivity?, val context: Context?, val
         }.start()
     }
 
-
     private fun dealWithResponseForLaunchActivity() {
         buildDataForLaunchActivity()
         if (activityState == LocationFragmentForTeacher.LAUNCH_FAIL) {
@@ -95,7 +94,7 @@ class OptionListener(val activity: FragmentActivity?, val context: Context?, val
 
     }
 
-    private fun updateActivityState(){
+    private fun updateActivityState() {
         if (activityTitleTextView == null) {
             activityTitleTextView = signView?.findViewById(R.id.activity_title_for_teacher)
         }
@@ -110,14 +109,11 @@ class OptionListener(val activity: FragmentActivity?, val context: Context?, val
         }
     }
 
-    private fun reFormatActivityTitle(){
-        newActivityTitle = newActivityTitle!!.replaceRange(10,newActivityTitle!!.length," " + newActivityTitle!!.removeRange(0,10))
-    }
-
     private fun buildDataForLaunchActivity() {
         MainActivity.responseJson = JSONObject(LocationFragmentForTeacher.response.toString())
         activityState = MainActivity.responseJson!!["activityState"].toString()
-        LocationFragmentForTeacher.currentActivityId = MainActivity.responseJson!!["activityId"].toString()
+        LocationFragmentForTeacher.currentActivityId =
+            MainActivity.responseJson!!["activityId"].toString()
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -130,6 +126,19 @@ class OptionListener(val activity: FragmentActivity?, val context: Context?, val
         urlForLaunchActivity =
             URL("http://${MainActivity.ip}:8080/activity/launchActivity?classId=${LocationFragmentForTeacher.currentClassId}&activityTitle=$newActivityTitle&teacherLongitude=$teacherLongitude&teacherLatitude=$teacherLatitude")
     }
+
+    private fun cancelPickerDialog() {
+        LocationFragmentForTeacher.optionsPickerView?.dialog?.cancel()
+    }
+
+    private fun reFormatActivityTitle() {
+        newActivityTitle = newActivityTitle!!.replaceRange(
+            10,
+            newActivityTitle!!.length,
+            " " + newActivityTitle!!.removeRange(0, 10)
+        )
+    }
+
 
     private var newActivityTitle: String? = null
     var teacherLatitude: String? = null

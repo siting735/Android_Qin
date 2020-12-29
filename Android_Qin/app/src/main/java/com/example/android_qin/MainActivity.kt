@@ -6,6 +6,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.view.animation.AlphaAnimation
 import android.view.animation.Animation
@@ -44,6 +45,10 @@ class MainActivity : Activity() {
                 cancelAnimation = true
             }
             buildUI()
+        }
+        if (userNameEditText == null || passwordEditText == null) {
+            userNameEditText = findViewById(R.id.user_name)
+            passwordEditText = findViewById(R.id.password)
         }
     }
 
@@ -217,14 +222,14 @@ class MainActivity : Activity() {
     }
 
     private fun buildRequestForLogin() {
-        if (userName == null || password == null) {
-            userName = findViewById(R.id.user_name)
-            password = findViewById(R.id.password)
+        if (userNameEditText == null || passwordEditText == null) {
+            userNameEditText = findViewById(R.id.user_name)
+            passwordEditText = findViewById(R.id.password)
         }
         urlForLogin = if (identity == STUDENT) {
-            URL("http://$ip:8080/student/login?username=" + userName?.text + "&password=" + password?.text)
+            URL("http://$ip:8080/student/login?username=" + userNameEditText?.text + "&password=" + passwordEditText?.text)
         } else {
-            URL("http://$ip:8080/teacher/login?username=" + userName?.text + "&password=" + password?.text)
+            URL("http://$ip:8080/teacher/login?username=" + userNameEditText?.text + "&password=" + passwordEditText?.text)
         }
     }
 
@@ -232,9 +237,26 @@ class MainActivity : Activity() {
         // super.onBackPressed()
     }
 
+    override fun onPause() {
+        super.onPause()
+        userNameString = userNameEditText?.text.toString()
+        passwordString = passwordEditText?.text.toString()
+        Log.i("userName onPause", userNameString.toString())
+
+    }
+
+    override fun onResume() {
+        userNameEditText?.setText(userNameString)
+        passwordEditText?.setText(passwordString)
+        Log.i("userName onResume", userNameString.toString())
+        super.onResume()
+    }
+
     var loadingDialog: AlertDialog? = null
-    var userName: ClearEditText? = null
-    var password: PasswordEditText? = null
+    var userNameEditText: ClearEditText? = null
+    var userNameString: String? = null
+    var passwordString: String? = null
+    var passwordEditText: PasswordEditText? = null
     var urlForLogin: URL? = null
     var connecting: Boolean = false
 

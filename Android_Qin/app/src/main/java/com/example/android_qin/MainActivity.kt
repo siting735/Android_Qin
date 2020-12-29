@@ -169,6 +169,7 @@ class MainActivity : Activity() {
             loginState = loginState.toInt()
         }
         connecting = false
+        loadingDialog?.cancel()
         when (loginState) {
             STUDENT -> {
                 toStudentPage(loginInfo)

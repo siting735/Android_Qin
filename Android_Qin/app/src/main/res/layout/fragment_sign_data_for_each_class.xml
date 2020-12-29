@@ -38,6 +38,7 @@
             <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
                 android:id="@+id/sign_data_swipe_for_class"
                 android:layout_width="match_parent"
+                android:layout_marginBottom="10dp"
                 android:layout_height="80dp">
 
                 <LinearLayout

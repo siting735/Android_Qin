@@ -16,6 +16,7 @@ import com.example.android_qin.R
 import com.example.android_qin.TeacherActivity
 import com.example.android_qin.util.ConnectionUtil
 import com.example.android_qin.util.DpUtil
+import com.example.android_qin.util.LayoutUtil
 import com.example.android_qin.util.NavUtil
 import com.xuexiang.xui.widget.textview.supertextview.SuperTextView
 import org.json.JSONArray
@@ -83,20 +84,12 @@ class SignDataForEachClass : Fragment() {
         signDataView.setLeftString(studentName)
         signDataView.setRightString("出勤率：")
         signDataView.setRightBottomString("$signRito%")
-        var layoutParams =
-            LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, dip2px(100f))
-        layoutParams.setMargins(dip2px(10f), dip2px(10f), dip2px(10f), 0)
         signDataView.setShapeCornersRadius(DpUtil.dip2px(context,5f).toFloat())
-        signDataView.layoutParams = layoutParams
+        signDataView.layoutParams = LayoutUtil.layoutParamsForInfoUnit
         signDataView = signDataView.useShape()
         activity?.runOnUiThread {
             signDataListLayout?.addView(signDataView)
         }
-    }
-
-    private fun dip2px(dpValue: Float): Int {
-        val scale = context?.resources?.displayMetrics?.density;
-        return (dpValue * scale!! + 0.5f).toInt()
     }
 
     private fun buildRequest() {

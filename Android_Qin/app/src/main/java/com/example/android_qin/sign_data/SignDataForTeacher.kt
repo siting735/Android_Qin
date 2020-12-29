@@ -17,6 +17,7 @@ import com.example.android_qin.R
 import com.example.android_qin.TeacherActivity
 import com.example.android_qin.listener.GetInClassListener
 import com.example.android_qin.util.ConnectionUtil
+import com.example.android_qin.util.LayoutUtil
 import com.example.android_qin.util.NavUtil
 import com.xuexiang.xui.widget.textview.supertextview.SuperTextView
 import org.json.JSONArray
@@ -82,11 +83,6 @@ class SignDataForTeacher : Fragment() {
         if (classListLayout == null) {
             classListLayout = view?.findViewById(R.id.class_list)
         }
-        if (layoutParams == null) {
-            layoutParams =
-                LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, dip2px(60f))
-            layoutParams?.setMargins(dip2px(10f), dip2px(10f), dip2px(10f), 0)
-        }
         classInfoView?.id = viewCounter
         viewCounter += 1
         tempClassName = classInfo?.get("className")?.toString()
@@ -95,7 +91,7 @@ class SignDataForTeacher : Fragment() {
         classInfoView?.setLeftString(tempClassName)
         classInfoView?.setShapeCornersRadius(dip2px(5f).toFloat())
         classInfoView?.setPadding(dip2px(14f), 0, 0, 0)
-        classInfoView?.layoutParams = layoutParams
+        classInfoView?.layoutParams = LayoutUtil.layoutParamsForInfoUnit
         classInfoView?.setRightIcon(R.drawable.get_in)
         val classInfoViewListener = GetInClassListener(tempClassId, tempClassName)
         classInfoView!!.setOnClickListener(classInfoViewListener)
@@ -136,7 +132,6 @@ class SignDataForTeacher : Fragment() {
 
     var swipe: SwipeRefreshLayout? = null
     private var classListLayout: LinearLayout? = null
-    var layoutParams: LinearLayout.LayoutParams? = null
     var viewCounter = 0
     var urlForGetClassInfos: URL? = null
     var response: StringBuilder? = null

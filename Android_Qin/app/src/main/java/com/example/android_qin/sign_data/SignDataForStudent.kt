@@ -13,6 +13,7 @@ import com.example.android_qin.MainActivity
 import com.example.android_qin.R
 import com.example.android_qin.StudentActivity
 import com.example.android_qin.util.ConnectionUtil
+import com.example.android_qin.util.LayoutUtil
 import com.xuexiang.xui.widget.textview.supertextview.SuperTextView
 import org.json.JSONArray
 import org.json.JSONObject
@@ -42,7 +43,6 @@ class SignDataForStudent : Fragment() {
             }
             dealWithResponse()
         }.start()
-
     }
 
     private fun dealWithResponse() {
@@ -131,19 +131,13 @@ class SignDataForStudent : Fragment() {
                 signDataView?.setRightString("未打卡")
             }
         }
-        if (layoutParams == null) {
-            layoutParams =
-                LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, dip2px(100f))
-            layoutParams?.setMargins(dip2px(10f), dip2px(10f), dip2px(10f), 0)
-        }
-        signDataView!!.layoutParams = layoutParams
+        signDataView!!.layoutParams = LayoutUtil.layoutParamsForInfoUnit
         return signDataView?.useShape()
     }
 
     var signDataListLayout: LinearLayout? = null
     var activityTitle: String? = null
     var signState: String? = null
-    var layoutParams: LinearLayout.LayoutParams? = null
     var signRito: String? = null
     var signRitoTextView: SuperTextView? = null
     var urlForGetSignData: URL? = null

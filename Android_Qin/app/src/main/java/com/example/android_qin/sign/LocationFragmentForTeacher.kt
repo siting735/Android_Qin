@@ -328,7 +328,6 @@ class LocationFragmentForTeacher : Fragment() {
         const val END_FAIL = "0"
         const val SIGN_FAIL = "0"
         var optionsPickerView: OptionsPickerView<String>? = null
-        val locationInfo = ArrayMap<String, String>()
         var currentClassId: String? = null
         var currentActivityId: String? = null
 

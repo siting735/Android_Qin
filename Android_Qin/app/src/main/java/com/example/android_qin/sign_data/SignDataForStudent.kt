@@ -47,14 +47,14 @@ class SignDataForStudent : Fragment() {
 
     private fun dealWithResponse() {
         buildDataForSignList()
-        updateSignRito(responseJson)
+        updateSignRito()
         val listLength = signDataJsonList!!.length()
         for (index in listLength - 1 downTo 0) {
             addSignDataToLayout(signDataJsonList!![index] as JSONObject)
         }
     }
 
-    private fun updateSignRito(responseJson: JSONObject?) {
+    private fun updateSignRito() {
         buildDataForUpdateSignRito()
         activity?.runOnUiThread {
             signRitoTextView?.setCenterBottomString("$signRito%")
@@ -104,15 +104,14 @@ class SignDataForStudent : Fragment() {
     }
 
     private fun buildDataForSignList() {
-        responseJson = JSONObject(response.toString())
-        signDataJsonList = responseJson!!["activityInfo"] as JSONArray
+        signDataJsonList = ConnectionUtil.responseJson!!["activityInfo"] as JSONArray
     }
 
     private fun buildDataForUpdateSignRito() {
         if (signRitoTextView == null) {
             signRitoTextView = view?.findViewById(R.id.sign_rito)
         }
-        signRito = responseJson!!["signRito"].toString()
+        signRito = ConnectionUtil.responseJson!!["signRito"].toString()
     }
 
     private fun buildSignDataView(
@@ -144,9 +143,7 @@ class SignDataForStudent : Fragment() {
     var signRito: String? = null
     var signRitoTextView: SuperTextView? = null
     var urlForGetSignData: URL? = null
-    var response: StringBuilder? = null
     var signDataJsonList: JSONArray? = null
-    var responseJson: JSONObject? = null
 
     companion object {
         const val UNSIGN = "0"

@@ -1,6 +1,7 @@
 package com.example.android_qin.util
 
 import android.content.Context
+import android.util.ArrayMap
 import android.util.Log
 import android.view.View
 import android.widget.Toast
@@ -10,6 +11,7 @@ import com.amap.api.location.AMapLocationListener
 import com.amap.api.maps2d.AMap
 import com.amap.api.maps2d.MapView
 import com.amap.api.maps2d.model.MyLocationStyle
+import com.example.android_qin.MainActivity
 import com.example.android_qin.R
 import com.example.android_qin.sign.LocationFragmentForTeacher
 
@@ -35,11 +37,19 @@ class MapUtil {
                     if (aMapLocation.errorCode == 0) {
                         mLocationClient!!.stopLocation()
                         Log.d("定位成功", "定位成功")
-                        LocationFragmentForTeacher.locationInfo["teacherLongitude"] =
-                            aMapLocation.longitude.toString()
-                        LocationFragmentForTeacher.locationInfo["teacherLatitude"] =
-                            aMapLocation.latitude.toString()
-                        Log.i("locationInfo", LocationFragmentForTeacher.locationInfo.toString())
+                        if (MainActivity.identity == MainActivity.STUDENT){
+                            locationInfo["studentLongitude"] =
+                                aMapLocation.longitude.toString()
+                            locationInfo["studentLatitude"] =
+                                aMapLocation.latitude.toString()
+                        }
+                        else{
+                            locationInfo["teacherLongitude"] =
+                                aMapLocation.longitude.toString()
+                            locationInfo["teacherLatitude"] =
+                                aMapLocation.latitude.toString()
+                        }
+                        Log.i("locationInfo", locationInfo.toString())
                     } else {
                         Log.e(
                             "AmapError", "location Error, ErrCode:"
@@ -55,7 +65,11 @@ class MapUtil {
         }
 
         fun buildMap(view: View?) {
-            mMapView = view?.findViewById<MapView>(R.id.map_for_teacher)
+            mMapView = if(MainActivity.identity == MainActivity.STUDENT){
+                view?.findViewById(R.id.map_for_student)
+            } else{
+                view?.findViewById(R.id.map_for_teacher)
+            }
             var aMap: AMap? = null  //创建地图
             if (aMap == null) {
                 aMap = mMapView?.map
@@ -75,6 +89,6 @@ class MapUtil {
         var mLocationClient: AMapLocationClient? = null
         var mLocationListener: AMapLocationListener? = null
         var mLocationOption: AMapLocationClientOption? = null
-
+        val locationInfo = ArrayMap<String, String>()
     }
 }

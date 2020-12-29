@@ -210,7 +210,6 @@ class MainActivity : Activity() {
             )
             != PackageManager.PERMISSION_GRANTED
         ) {
-            Toast.makeText(this, "granting permission", Toast.LENGTH_SHORT).show()
             ActivityCompat.requestPermissions(
                 this,
                 arrayOf(

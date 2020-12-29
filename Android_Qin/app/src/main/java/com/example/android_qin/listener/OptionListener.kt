@@ -14,6 +14,7 @@ import com.example.android_qin.R
 import com.example.android_qin.TeacherActivity
 import com.example.android_qin.sign.LocationFragmentForTeacher
 import com.example.android_qin.util.ConnectionUtil
+import com.example.android_qin.util.MapUtil
 import com.xuexiang.xui.widget.picker.widget.listener.OnOptionsSelectListener
 import com.xuexiang.xui.widget.textview.supertextview.SuperTextView
 import org.json.JSONArray
@@ -120,8 +121,8 @@ class OptionListener(val activity: FragmentActivity?, val context: Context?, val
         val current = LocalDateTime.now()
         val formatter = DateTimeFormatter.ofPattern("yyyy-MM-ddHH:mm")
         newActivityTitle = current.format(formatter)
-        teacherLatitude = LocationFragmentForTeacher.locationInfo["teacherLatitude"]
-        teacherLongitude = LocationFragmentForTeacher.locationInfo["teacherLongitude"]
+        teacherLatitude = MapUtil.locationInfo["teacherLatitude"]
+        teacherLongitude = MapUtil.locationInfo["teacherLongitude"]
         urlForLaunchActivity =
             URL("http://${MainActivity.ip}:8080/activity/launchActivity?classId=${LocationFragmentForTeacher.currentClassId}&activityTitle=$newActivityTitle&teacherLongitude=$teacherLongitude&teacherLatitude=$teacherLatitude")
     }

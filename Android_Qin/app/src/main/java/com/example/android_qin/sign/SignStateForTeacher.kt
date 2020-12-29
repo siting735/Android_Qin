@@ -36,16 +36,20 @@ class SignStateForTeacher : Fragment() {
         val unsignedStudentList = JSONArray(signData["unsignedStudentList"].toString())
         updateSignRito(signRito)
         val unsignedStudentListLength = unsignedStudentList.length()
+        if (unsignedStudentListLength == 0) {
+            showEmptyIcon()
+            Log.i("unsignedStudentListLength", unsignedStudentListLength.toString())
+            return Unit
+        }
         for (index in 0 until unsignedStudentListLength){
             addStudentInfoToList(unsignedStudentList!![index] as JSONObject)
         }
-        if (unsignedStudentListLength == 0) {
-            showEmptyIcon()
-        }
-
     }
 
     private fun showEmptyIcon(){
+        if (unsignStudentListLayout == null) {
+            unsignStudentListLayout = view?.findViewById(R.id.unsign_students_list)
+        }
         val imageView = ImageView(context)
         val layoutParamsForEmptyIcon = LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT)
         imageView.setImageResource(R.drawable.empty)

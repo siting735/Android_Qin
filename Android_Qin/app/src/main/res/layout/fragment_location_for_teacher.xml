@@ -12,6 +12,7 @@
         android:orientation="vertical">
 
         <Toolbar
+            android:id="@+id/tool_bar"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
@@ -25,6 +26,17 @@
                 android:text="打卡"
                 android:textColor="@color/white"
                 android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/manual_sign"
+                android:layout_gravity="right"
+                android:text="@string/manual_sign"
+                android:textSize="20sp"
+                android:layout_marginRight="10dp"
+                android:textColor="@color/white"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
         </Toolbar>
 
         <LinearLayout

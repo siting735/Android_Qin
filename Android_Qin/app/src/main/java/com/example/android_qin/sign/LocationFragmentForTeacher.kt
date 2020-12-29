@@ -12,10 +12,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.annotation.RequiresApi
+import androidx.core.view.marginTop
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.amap.api.location.AMapLocationClient
 import com.amap.api.location.AMapLocationClientOption
@@ -29,6 +28,7 @@ import com.example.android_qin.TeacherActivity
 import com.example.android_qin.listener.OptionListener
 import com.example.android_qin.util.ConnectionUtil
 import com.example.android_qin.util.NavUtil
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.xuexiang.xui.widget.picker.widget.OptionsPickerView
 import com.xuexiang.xui.widget.picker.widget.builder.OptionsPickerBuilder
 import com.xuexiang.xui.widget.picker.widget.listener.OnOptionsSelectListener
@@ -48,7 +48,34 @@ class LocationFragmentForTeacher : Fragment() {
         getLocationInfo()
         configSignBtn()
         configSwipeRefresh()
+        configManualSign()
         refreshActivity()
+    }
+
+
+    private fun configManualSign(){
+        val manualSignTextVIew = view?.findViewById<TextView>(R.id.manual_sign)
+        manualSignTextVIew?.setOnClickListener {
+            if (currentActivityId == null){
+                activity?.runOnUiThread {
+                    Toast.makeText(requireContext(),"暂无活动",Toast.LENGTH_LONG).show()
+                }
+            }
+            else {
+                buildManualDialog()
+                manualSignDialog?.show()
+            }
+        }
+    }
+
+    private fun configSwipeRefresh() {
+        val swipe =
+            view?.findViewById<SwipeRefreshLayout>(R.id.location_swipe_for_teacher)
+        swipe?.setOnRefreshListener {
+            mLocationClient!!.startLocation()
+            refreshActivity()
+            swipe.isRefreshing = false
+        }
     }
 
     private fun refreshActivity() {
@@ -85,15 +112,66 @@ class LocationFragmentForTeacher : Fragment() {
         }
     }
 
-    private fun configSwipeRefresh() {
-        val swipe =
-            view?.findViewById<SwipeRefreshLayout>(R.id.location_swipe_for_teacher)
-        swipe?.setOnRefreshListener {
-            mLocationClient!!.startLocation()
-            refreshActivity()
-            swipe.isRefreshing = false
+    private fun manualSign(){
+        Thread {
+            buildRequestForManualSign()
+            try {
+                response = ConnectionUtil.getDataByUrl(urlForManualSign)
+            } catch (e: Exception) {
+                ConnectionUtil.buildConnectFailDialog(requireContext())
+                activity?.runOnUiThread {
+                    ConnectionUtil.connectFailDialog?.show()
+                }
+                Thread.currentThread().join()
+            }
+            dealWithResponseForManualSign()
+        }.start()
+
+    }
+
+
+    private fun buildRequestForManualSign(){
+        urlForManualSign =
+            URL("http://${MainActivity.ip}:8080/sign/manualSign?activityId=$currentActivityId&studentId=$studentId")
+    }
+
+    private fun buildDataForManualSign(){
+        MainActivity.responseJson = JSONObject(response.toString())
+        signState = MainActivity.responseJson!!["signState"].toString()
+    }
+
+    private fun dealWithResponseForManualSign(){
+        buildDataForManualSign()
+        if (signState == SIGN_FAIL) {
+            activity?.runOnUiThread {
+                Toast.makeText(requireContext(), "签到失败", Toast.LENGTH_LONG).show()
+            }
+        } else {
+            activity?.runOnUiThread {
+                Toast.makeText(requireContext(), "签到成功", Toast.LENGTH_LONG).show()
+            }
         }
     }
+
+    private fun buildManualDialog(){
+        if (manualSignDialog == null) {
+            manualSignDialogBuilder = AlertDialog.Builder(context)
+            manualSignDialogBuilder!!.setTitle("手动签到")
+            studentIdLayout = LinearLayout.inflate(requireContext(), R.layout.student_id_input, null) as LinearLayout
+            studentIdEditText = studentIdLayout?.findViewById<EditText>(R.id.student_id_edit_text)
+            manualSignDialogBuilder!!.setView(studentIdLayout)
+            manualSignDialogBuilder?.setPositiveButton("确定") { dialog, id ->
+                studentId = studentIdEditText?.text.toString()
+                manualSign()
+            }
+            manualSignDialogBuilder?.setNegativeButton("取消") { dialog, id ->
+                {}
+            }
+            manualSignDialog = manualSignDialogBuilder!!.create()
+        }
+    }
+
+
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun configSignBtn() {
@@ -136,6 +214,7 @@ class LocationFragmentForTeacher : Fragment() {
                 Toast.makeText(requireContext(), "结束活动失败", Toast.LENGTH_LONG).show()
             }
         } else {
+            currentActivityId = null
             activity?.runOnUiThread {
                 NavUtil.navController?.navigate(R.id.signStateForTeacher)
             }
@@ -294,10 +373,18 @@ class LocationFragmentForTeacher : Fragment() {
     var optionsPickerBuilder: OptionsPickerBuilder? = null
     var tempClassInfo: JSONObject? = null
     var activityTitleTextView: SuperTextView? = null
+    var urlForManualSign: URL? = null
+    var studentId: String? = null
+    private var signState: String? = null
+    var manualSignDialogBuilder: AlertDialog.Builder? = null
+    private var manualSignDialog: AlertDialog? = null
+    var studentIdLayout: LinearLayout? = null
+    var studentIdEditText: EditText? = null
 
     companion object {
         const val LAUNCH_FAIL = "0"
         const val END_FAIL = "0"
+        const val SIGN_FAIL = "0"
         var response: StringBuilder? = null
         var optionsPickerView: OptionsPickerView<String>? = null
         val locationInfo = ArrayMap<String, String>()

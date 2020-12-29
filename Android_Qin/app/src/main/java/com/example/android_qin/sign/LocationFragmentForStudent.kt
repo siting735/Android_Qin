@@ -26,6 +26,7 @@ import com.example.android_qin.MainActivity
 import com.example.android_qin.R
 import com.example.android_qin.StudentActivity
 import com.example.android_qin.util.ConnectionUtil
+import com.example.android_qin.util.MapUtil
 import com.example.android_qin.util.NavUtil
 import com.xuexiang.xui.widget.textview.supertextview.SuperTextView
 import org.json.JSONObject
@@ -37,9 +38,9 @@ class LocationFragmentForStudent : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        buildMap()
-        mMapView?.onCreate(savedInstanceState)
-        getLocationInfo()
+        MapUtil.buildMap(view)
+        MapUtil.mMapView?.onCreate(savedInstanceState)
+        MapUtil.getLocationInfo(requireContext())
         configSignBtn()
         configSwipeRefresh()
     }
@@ -48,7 +49,7 @@ class LocationFragmentForStudent : Fragment() {
         val swipe =
             view?.findViewById<androidx.swiperefreshlayout.widget.SwipeRefreshLayout>(R.id.location_swipe_for_student)
         swipe?.setOnRefreshListener {
-            mLocationClient?.startLocation()
+            MapUtil.mLocationClient?.startLocation()
             refreshActivity()
             swipe.isRefreshing = false
         }
@@ -180,10 +181,6 @@ class LocationFragmentForStudent : Fragment() {
         refreshActivity()
     }
 
-    override fun onResume() {
-        super.onResume()
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {}
@@ -193,62 +190,7 @@ class LocationFragmentForStudent : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_location_for_student, container, false)
-    }
-
-    private fun getLocationInfo() {
-        mLocationClient = AMapLocationClient(context)
-        mLocationOption = AMapLocationClientOption()
-        mLocationOption!!.setLocationPurpose(AMapLocationClientOption.AMapLocationPurpose.Transport)
-        if (null != mLocationClient) {
-            mLocationClient!!.setLocationOption(mLocationOption)
-            mLocationClient!!.stopLocation()
-            mLocationClient!!.startLocation()
-        }
-        mLocationOption!!.locationMode = AMapLocationClientOption.AMapLocationMode.Hight_Accuracy
-        mLocationOption!!.interval = 5000
-        // mLocationOption!!.isOnceLocation = true
-        mLocationClient!!.setLocationOption(mLocationOption)
-        mLocationOption!!.isMockEnable = true
-        mLocationListener = AMapLocationListener { aMapLocation ->
-            if (aMapLocation != null) {
-                if (aMapLocation.errorCode == 0) {
-                    mLocationClient!!.stopLocation()
-                    Log.d("定位成功", "定位成功")
-                    locationInfo["studentLongitude"] = aMapLocation.longitude.toString()
-                    locationInfo["studentLatitude"] = aMapLocation.latitude.toString()
-                    Log.i("locationInfo", locationInfo.toString())
-                    mLocationClient?.stopLocation()
-                } else {
-                    Log.e(
-                        "AmapError", "location Error, ErrCode:"
-                                + aMapLocation.errorCode + ", errInfo:"
-                                + aMapLocation.errorInfo
-                    )
-                    Toast.makeText(context, "定位失败", Toast.LENGTH_LONG)
-                }
-            }
-        }
-        mLocationClient!!.setLocationListener(mLocationListener)
-        mLocationClient!!.startLocation()
-    }
-
-    private fun buildMap() {
-        mMapView = view?.findViewById<MapView>(R.id.map_for_student)
-        var aMap: AMap? = null
-        if (aMap == null) {
-            aMap = mMapView?.map
-        }
-        myLocationStyle =
-            MyLocationStyle()
-        myLocationStyle?.interval(2000)
-        myLocationStyle?.showMyLocation(true)
-        aMap!!.setMyLocationStyle(myLocationStyle)
-        aMap.uiSettings.isMyLocationButtonEnabled = true
-        aMap!!.isMyLocationEnabled = true
-        myLocationStyle?.myLocationType(MyLocationStyle.LOCATION_TYPE_FOLLOW)
-
     }
 
     private fun buildRequestForRefreshActivity() {
@@ -283,11 +225,6 @@ class LocationFragmentForStudent : Fragment() {
     var studentId: String? = null
     var urlForRefreshActivity: URL? = null
     var urlForSign: URL? = null
-    var mMapView: MapView? = null
-    var myLocationStyle: MyLocationStyle? = null
-    var mLocationClient: AMapLocationClient? = null
-    var mLocationListener: AMapLocationListener? = null
-    var mLocationOption: AMapLocationClientOption? = null
     private val locationInfo = ArrayMap<String, String>()
 
     companion object {

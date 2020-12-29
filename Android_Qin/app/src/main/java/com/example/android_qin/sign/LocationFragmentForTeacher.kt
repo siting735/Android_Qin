@@ -27,6 +27,7 @@ import com.example.android_qin.R
 import com.example.android_qin.TeacherActivity
 import com.example.android_qin.listener.OptionListener
 import com.example.android_qin.util.ConnectionUtil
+import com.example.android_qin.util.MapUtil
 import com.example.android_qin.util.NavUtil
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.xuexiang.xui.widget.picker.widget.OptionsPickerView
@@ -43,9 +44,9 @@ class LocationFragmentForTeacher : Fragment() {
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        buildMap()
-        mMapView?.onCreate(savedInstanceState)
-        getLocationInfo()
+        MapUtil.buildMap(view)
+        MapUtil.mMapView?.onCreate(savedInstanceState)
+        MapUtil.getLocationInfo(requireContext())
         configSignBtn()
         configSwipeRefresh()
         configManualSign()
@@ -53,15 +54,14 @@ class LocationFragmentForTeacher : Fragment() {
     }
 
 
-    private fun configManualSign(){
+    private fun configManualSign() {
         val manualSignTextVIew = view?.findViewById<TextView>(R.id.manual_sign)
         manualSignTextVIew?.setOnClickListener {
-            if (currentActivityId == null){
+            if (currentActivityId == null) {
                 activity?.runOnUiThread {
-                    Toast.makeText(requireContext(),"暂无活动",Toast.LENGTH_LONG).show()
+                    Toast.makeText(requireContext(), "暂无活动", Toast.LENGTH_LONG).show()
                 }
-            }
-            else {
+            } else {
                 buildManualDialog()
                 manualSignDialog?.show()
             }
@@ -72,7 +72,7 @@ class LocationFragmentForTeacher : Fragment() {
         val swipe =
             view?.findViewById<SwipeRefreshLayout>(R.id.location_swipe_for_teacher)
         swipe?.setOnRefreshListener {
-            mLocationClient!!.startLocation()
+            MapUtil.mLocationClient!!.startLocation()
             refreshActivity()
             swipe.isRefreshing = false
         }
@@ -112,7 +112,7 @@ class LocationFragmentForTeacher : Fragment() {
         }
     }
 
-    private fun manualSign(){
+    private fun manualSign() {
         Thread {
             buildRequestForManualSign()
             try {
@@ -130,16 +130,16 @@ class LocationFragmentForTeacher : Fragment() {
     }
 
 
-    private fun buildRequestForManualSign(){
+    private fun buildRequestForManualSign() {
         urlForManualSign =
             URL("http://${MainActivity.ip}:8080/sign/manualSign?activityId=$currentActivityId&studentId=$studentId")
     }
 
-    private fun buildDataForManualSign(){
+    private fun buildDataForManualSign() {
         signState = ConnectionUtil.responseJson!!["signState"].toString()
     }
 
-    private fun dealWithResponseForManualSign(){
+    private fun dealWithResponseForManualSign() {
         buildDataForManualSign()
         if (signState == SIGN_FAIL) {
             activity?.runOnUiThread {
@@ -152,11 +152,15 @@ class LocationFragmentForTeacher : Fragment() {
         }
     }
 
-    private fun buildManualDialog(){
+    private fun buildManualDialog() {
         if (manualSignDialog == null) {
             manualSignDialogBuilder = AlertDialog.Builder(context)
             manualSignDialogBuilder!!.setTitle("手动签到")
-            studentIdLayout = LinearLayout.inflate(requireContext(), R.layout.student_id_input, null) as LinearLayout
+            studentIdLayout = LinearLayout.inflate(
+                requireContext(),
+                R.layout.student_id_input,
+                null
+            ) as LinearLayout
             studentIdEditText = studentIdLayout?.findViewById<EditText>(R.id.student_id_edit_text)
             manualSignDialogBuilder!!.setView(studentIdLayout)
             manualSignDialogBuilder?.setPositiveButton("确定") { dialog, id ->
@@ -171,13 +175,11 @@ class LocationFragmentForTeacher : Fragment() {
     }
 
 
-
     @RequiresApi(Build.VERSION_CODES.O)
     private fun configSignBtn() {
         val signBtn = view?.findViewById<Button>(R.id.sign_btn_for_teacher)
         NavUtil.buildNavHost(activity?.supportFragmentManager)
         signBtn?.setOnClickListener {
-            // NavUtil.navController?.navigate(R.id.signStateForTeacher)
             if (currentClassId == "") {
                 selectClassForLaunch()
             } else {
@@ -218,58 +220,6 @@ class LocationFragmentForTeacher : Fragment() {
                 NavUtil.navController?.navigate(R.id.signStateForTeacher)
             }
         }
-
-    }
-
-    private fun getLocationInfo() {
-        mLocationClient = AMapLocationClient(context)
-        mLocationOption = AMapLocationClientOption()
-        mLocationOption!!.setLocationPurpose(AMapLocationClientOption.AMapLocationPurpose.Transport)
-        if (null != mLocationClient) {
-            mLocationClient!!.setLocationOption(mLocationOption)
-            mLocationClient!!.stopLocation()
-            mLocationClient!!.startLocation()
-        }
-        mLocationOption!!.locationMode = AMapLocationClientOption.AMapLocationMode.Hight_Accuracy
-        mLocationOption!!.interval = 5000
-        mLocationClient!!.setLocationOption(mLocationOption)
-        mLocationOption!!.isMockEnable = true
-        mLocationListener = AMapLocationListener { aMapLocation ->
-            if (aMapLocation != null) {
-                if (aMapLocation.errorCode == 0) {
-                    mLocationClient!!.stopLocation()
-                    Log.d("定位成功", "定位成功")
-                    locationInfo["teacherLongitude"] = aMapLocation.longitude.toString()
-                    locationInfo["teacherLatitude"] = aMapLocation.latitude.toString()
-                    Log.i("locationInfo", locationInfo.toString())
-                } else {
-                    Log.e(
-                        "AmapError", "location Error, ErrCode:"
-                                + aMapLocation.errorCode + ", errInfo:"
-                                + aMapLocation.errorInfo
-                    )
-                    Toast.makeText(context, "定位失败", Toast.LENGTH_LONG)
-                }
-            }
-        }
-        mLocationClient!!.setLocationListener(mLocationListener)
-        mLocationClient!!.startLocation()
-    }
-
-    private fun buildMap() {
-        mMapView = view?.findViewById<MapView>(R.id.map_for_teacher)
-        var aMap: AMap? = null  //创建地图
-        if (aMap == null) {
-            aMap = mMapView?.map
-        }
-        myLocationStyle =
-            MyLocationStyle()
-        myLocationStyle?.interval(2000)
-        myLocationStyle?.showMyLocation(true)
-        aMap!!.setMyLocationStyle(myLocationStyle)
-        aMap.uiSettings.isMyLocationButtonEnabled = true
-        aMap!!.isMyLocationEnabled = true
-        myLocationStyle?.myLocationType(MyLocationStyle.LOCATION_TYPE_FOLLOW)
 
     }
 
@@ -359,11 +309,6 @@ class LocationFragmentForTeacher : Fragment() {
 
     var activityState: String? = null
     var currentActivityTitle: String? = null
-    var mMapView: MapView? = null
-    var myLocationStyle: MyLocationStyle? = null
-    var mLocationClient: AMapLocationClient? = null
-    var mLocationListener: AMapLocationListener? = null
-    var mLocationOption: AMapLocationClientOption? = null
     var urlForRefreshActivity: URL? = null
     var confirmDialogForEnd: AlertDialog.Builder? = null
     var urlForEndActivity: URL? = null

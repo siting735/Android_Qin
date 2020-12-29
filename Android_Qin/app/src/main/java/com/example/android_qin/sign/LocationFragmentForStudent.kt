@@ -58,7 +58,7 @@ class LocationFragmentForStudent : Fragment() {
         Thread {
             buildRequestForRefreshActivity()
             try {
-                response = ConnectionUtil.getDataByUrl(urlForRefreshActivity)
+                ConnectionUtil.getDataByUrl(urlForRefreshActivity)
             } catch (e: Exception) {
                 e.printStackTrace()
                 ConnectionUtil.buildConnectFailDialog(requireContext())
@@ -67,11 +67,11 @@ class LocationFragmentForStudent : Fragment() {
                 }
                 Thread.currentThread().join()
             }
-            dealWithResponseForRefreshActivity(response)
+            dealWithResponseForRefreshActivity()
         }.start()
     }
 
-    private fun dealWithResponseForRefreshActivity(response: StringBuilder?) {
+    private fun dealWithResponseForRefreshActivity() {
         buildDataForRefreshActivity()
         if (activityTitle.toString() == "") {
             activity?.runOnUiThread {
@@ -90,7 +90,7 @@ class LocationFragmentForStudent : Fragment() {
         val signBtn = view?.findViewById<Button>(R.id.sign_btn_for_student)
         NavUtil.buildNavHost(activity?.supportFragmentManager)
         signBtn?.setOnClickListener {
-            // sign()
+            sign()
             NavUtil.navController?.navigate(R.id.signStateForStudent)
         }
     }
@@ -99,7 +99,7 @@ class LocationFragmentForStudent : Fragment() {
         Thread {
             buildRequestForSign()
             try {
-                response = ConnectionUtil.getDataByUrl(urlForSign)
+                ConnectionUtil.getDataByUrl(urlForSign)
             } catch (e: Exception) {
                 Log.e("error in sign", e.toString())
                 ConnectionUtil.buildConnectFailDialog(requireContext())
@@ -108,13 +108,12 @@ class LocationFragmentForStudent : Fragment() {
                 }
                 Thread.currentThread().join()
             }
-            dealWithResponseForSign(response)
+            dealWithResponseForSign()
         }.start()
     }
 
-    private fun dealWithResponseForSign(response: StringBuilder?) {
-        val responseJson = JSONObject(response.toString())
-        val signState = responseJson["signState"] as Int
+    private fun dealWithResponseForSign() {
+        val signState = ConnectionUtil.responseJson!!["signState"] as Int
         NavUtil.buildNavHost(activity?.supportFragmentManager)
         if (signState == 0) {
             activity?.runOnUiThread {
@@ -258,8 +257,7 @@ class LocationFragmentForStudent : Fragment() {
     }
 
     private fun buildDataForRefreshActivity() {
-        responseJson = JSONObject(response.toString())
-        activityTitle = responseJson!!["activityTitle"].toString()
+        activityTitle = ConnectionUtil.responseJson!!["activityTitle"].toString()
         if (activityTitleTextView == null) {
             activityTitleTextView = view?.findViewById(R.id.activity_title_for_student)
         }
@@ -278,7 +276,6 @@ class LocationFragmentForStudent : Fragment() {
     }
 
     private var deviceId: String? = null
-    var responseJson: JSONObject? = null
     var activityTitle: String? = null
     var activityTitleTextView: SuperTextView? = null
     var studentLongitude: String? = null
@@ -286,7 +283,6 @@ class LocationFragmentForStudent : Fragment() {
     var studentId: String? = null
     var urlForRefreshActivity: URL? = null
     var urlForSign: URL? = null
-    var response: StringBuilder? = null
     var mMapView: MapView? = null
     var myLocationStyle: MyLocationStyle? = null
     var mLocationClient: AMapLocationClient? = null

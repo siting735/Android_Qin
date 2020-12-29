@@ -54,7 +54,7 @@ class SignDataForEachClass : Fragment() {
         Thread {
             buildRequest()
             try {
-                response = ConnectionUtil.getDataByUrl(urlForGetSignDatas)
+                ConnectionUtil.getDataByUrl(urlForGetSignDatas)
             } catch (e: Exception) {
                 ConnectionUtil.buildConnectFailDialog(requireContext())
                 activity?.runOnUiThread {
@@ -67,8 +67,7 @@ class SignDataForEachClass : Fragment() {
     }
 
     private fun dealWithResponse() {
-        val responseJson = JSONObject(response.toString())
-        val signDataList = responseJson["signRitoOfStudents"] as JSONArray
+        val signDataList = ConnectionUtil.responseJson!!["signRitoOfStudents"] as JSONArray
         for (index in 0 until signDataList.length()) {
             addSignDataToLayout(signDataList[index] as JSONObject)
         }
@@ -84,7 +83,7 @@ class SignDataForEachClass : Fragment() {
         signDataView.setLeftString(studentName)
         signDataView.setRightString("出勤率：")
         signDataView.setRightBottomString("$signRito%")
-        signDataView.setShapeCornersRadius(DpUtil.dip2px(context,5f).toFloat())
+        signDataView.setShapeCornersRadius(DpUtil.dip2px(context, 5f).toFloat())
         signDataView.layoutParams = LayoutUtil.layoutParamsForInfoUnit
         signDataView = signDataView.useShape()
         activity?.runOnUiThread {
@@ -105,7 +104,6 @@ class SignDataForEachClass : Fragment() {
         return inflater.inflate(R.layout.fragment_sign_data_for_each_class, container, false)
     }
 
-    var response: StringBuilder? = null
     private var urlForGetSignDatas: URL? = null
 
     companion object {

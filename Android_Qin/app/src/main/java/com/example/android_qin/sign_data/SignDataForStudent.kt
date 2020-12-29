@@ -33,7 +33,7 @@ class SignDataForStudent : Fragment() {
             removeOriginSignDatas()
             buildRequestForGetSignData()
             try {
-                response = ConnectionUtil.getDataByUrl(urlForGetSignData)
+                ConnectionUtil.getDataByUrl(urlForGetSignData)
             } catch (e: Exception) {
                 ConnectionUtil.buildConnectFailDialog(requireContext())
                 activity?.runOnUiThread {
@@ -115,7 +115,10 @@ class SignDataForStudent : Fragment() {
         signRito = responseJson!!["signRito"].toString()
     }
 
-    private fun buildSignDataView(signDataView: SuperTextView?, signData: JSONObject?):SuperTextView{
+    private fun buildSignDataView(
+        signDataView: SuperTextView?,
+        signData: JSONObject?
+    ): SuperTextView {
         if (signDataListLayout == null) {
             signDataListLayout = view?.findViewById(R.id.sign_data_list)
         }

@@ -46,7 +46,7 @@ class SignDataForTeacher : Fragment() {
         Thread {
             buildRequestForGetClassInfos()
             try {
-                response = ConnectionUtil.getDataByUrl(urlForGetClassInfos)
+                ConnectionUtil.getDataByUrl(urlForGetClassInfos)
             } catch (e: Exception) {
                 ConnectionUtil.buildConnectFailDialog(requireContext())
                 activity?.runOnUiThread {
@@ -79,7 +79,10 @@ class SignDataForTeacher : Fragment() {
     }
 
     @SuppressLint("ResourceType")
-    private fun buildClassInfoView(classInfoView: SuperTextView?, classInfo: JSONObject?) :SuperTextView{
+    private fun buildClassInfoView(
+        classInfoView: SuperTextView?,
+        classInfo: JSONObject?
+    ): SuperTextView {
         if (classListLayout == null) {
             classListLayout = view?.findViewById(R.id.class_list)
         }
@@ -114,7 +117,7 @@ class SignDataForTeacher : Fragment() {
     }
 
     private fun buildDataForClassList() {
-        responseJson = JSONObject(response.toString())
+        responseJson = JSONObject(ConnectionUtil.response.toString())
         classInfos = responseJson!!["classInfos"] as JSONArray
     }
 
@@ -134,7 +137,6 @@ class SignDataForTeacher : Fragment() {
     private var classListLayout: LinearLayout? = null
     var viewCounter = 0
     var urlForGetClassInfos: URL? = null
-    var response: StringBuilder? = null
     var responseJson: JSONObject? = null
     var classInfos: JSONArray? = null
     var tempClassId: String? = null

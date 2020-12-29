@@ -16,6 +16,7 @@ import androidx.navigation.fragment.NavHostFragment
 import com.example.android_qin.MainActivity
 import com.example.android_qin.R
 import com.example.android_qin.sign_data.SignDataForStudent
+import com.example.android_qin.util.ConnectionUtil
 import com.example.android_qin.util.DpUtil
 import com.example.android_qin.util.LayoutUtil
 import com.example.android_qin.util.NavUtil
@@ -31,14 +32,13 @@ class SignStateForTeacher : Fragment() {
         super.onStart()
     }
     private fun buildPage(){
-        val signData = JSONObject(LocationFragmentForTeacher.response.toString())
+        val signData = JSONObject(ConnectionUtil.response.toString())
         val signRito = signData["signRito"].toString()
         val unsignedStudentList = JSONArray(signData["unsignedStudentList"].toString())
         updateSignRito(signRito)
         val unsignedStudentListLength = unsignedStudentList.length()
         if (unsignedStudentListLength == 0) {
             showEmptyIcon()
-            Log.i("unsignedStudentListLength", unsignedStudentListLength.toString())
             return Unit
         }
         for (index in 0 until unsignedStudentListLength){

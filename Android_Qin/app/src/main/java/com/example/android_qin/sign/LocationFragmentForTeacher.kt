@@ -82,7 +82,7 @@ class LocationFragmentForTeacher : Fragment() {
         Thread {
             buildRequestForRefreshActivity()
             try {
-                response = ConnectionUtil.getDataByUrl(urlForRefreshActivity)
+                ConnectionUtil.getDataByUrl(urlForRefreshActivity)
             } catch (e: Exception) {
                 ConnectionUtil.buildConnectFailDialog(requireContext())
                 activity?.runOnUiThread {
@@ -90,11 +90,11 @@ class LocationFragmentForTeacher : Fragment() {
                 }
                 Thread.currentThread().join()
             }
-            dealWithResponseForRefreshActivity(response)
+            dealWithResponseForRefreshActivity()
         }.start()
     }
 
-    private fun dealWithResponseForRefreshActivity(response: StringBuilder?) {
+    private fun dealWithResponseForRefreshActivity() {
         buildDataForRefreshActivity()
         if (currentActivityTitle == "") {
             currentClassId = ""
@@ -103,8 +103,8 @@ class LocationFragmentForTeacher : Fragment() {
                 activityTitleTextView?.setRightIcon(R.drawable.no_activity)
             }
         } else {
-            currentClassId = MainActivity.responseJson!!["classId"].toString()
-            currentActivityId = MainActivity.responseJson!!["activityId"].toString()
+            currentClassId = ConnectionUtil.responseJson!!["classId"].toString()
+            currentActivityId = ConnectionUtil.responseJson!!["activityId"].toString()
             activity?.runOnUiThread {
                 activityTitleTextView?.setLeftString(currentActivityTitle.toString())
                 activityTitleTextView?.setRightIcon(R.drawable.activity_running)
@@ -116,7 +116,7 @@ class LocationFragmentForTeacher : Fragment() {
         Thread {
             buildRequestForManualSign()
             try {
-                response = ConnectionUtil.getDataByUrl(urlForManualSign)
+                ConnectionUtil.getDataByUrl(urlForManualSign)
             } catch (e: Exception) {
                 ConnectionUtil.buildConnectFailDialog(requireContext())
                 activity?.runOnUiThread {
@@ -136,8 +136,7 @@ class LocationFragmentForTeacher : Fragment() {
     }
 
     private fun buildDataForManualSign(){
-        MainActivity.responseJson = JSONObject(response.toString())
-        signState = MainActivity.responseJson!!["signState"].toString()
+        signState = ConnectionUtil.responseJson!!["signState"].toString()
     }
 
     private fun dealWithResponseForManualSign(){
@@ -193,7 +192,7 @@ class LocationFragmentForTeacher : Fragment() {
         Thread {
             buildRequestForEndActivity()
             try {
-                response = ConnectionUtil.getDataByUrl(urlForEndActivity)
+                ConnectionUtil.getDataByUrl(urlForEndActivity)
             } catch (e: Exception) {
                 ConnectionUtil.buildConnectFailDialog(requireContext())
                 activity?.runOnUiThread {
@@ -347,8 +346,7 @@ class LocationFragmentForTeacher : Fragment() {
     }
 
     private fun buildDataForRefreshActivity() {
-        MainActivity.responseJson = JSONObject(response.toString())
-        currentActivityTitle = MainActivity.responseJson!!["activityTitle"].toString()
+        currentActivityTitle = ConnectionUtil.responseJson!!["activityTitle"].toString()
         Log.i("currentActivityTitle", currentActivityTitle.toString())
         if (activityTitleTextView == null) {
             activityTitleTextView = view?.findViewById(R.id.activity_title_for_teacher)
@@ -356,8 +354,7 @@ class LocationFragmentForTeacher : Fragment() {
     }
 
     private fun buildDataForEndActivity() {
-        MainActivity.responseJson = JSONObject(response.toString())
-        activityState = MainActivity.responseJson!!["activityState"].toString()
+        activityState = ConnectionUtil.responseJson!!["activityState"].toString()
     }
 
     var activityState: String? = null
@@ -385,7 +382,6 @@ class LocationFragmentForTeacher : Fragment() {
         const val LAUNCH_FAIL = "0"
         const val END_FAIL = "0"
         const val SIGN_FAIL = "0"
-        var response: StringBuilder? = null
         var optionsPickerView: OptionsPickerView<String>? = null
         val locationInfo = ArrayMap<String, String>()
         var currentClassId: String? = null

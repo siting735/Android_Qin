@@ -64,8 +64,7 @@ class OptionListener(val activity: FragmentActivity?, val context: Context?, val
         Thread {
             buildRequestForLaunchActivity()
             try {
-                LocationFragmentForTeacher.response =
-                    ConnectionUtil.getDataByUrl(urlForLaunchActivity)
+                ConnectionUtil.getDataByUrl(urlForLaunchActivity)
             } catch (e: Exception) {
                 e.printStackTrace()
                 ConnectionUtil.buildConnectFailDialog(context)
@@ -110,10 +109,10 @@ class OptionListener(val activity: FragmentActivity?, val context: Context?, val
     }
 
     private fun buildDataForLaunchActivity() {
-        MainActivity.responseJson = JSONObject(LocationFragmentForTeacher.response.toString())
-        activityState = MainActivity.responseJson!!["activityState"].toString()
+        ConnectionUtil.responseJson = JSONObject(ConnectionUtil.response.toString())
+        activityState = ConnectionUtil.responseJson!!["activityState"].toString()
         LocationFragmentForTeacher.currentActivityId =
-            MainActivity.responseJson!!["activityId"].toString()
+            ConnectionUtil.responseJson!!["activityId"].toString()
     }
 
     @RequiresApi(Build.VERSION_CODES.O)

@@ -139,7 +139,7 @@ class MainActivity : Activity() {
             buildRequestForLogin()
             configLoadingProgress()
             try {
-                response = ConnectionUtil.getDataByUrl(urlForLogin)
+                ConnectionUtil.getDataByUrl(urlForLogin)
             } catch (e: Exception) {
                 ConnectionUtil.buildConnectFailDialog(applicationContext)
                 loadingDialog?.cancel()
@@ -148,12 +148,12 @@ class MainActivity : Activity() {
                 }
                 Thread.currentThread().join()
             }
-            dealWithResponse(response)
+            dealWithResponse()
         }.start()
     }
 
-    private fun dealWithResponse(response: StringBuilder?) {
-        val loginInfo = JSONObject(response.toString())
+    private fun dealWithResponse() {
+        val loginInfo = JSONObject(ConnectionUtil.response.toString())
         var loginState = loginInfo["loginState"]
         if (loginState is String) {
             loginState = loginState.toInt()
@@ -233,7 +233,6 @@ class MainActivity : Activity() {
     var userName: ClearEditText? = null
     var password: PasswordEditText? = null
     var urlForLogin: URL? = null
-    var response: StringBuilder? = null
 
     companion object {
         const val STUDENT = 1
@@ -246,6 +245,6 @@ class MainActivity : Activity() {
         var identity = STUDENT
         var alphaAnimation: AlphaAnimation? = null
         var cancelAnimation = false
-        var responseJson: JSONObject? = null
+
     }
 }

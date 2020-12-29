@@ -2,6 +2,7 @@ package com.example.android_qin.util
 
 import android.content.Context
 import androidx.appcompat.app.AlertDialog
+import org.json.JSONObject
 import java.io.BufferedReader
 import java.io.InputStream
 import java.net.HttpURLConnection
@@ -9,7 +10,7 @@ import java.net.URL
 
 class ConnectionUtil {
     companion object {
-        fun getDataByUrl(url: URL?): StringBuilder?{
+        fun getDataByUrl(url: URL?){
             connection = url?.openConnection() as HttpURLConnection
             connection?.requestMethod = "GET"
             inputStream = connection?.inputStream
@@ -21,7 +22,7 @@ class ConnectionUtil {
             }
             reader?.close()
             connection?.disconnect()
-            return response
+            responseJson = JSONObject(response.toString())
         }
 
         fun buildConnectFailDialog(context: Context?) {
@@ -34,10 +35,12 @@ class ConnectionUtil {
                 }
             }
         }
+
         var connection: HttpURLConnection? = null
         var inputStream: InputStream? = null
         var reader: BufferedReader? = null
         var response: StringBuilder? = null
+        var responseJson: JSONObject? = null
         var connectFailDialog: AlertDialog.Builder? = null
     }
 }

@@ -47,7 +47,6 @@ class TeacherActivity : AppCompatActivity() {
     }
 
     private fun toDefaultPage() {
-        // NavUtil.navController?.popBackStack()
         NavUtil.navController?.navigate(R.id.locationFragmentForTeacher)
     }
 

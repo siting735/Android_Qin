@@ -48,6 +48,7 @@ class SignDataForTeacher : Fragment() {
             try {
                 ConnectionUtil.getDataByUrl(urlForGetClassInfos)
             } catch (e: Exception) {
+                e.printStackTrace()
                 ConnectionUtil.buildConnectFailDialog(requireContext())
                 activity?.runOnUiThread {
                     ConnectionUtil.connectFailDialog?.show()

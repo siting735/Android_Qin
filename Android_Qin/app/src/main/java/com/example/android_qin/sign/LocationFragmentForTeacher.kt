@@ -46,7 +46,6 @@ class LocationFragmentForTeacher : Fragment() {
         super.onActivityCreated(savedInstanceState)
         MapUtil.buildMap(view)
         MapUtil.mMapView?.onCreate(savedInstanceState)
-        MapUtil.getLocationInfo(requireContext())
         configSignBtn()
         configSwipeRefresh()
         configManualSign()
@@ -303,6 +302,10 @@ class LocationFragmentForTeacher : Fragment() {
         }
     }
 
+    override fun onStart() {
+        super.onStart()
+        MapUtil.getLocationInfo(requireContext(),activity)
+    }
     private fun buildDataForEndActivity() {
         activityState = ConnectionUtil.responseJson!!["activityState"].toString()
     }

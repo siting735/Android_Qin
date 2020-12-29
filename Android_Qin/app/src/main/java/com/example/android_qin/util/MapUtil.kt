@@ -5,6 +5,7 @@ import android.util.ArrayMap
 import android.util.Log
 import android.view.View
 import android.widget.Toast
+import androidx.fragment.app.FragmentActivity
 import com.amap.api.location.AMapLocationClient
 import com.amap.api.location.AMapLocationClientOption
 import com.amap.api.location.AMapLocationListener
@@ -17,7 +18,7 @@ import com.example.android_qin.sign.LocationFragmentForTeacher
 
 class MapUtil {
     companion object {
-        fun getLocationInfo(context: Context?) {
+        fun getLocationInfo(context: Context?, activity:FragmentActivity?) {
             mLocationClient = AMapLocationClient(context)
             mLocationOption = AMapLocationClientOption()
             mLocationOption!!.locationPurpose =
@@ -29,7 +30,7 @@ class MapUtil {
             }
             mLocationOption!!.locationMode =
                 AMapLocationClientOption.AMapLocationMode.Hight_Accuracy
-            mLocationOption!!.interval = 5000
+            mLocationOption!!.interval = 9999999
             mLocationClient!!.setLocationOption(mLocationOption)
             mLocationOption!!.isMockEnable = true
             mLocationListener = AMapLocationListener { aMapLocation ->

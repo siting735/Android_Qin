@@ -40,7 +40,6 @@ class LocationFragmentForStudent : Fragment() {
         super.onActivityCreated(savedInstanceState)
         MapUtil.buildMap(view)
         MapUtil.mMapView?.onCreate(savedInstanceState)
-        MapUtil.getLocationInfo(requireContext())
         configSignBtn()
         configSwipeRefresh()
     }
@@ -179,6 +178,7 @@ class LocationFragmentForStudent : Fragment() {
     override fun onStart() {
         super.onStart()
         refreshActivity()
+        MapUtil.getLocationInfo(requireContext(),activity)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

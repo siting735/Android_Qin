@@ -96,7 +96,9 @@ class MainActivity : Activity() {
     private fun configLoginBtn() {
         val loginBtn = findViewById<com.xuexiang.xui.widget.button.ButtonView>(R.id.login_btn)
         loginBtn.setOnClickListener {
-            login()
+            if (!connecting){
+                login()
+            }
         }
     }
 
@@ -158,6 +160,7 @@ class MainActivity : Activity() {
         if (loginState is String) {
             loginState = loginState.toInt()
         }
+        connecting = false
         when (loginState) {
             STUDENT -> {
                 toStudentPage(loginInfo)
@@ -233,6 +236,7 @@ class MainActivity : Activity() {
     var userName: ClearEditText? = null
     var password: PasswordEditText? = null
     var urlForLogin: URL? = null
+    var connecting: Boolean = false
 
     companion object {
         const val STUDENT = 1

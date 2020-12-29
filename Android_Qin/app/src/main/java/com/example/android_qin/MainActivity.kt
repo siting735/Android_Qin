@@ -101,7 +101,7 @@ class MainActivity : Activity() {
     private fun configLoginBtn() {
         val loginBtn = findViewById<com.xuexiang.xui.widget.button.ButtonView>(R.id.login_btn)
         loginBtn.setOnClickListener {
-            if (!connecting){
+            if (!connecting) {
                 login()
             }
         }
@@ -142,7 +142,7 @@ class MainActivity : Activity() {
 
 
     private fun login() {
-        Thread {
+        requestThread = Thread {
             buildRequestForLogin()
             configLoadingProgress()
             try {
@@ -156,7 +156,10 @@ class MainActivity : Activity() {
                 Thread.currentThread().join()
             }
             dealWithResponse()
-        }.start()
+        }
+        requestThread?.start()
+
+
     }
 
     private fun dealWithResponse() {
@@ -182,10 +185,15 @@ class MainActivity : Activity() {
         val loadingProgress = ProgressBar(this)
         loadingDialogBuilder.setView(loadingProgress)
         loadingDialogBuilder.setTitle("正在登陆...")
+        loadingDialogBuilder.setOnCancelListener {
+            connecting = false
+            requestThread?.join()
+        }
         runOnUiThread {
             loadingDialog = loadingDialogBuilder.create()
             loadingDialog!!.show()
         }
+
     }
 
     private fun initUI() {
@@ -259,6 +267,7 @@ class MainActivity : Activity() {
     var passwordEditText: PasswordEditText? = null
     var urlForLogin: URL? = null
     var connecting: Boolean = false
+    var requestThread: Thread? = null
 
     companion object {
         const val STUDENT = 1
@@ -266,8 +275,9 @@ class MainActivity : Activity() {
         const val NO_USER = 3
         const val WRONG_PASSWORD = 4
         var LOG_OUT = false
-        // const val ip = "10.60.0.13"
-        const val ip = "192.168.3.195"
+        const val ip = "10.60.0.13"
+
+        // const val ip = "192.168.3.195"
         var identity = STUDENT
         var alphaAnimation: AlphaAnimation? = null
         var cancelAnimation = false

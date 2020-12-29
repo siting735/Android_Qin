@@ -225,8 +225,6 @@ class MainActivity : Activity() {
                 ),
                 10
             )
-        } else {
-            Toast.makeText(this, "already get permission", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -250,14 +248,12 @@ class MainActivity : Activity() {
         super.onPause()
         userNameString = userNameEditText?.text.toString()
         passwordString = passwordEditText?.text.toString()
-        Log.i("userName onPause", userNameString.toString())
 
     }
 
     override fun onResume() {
         userNameEditText?.setText(userNameString)
         passwordEditText?.setText(passwordString)
-        Log.i("userName onResume", userNameString.toString())
         super.onResume()
     }
 

@@ -49,9 +49,14 @@ class LocationFragmentForStudent : Fragment() {
         val signBtn = view?.findViewById<Button>(R.id.sign_btn_for_student)
         NavUtil.buildNavHost(activity?.supportFragmentManager)
         signBtn?.setOnClickListener {
-            if (currentActivityTitle != null) {
-                sign()
-                NavUtil.navController?.navigate(R.id.signStateForStudent)
+            if (currentActivityTitle != null ) {
+                if (signState == SUCCESS){
+                    Toast.makeText(requireContext(), "已成功打卡", Toast.LENGTH_LONG).show()
+                }
+                else{
+                    sign()
+                }
+
             } else {
                 activity?.runOnUiThread {
                     Toast.makeText(requireContext(), "暂无活动", Toast.LENGTH_LONG).show()
@@ -105,7 +110,7 @@ class LocationFragmentForStudent : Fragment() {
             try {
                 ConnectionUtil.getDataByUrl(urlForSign)
             } catch (e: Exception) {
-                Log.e("error in sign", e.toString())
+                e.printStackTrace()
                 ConnectionUtil.buildConnectFailDialog(requireContext())
                 activity?.runOnUiThread {
                     ConnectionUtil.connectFailDialog?.show()
@@ -117,15 +122,15 @@ class LocationFragmentForStudent : Fragment() {
     }
 
     private fun dealWithResponseForSign() {
-        val signState = ConnectionUtil.responseJson!!["signState"] as Int
+        signState = ConnectionUtil.responseJson!!["signState"] as Int
         NavUtil.buildNavHost(activity?.supportFragmentManager)
-        if (signState == 0) {
+        if (signState == FAIL) {
             activity?.runOnUiThread {
                 Toast.makeText(context, "签到失败", Toast.LENGTH_LONG).show()
             }
         } else {
             activity?.runOnUiThread {
-                // page is waiting to build
+                signState = 1
                 NavUtil.navController?.navigate(R.id.signStateForStudent)
             }
         }
@@ -226,8 +231,11 @@ class LocationFragmentForStudent : Fragment() {
     var studentLatitude: String? = null
     var urlForRefreshActivity: URL? = null
     var urlForSign: URL? = null
+    var signState: Int? = 0
 
     companion object {
+        const val SUCCESS = 1
+        const val FAIL = 0
         const val NULL = "null"
     }
 }

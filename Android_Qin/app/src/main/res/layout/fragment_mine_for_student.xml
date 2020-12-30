@@ -44,7 +44,7 @@
                 app:sLeftBottomTextString="东莞理工学院"
                 app:sLeftIconHeight="55dp"
                 app:sLeftIconRes="@drawable/profile_head_icon"
-                app:sLeftIconWidth="5dp"
+                app:sLeftIconWidth="55dp"
                 app:sLeftIconPadding="5dp"
                 app:sLeftTextIsBold="true"
                 app:sLeftTextString="陈浪杰"

@@ -50,13 +50,12 @@ class LocationFragmentForStudent : Fragment() {
         NavUtil.buildNavHost(activity?.supportFragmentManager)
         signBtn?.setOnClickListener {
             if (currentActivityTitle != null ) {
-                if (signState == SUCCESS){
+                if (signState == ALREADY_SIGN){
                     Toast.makeText(requireContext(), "已成功打卡", Toast.LENGTH_LONG).show()
                 }
-                else{
+                else if (signState == UNSIGN){
                     sign()
                 }
-
             } else {
                 activity?.runOnUiThread {
                     Toast.makeText(requireContext(), "暂无活动", Toast.LENGTH_LONG).show()
@@ -124,7 +123,7 @@ class LocationFragmentForStudent : Fragment() {
     private fun dealWithResponseForSign() {
         signState = ConnectionUtil.responseJson!!["signState"] as Int
         NavUtil.buildNavHost(activity?.supportFragmentManager)
-        if (signState == FAIL) {
+        if (signState == UNSIGN) {
             activity?.runOnUiThread {
                 Toast.makeText(context, "签到失败", Toast.LENGTH_LONG).show()
             }
@@ -235,7 +234,8 @@ class LocationFragmentForStudent : Fragment() {
 
     companion object {
         const val SUCCESS = 1
-        const val FAIL = 0
+        const val UNSIGN = 0
+        const val ALREADY_SIGN = 2
         const val NULL = "null"
     }
 }

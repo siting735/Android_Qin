@@ -44,7 +44,6 @@ class MineForTeacher : Fragment() {
             MainActivity.identity = MainActivity.STUDENT
             NavUtil.navController?.navigate(R.id.mainActivity2)
             AccountInfoUtil.clearAccountInfo()
-
         }
         dialog.setNegativeButton("取消") { dialog, id -> {} }
         dialog.show()

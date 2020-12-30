@@ -38,4 +38,9 @@
         android:name="com.example.android_qin.MainActivity"
         android:label="activity_main"
         tools:layout="@layout/activity_main" />
+    <fragment
+        android:id="@+id/profileInfoForStudent"
+        android:name="com.example.android_qin.mine.ProfileInfoForStudent"
+        android:label="fragment_profile_info_for_student"
+        tools:layout="@layout/fragment_profile_info_for_student" />
 </navigation>

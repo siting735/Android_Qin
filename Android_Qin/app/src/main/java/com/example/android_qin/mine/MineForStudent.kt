@@ -21,12 +21,16 @@ class MineForStudent : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         configLogOutButton()
-        updateProfile()
+        configProfile()
     }
 
-    private fun updateProfile(){
-        val profileView = view?.findViewById<SuperTextView>(R.id.mine_info_for_student)
+    private fun configProfile(){
+        profileView = view?.findViewById(R.id.mine_info_for_student)
         profileView?.setLeftString(StudentActivity.studentName)
+        profileView?.setOnClickListener {
+            NavUtil.navController?.popBackStack()
+            NavUtil.navController?.navigate(R.id.profileInfoForStudent)
+        }
     }
 
     private fun configLogOutButton() {
@@ -58,4 +62,6 @@ class MineForStudent : Fragment() {
     ): View? {
         return inflater.inflate(R.layout.fragment_mine_for_student, container, false)
     }
+
+    private var profileView: SuperTextView? = null
 }

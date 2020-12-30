@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".mine.MineForTeacher">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".mine.ProfileInfoForTeacher">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -12,17 +12,19 @@
         android:orientation="vertical">
 
         <Toolbar
+            android:id="@+id/profile_info_tool_bar"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
             android:background="@color/xui_config_color_titlebar"
+            android:navigationIcon="@drawable/back"
             android:titleTextColor="@color/white">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="我的"
+                android:text="个人信息"
                 android:textColor="@color/white"
                 android:textSize="20sp" />
         </Toolbar>
@@ -34,55 +36,35 @@
             android:orientation="vertical">
 
             <com.xuexiang.xui.widget.textview.supertextview.SuperTextView
-                android:id="@+id/mine_info_for_teacher"
+                android:id="@+id/teacher_name"
                 android:layout_width="match_parent"
-                android:layout_height="100dp"
+                android:layout_height="70dp"
                 android:layout_marginLeft="10dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginRight="10dp"
-                android:layout_marginBottom="10dp"
-                app:sDividerLineType="both"
-                app:sLeftBottomTextString="东莞理工学院"
-                app:sLeftIconHeight="55dp"
-                app:sLeftIconRes="@drawable/profile_head_icon"
-                app:sLeftIconWidth="55dp"
-                app:sLeftIconPadding="5dp"
-                app:sLeftTextIsBold="true"
-                app:sLeftTextString="陈浪杰" />
-
-            <com.xuexiang.xui.widget.textview.supertextview.SuperTextView
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="20dp"
                 android:layout_marginRight="10dp"
                 android:paddingLeft="10dp"
                 app:sDividerLineType="both"
                 app:sLeftTextIsBold="true"
-                app:sLeftTextString="关于"
+                app:sLeftTextString="姓名"
                 app:sShapeCornersRadius="10dp"
                 app:sUseShape="true" />
-
-            <LinearLayout
-                android:layout_weight="1"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"/>
 
             <com.xuexiang.xui.widget.textview.supertextview.SuperTextView
-                android:id="@+id/log_out_btn_for_teacher"
+                android:id="@+id/teacher_id"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_height="70dp"
                 android:layout_marginLeft="10dp"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="20dp"
                 android:layout_marginRight="10dp"
-                android:layout_marginBottom="200dp"
-                android:textAlignment="center"
-                app:sCenterTextIsBold="true"
-                app:sCenterTextString="退出登录"
+                android:paddingLeft="10dp"
                 app:sDividerLineType="both"
+                app:sLeftTextIsBold="true"
+                app:sLeftTextString="学号"
                 app:sShapeCornersRadius="10dp"
                 app:sUseShape="true" />
+
         </LinearLayout>
+
     </LinearLayout>
 
 </FrameLayout>

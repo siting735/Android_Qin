@@ -95,7 +95,7 @@ class LocationFragmentForTeacher : Fragment() {
 
     private fun dealWithResponseForRefreshActivity() {
         buildDataForRefreshActivity()
-        if (currentActivityTitle == "") {
+        if (currentActivityTitle == NULL) {
             currentClassId = ""
             activity?.runOnUiThread {
                 activityTitleTextView?.setLeftString("暂无活动")
@@ -333,6 +333,6 @@ class LocationFragmentForTeacher : Fragment() {
         var optionsPickerView: OptionsPickerView<String>? = null
         var currentClassId: String? = null
         var currentActivityId: String? = null
-
+        const val NULL = "null"
     }
 }

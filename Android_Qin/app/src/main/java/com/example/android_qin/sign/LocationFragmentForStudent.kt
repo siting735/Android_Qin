@@ -73,7 +73,7 @@ class LocationFragmentForStudent : Fragment() {
 
     private fun dealWithResponseForRefreshActivity() {
         buildDataForRefreshActivity()
-        if (activityTitle.toString() == "") {
+        if (activityTitle == NULL) {
             activity?.runOnUiThread {
                 activityTitleTextView?.setLeftString("暂无活动")
                 activityTitleTextView?.setRightIcon(R.drawable.no_activity)
@@ -228,6 +228,6 @@ class LocationFragmentForStudent : Fragment() {
     private val locationInfo = ArrayMap<String, String>()
 
     companion object {
-
+        const val NULL = "null"
     }
 }

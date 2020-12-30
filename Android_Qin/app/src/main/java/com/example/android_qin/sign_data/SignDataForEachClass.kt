@@ -11,6 +11,7 @@ import android.widget.Toolbar
 import androidx.appcompat.app.AlertDialog
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.android_qin.MainActivity
 import com.example.android_qin.R
 import com.example.android_qin.TeacherActivity
@@ -29,6 +30,7 @@ class SignDataForEachClass : Fragment() {
     override fun onStart() {
         configBackButton()
         updateClassName()
+        configSwipeRefresh()
         getStudentsSignData()
         super.onStart()
     }
@@ -39,6 +41,15 @@ class SignDataForEachClass : Fragment() {
         backBtn?.setNavigationOnClickListener {
             NavUtil.navController?.popBackStack()
             NavUtil.navController?.navigate(R.id.signDataForTeacher)
+        }
+    }
+
+    private fun configSwipeRefresh(){
+        val swipe =
+            view?.findViewById<SwipeRefreshLayout>(R.id.sign_data_swipe_for_class)
+        swipe?.setOnRefreshListener {
+            getStudentsSignData()
+            swipe.isRefreshing = false
         }
     }
 
@@ -53,6 +64,7 @@ class SignDataForEachClass : Fragment() {
     private fun getStudentsSignData() {
         Thread {
             if (context != null) {
+                removeOriginSignDatas()
                 buildRequest()
                 ConnectionUtil.getDataByRequest(
                     requireActivity(),
@@ -62,6 +74,13 @@ class SignDataForEachClass : Fragment() {
                 dealWithResponse()
             }
         }.start()
+    }
+
+    private fun removeOriginSignDatas() {
+        val signDataList = view?.findViewById<LinearLayout>(R.id.students_sign_data_list)
+        activity?.runOnUiThread {
+            signDataList?.removeAllViews()
+        }
     }
 
     private fun dealWithResponse() {

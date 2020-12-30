@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.ProgressBar
 import androidx.appcompat.app.AlertDialog
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.android_qin.MainActivity
 import com.example.android_qin.R
 import com.example.android_qin.StudentActivity
@@ -76,7 +77,7 @@ class SignDataForStudent : Fragment() {
 
     private fun configSwipeRefresh() {
         val swipe =
-            view?.findViewById<androidx.swiperefreshlayout.widget.SwipeRefreshLayout>(R.id.sign_data_swipe)
+            view?.findViewById<SwipeRefreshLayout>(R.id.sign_data_swipe)
         swipe?.setOnRefreshListener {
             getSignDataForStudent()
             swipe.isRefreshing = false

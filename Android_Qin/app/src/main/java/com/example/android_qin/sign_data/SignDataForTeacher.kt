@@ -17,6 +17,7 @@ import com.example.android_qin.R
 import com.example.android_qin.TeacherActivity
 import com.example.android_qin.listener.GetInClassListener
 import com.example.android_qin.util.ConnectionUtil
+import com.example.android_qin.util.DpUtil
 import com.example.android_qin.util.LayoutUtil
 import com.example.android_qin.util.NavUtil
 import com.xuexiang.xui.widget.textview.supertextview.SuperTextView
@@ -93,7 +94,7 @@ class SignDataForTeacher : Fragment() {
         tempClassId = classInfo?.get("classId")?.toString()
         classInfoView?.setLeftIcon(R.drawable.class_icon)
         classInfoView?.setLeftString(tempClassName)
-        classInfoView?.setShapeCornersRadius(dip2px(5f).toFloat())
+        classInfoView?.setShapeCornersRadius(DpUtil.dip2px(requireContext(),5f).toFloat())
         classInfoView?.setPadding(dip2px(14f), 0, 0, 0)
         classInfoView?.layoutParams = LayoutUtil.layoutParamsForInfoUnit
         classInfoView?.setRightIcon(R.drawable.get_in)

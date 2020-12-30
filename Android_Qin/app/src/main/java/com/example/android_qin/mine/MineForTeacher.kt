@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import com.example.android_qin.MainActivity
 import com.example.android_qin.R
 import com.example.android_qin.TeacherActivity
+import com.example.android_qin.util.AccountInfoUtil
 import com.example.android_qin.util.NavUtil
 import com.xuexiang.xui.widget.textview.supertextview.SuperTextView
 
@@ -35,6 +36,7 @@ class MineForTeacher : Fragment() {
             TeacherActivity.tabBarState = 0
             MainActivity.identity = MainActivity.STUDENT
             NavUtil.navController?.navigate(R.id.mainActivity2)
+            AccountInfoUtil.clearAccountInfo()
 
         }
         dialog.setNegativeButton("取消") { dialog, id ->

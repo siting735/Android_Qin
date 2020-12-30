@@ -1,22 +1,10 @@
 package com.example.android_qin
 
-import android.content.Context
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.AttributeSet
-import android.util.Log
-import android.view.View
-import android.widget.ProgressBar
-import androidx.appcompat.app.AlertDialog
-import androidx.fragment.app.Fragment
-import androidx.navigation.NavController
-import androidx.navigation.fragment.NavHostFragment
-import com.example.android_qin.util.ConnectionUtil
 import com.example.android_qin.util.NavUtil
 import com.example.android_qin.util.TabBarUtil
 import com.xuexiang.xui.widget.tabbar.TabSegment
-import kotlin.coroutines.coroutineContext
 
 class StudentActivity : AppCompatActivity() {
 

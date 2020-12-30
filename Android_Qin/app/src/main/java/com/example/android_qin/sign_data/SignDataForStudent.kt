@@ -13,6 +13,7 @@ import com.example.android_qin.MainActivity
 import com.example.android_qin.R
 import com.example.android_qin.StudentActivity
 import com.example.android_qin.util.ConnectionUtil
+import com.example.android_qin.util.DpUtil
 import com.example.android_qin.util.LayoutUtil
 import com.xuexiang.xui.widget.textview.supertextview.SuperTextView
 import org.json.JSONArray
@@ -63,7 +64,13 @@ class SignDataForStudent : Fragment() {
 
     @SuppressLint("ResourceAsColor")
     private fun addSignDataToLayout(signData: JSONObject?) {
-        val signDataView = SuperTextView(context)
+        var signDataView: SuperTextView? = null
+        if(context != null){
+            signDataView = SuperTextView(requireContext())
+        }
+        else{
+            return Unit
+        }
         buildSignDataView(signDataView, signData)
         activity?.runOnUiThread {
             signDataListLayout?.addView(signDataView)
@@ -84,11 +91,6 @@ class SignDataForStudent : Fragment() {
         activity?.runOnUiThread {
             signDataList?.removeAllViews()
         }
-    }
-
-    private fun dip2px(dpValue: Float): Int {
-        val scale = context?.resources?.displayMetrics?.density;
-        return (dpValue * scale!! + 0.5f).toInt()
     }
 
     override fun onCreateView(
@@ -124,7 +126,9 @@ class SignDataForStudent : Fragment() {
         activityTitle = signData?.get("activityTitle")?.toString()
         signState = signData?.get("signState")?.toString()
         signDataView?.setLeftBottomString(activityTitle)
-        signDataView?.setShapeCornersRadius(dip2px(5f).toFloat())
+        if(context != null){
+            signDataView?.setShapeCornersRadius(DpUtil.dip2px(requireContext(), 5f).toFloat())
+        }
         when (signState) {
             SIGN -> {
                 signDataView?.setRightString("已打卡")

@@ -61,18 +61,11 @@ class OptionListener(val activity: FragmentActivity?, val context: Context?, val
     @RequiresApi(Build.VERSION_CODES.O)
     private fun launchActivity() {
         Thread {
-            buildRequestForLaunchActivity()
-            try {
-                ConnectionUtil.getDataByUrl(urlForLaunchActivity)
-            } catch (e: Exception) {
-                e.printStackTrace()
-                ConnectionUtil.buildConnectFailDialog(context)
-                activity?.runOnUiThread {
-                    ConnectionUtil.connectFailDialog?.show()
-                }
-                Thread.currentThread().join()
+            if (context != null) {
+                buildRequestForLaunchActivity()
+                ConnectionUtil.getDataByRequest(activity, context, urlForLaunchActivity)
+                dealWithResponseForLaunchActivity()
             }
-            dealWithResponseForLaunchActivity()
         }.start()
     }
 

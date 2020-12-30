@@ -31,18 +31,16 @@ class SignDataForStudent : Fragment() {
 
     private fun getSignDataForStudent() {
         Thread {
-            removeOriginSignDatas()
-            buildRequestForGetSignData()
-            try {
-                ConnectionUtil.getDataByUrl(urlForGetSignData)
-            } catch (e: Exception) {
-                ConnectionUtil.buildConnectFailDialog(requireContext())
-                activity?.runOnUiThread {
-                    ConnectionUtil.connectFailDialog?.show()
-                }
-                Thread.currentThread().join()
+            if (context != null) {
+                removeOriginSignDatas()
+                buildRequestForGetSignData()
+                ConnectionUtil.getDataByRequest(
+                    requireActivity(),
+                    requireContext(),
+                    urlForGetSignData
+                )
+                dealWithResponse()
             }
-            dealWithResponse()
         }.start()
     }
 
@@ -65,10 +63,9 @@ class SignDataForStudent : Fragment() {
     @SuppressLint("ResourceAsColor")
     private fun addSignDataToLayout(signData: JSONObject?) {
         var signDataView: SuperTextView? = null
-        if(context != null){
+        if (context != null) {
             signDataView = SuperTextView(requireContext())
-        }
-        else{
+        } else {
             return Unit
         }
         buildSignDataView(signDataView, signData)
@@ -126,7 +123,7 @@ class SignDataForStudent : Fragment() {
         activityTitle = signData?.get("activityTitle")?.toString()
         signState = signData?.get("signState")?.toString()
         signDataView?.setLeftBottomString(activityTitle)
-        if(context != null){
+        if (context != null) {
             signDataView?.setShapeCornersRadius(DpUtil.dip2px(requireContext(), 5f).toFloat())
         }
         when (signState) {

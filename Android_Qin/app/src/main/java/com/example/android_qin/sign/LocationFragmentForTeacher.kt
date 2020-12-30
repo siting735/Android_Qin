@@ -79,17 +79,15 @@ class LocationFragmentForTeacher : Fragment() {
 
     private fun refreshActivity() {
         Thread {
-            buildRequestForRefreshActivity()
-            try {
-                ConnectionUtil.getDataByUrl(urlForRefreshActivity)
-            } catch (e: Exception) {
-                ConnectionUtil.buildConnectFailDialog(requireContext())
-                activity?.runOnUiThread {
-                    ConnectionUtil.connectFailDialog?.show()
-                }
-                Thread.currentThread().join()
+            if (context != null) {
+                buildRequestForRefreshActivity()
+                ConnectionUtil.getDataByRequest(
+                    requireActivity(),
+                    requireContext(),
+                    urlForRefreshActivity
+                )
+                dealWithResponseForRefreshActivity()
             }
-            dealWithResponseForRefreshActivity()
         }.start()
     }
 
@@ -191,17 +189,15 @@ class LocationFragmentForTeacher : Fragment() {
     @RequiresApi(Build.VERSION_CODES.O)
     private fun endActivity() {
         Thread {
-            buildRequestForEndActivity()
-            try {
-                ConnectionUtil.getDataByUrl(urlForEndActivity)
-            } catch (e: Exception) {
-                ConnectionUtil.buildConnectFailDialog(requireContext())
-                activity?.runOnUiThread {
-                    ConnectionUtil.connectFailDialog?.show()
-                }
-                Thread.currentThread().join()
+            if (context != null) {
+                buildRequestForEndActivity()
+                ConnectionUtil.getDataByRequest(
+                    requireActivity(),
+                    requireContext(),
+                    urlForEndActivity
+                )
+                dealWithResponseForEndActivity()
             }
-            dealWithResponseForEndActivity()
         }.start()
     }
 
@@ -304,8 +300,9 @@ class LocationFragmentForTeacher : Fragment() {
 
     override fun onStart() {
         super.onStart()
-        MapUtil.getLocationInfo(requireContext(),activity)
+        MapUtil.getLocationInfo(requireContext(), activity)
     }
+
     private fun buildDataForEndActivity() {
         activityState = ConnectionUtil.responseJson!!["activityState"].toString()
     }

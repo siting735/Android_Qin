@@ -52,17 +52,15 @@ class SignDataForEachClass : Fragment() {
 
     private fun getStudentsSignData() {
         Thread {
-            buildRequest()
-            try {
-                ConnectionUtil.getDataByUrl(urlForGetSignDatas)
-            } catch (e: Exception) {
-                ConnectionUtil.buildConnectFailDialog(requireContext())
-                activity?.runOnUiThread {
-                    ConnectionUtil.connectFailDialog?.show()
-                }
-                Thread.currentThread().join()
+            if (context != null) {
+                buildRequest()
+                ConnectionUtil.getDataByRequest(
+                    requireActivity(),
+                    requireContext(),
+                    urlForGetSignDatas
+                )
+                dealWithResponse()
             }
-            dealWithResponse()
         }.start()
     }
 
@@ -106,7 +104,4 @@ class SignDataForEachClass : Fragment() {
 
     private var urlForGetSignDatas: URL? = null
 
-    companion object {
-
-    }
 }

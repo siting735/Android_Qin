@@ -49,13 +49,12 @@ class LocationFragmentForStudent : Fragment() {
         val signBtn = view?.findViewById<Button>(R.id.sign_btn_for_student)
         NavUtil.buildNavHost(activity?.supportFragmentManager)
         signBtn?.setOnClickListener {
-            if (currentActivityTitle != null){
+            if (currentActivityTitle != null) {
                 sign()
                 NavUtil.navController?.navigate(R.id.signStateForStudent)
-            }
-            else{
-                activity?.runOnUiThread{
-                    Toast.makeText(requireContext(),"暂无活动", Toast.LENGTH_LONG).show()
+            } else {
+                activity?.runOnUiThread {
+                    Toast.makeText(requireContext(), "暂无活动", Toast.LENGTH_LONG).show()
                 }
             }
         }
@@ -73,11 +72,15 @@ class LocationFragmentForStudent : Fragment() {
 
     private fun refreshActivity() {
         Thread {
-            buildRequestForRefreshActivity()
-            if (context != null){
-                ConnectionUtil.getDataByRequest(requireActivity(),requireContext(),urlForRefreshActivity)
+            if (context != null) {
+                buildRequestForRefreshActivity()
+                ConnectionUtil.getDataByRequest(
+                    requireActivity(),
+                    requireContext(),
+                    urlForRefreshActivity
+                )
+                dealWithResponseForRefreshActivity()
             }
-            dealWithResponseForRefreshActivity()
         }.start()
     }
 
@@ -179,7 +182,7 @@ class LocationFragmentForStudent : Fragment() {
     override fun onStart() {
         super.onStart()
         refreshActivity()
-        MapUtil.getLocationInfo(requireContext(),activity)
+        MapUtil.getLocationInfo(requireContext(), activity)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

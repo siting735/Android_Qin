@@ -45,18 +45,15 @@ class SignDataForTeacher : Fragment() {
 
     private fun getClassListByRequest() {
         Thread {
-            buildRequestForGetClassInfos()
-            try {
-                ConnectionUtil.getDataByUrl(urlForGetClassInfos)
-            } catch (e: Exception) {
-                e.printStackTrace()
-                ConnectionUtil.buildConnectFailDialog(requireContext())
-                activity?.runOnUiThread {
-                    ConnectionUtil.connectFailDialog?.show()
-                }
-                Thread.currentThread().join()
+            if (context != null) {
+                buildRequestForGetClassInfos()
+                ConnectionUtil.getDataByRequest(
+                    requireActivity(),
+                    requireContext(),
+                    urlForGetClassInfos
+                )
+                dealWithResponse()
             }
-            dealWithResponse()
         }.start()
     }
 
@@ -66,11 +63,6 @@ class SignDataForTeacher : Fragment() {
         activity?.runOnUiThread {
             classListLayout?.addView(classInfoView)
         }
-    }
-
-    private fun dip2px(dpValue: Float): Int {
-        val scale = context?.resources?.displayMetrics?.density;
-        return (dpValue * scale!! + 0.5f).toInt()
     }
 
     override fun onCreateView(
@@ -94,8 +86,8 @@ class SignDataForTeacher : Fragment() {
         tempClassId = classInfo?.get("classId")?.toString()
         classInfoView?.setLeftIcon(R.drawable.class_icon)
         classInfoView?.setLeftString(tempClassName)
-        classInfoView?.setShapeCornersRadius(DpUtil.dip2px(requireContext(),5f).toFloat())
-        classInfoView?.setPadding(dip2px(14f), 0, 0, 0)
+        classInfoView?.setShapeCornersRadius(DpUtil.dip2px(requireContext(), 5f).toFloat())
+        classInfoView?.setPadding(DpUtil.dip2px(requireContext(), 14f), 0, 0, 0)
         classInfoView?.layoutParams = LayoutUtil.layoutParamsForInfoUnit
         classInfoView?.setRightIcon(R.drawable.get_in)
         val classInfoViewListener = GetInClassListener(tempClassId, tempClassName)

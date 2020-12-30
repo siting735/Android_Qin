@@ -13,7 +13,7 @@ import java.net.URL
 class ConnectionUtil {
     companion object {
 
-        fun getDataByRequest(activity:Activity, context:Context, urlForLogin:URL?) {
+        fun getDataByRequest(activity:Activity?, context:Context, urlForLogin:URL?) {
             try {
                 getDataByUrl(urlForLogin)
             } catch (e: Exception) {

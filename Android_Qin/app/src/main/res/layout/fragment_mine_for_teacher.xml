@@ -51,6 +51,7 @@
                 app:sLeftTextString="陈浪杰" />
 
             <com.xuexiang.xui.widget.textview.supertextview.SuperTextView
+                android:id="@+id/about"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_marginLeft="10dp"

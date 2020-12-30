@@ -22,6 +22,7 @@ class MineForStudent : Fragment() {
         super.onActivityCreated(savedInstanceState)
         configLogOutButton()
         configProfile()
+        configAbout()
     }
 
     private fun configProfile() {
@@ -30,6 +31,13 @@ class MineForStudent : Fragment() {
         profileView?.setOnClickListener {
             NavUtil.navController?.popBackStack()
             NavUtil.navController?.navigate(R.id.profileInfoForStudent)
+        }
+    }
+
+    private fun configAbout(){
+        val about = view?.findViewById<SuperTextView>(R.id.about)
+        about?.setOnClickListener {
+            NavUtil.navController?.navigate(R.id.about2)
         }
     }
 

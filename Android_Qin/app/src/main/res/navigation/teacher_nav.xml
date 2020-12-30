@@ -48,4 +48,9 @@
         android:name="com.example.android_qin.mine.ProfileInfoForTeacher"
         android:label="fragment_profile_info_for_teacher"
         tools:layout="@layout/fragment_profile_info_for_teacher" />
+    <fragment
+        android:id="@+id/about3"
+        android:name="com.example.android_qin.mine.About"
+        android:label="fragment_about"
+        tools:layout="@layout/fragment_about" />
 </navigation>

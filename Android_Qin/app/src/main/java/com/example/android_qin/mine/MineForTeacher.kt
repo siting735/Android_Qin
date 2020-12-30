@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.example.android_qin.MainActivity
 import com.example.android_qin.R
+import com.example.android_qin.StudentActivity
 import com.example.android_qin.TeacherActivity
 import com.example.android_qin.util.AccountInfoUtil
 import com.example.android_qin.util.NavUtil
@@ -18,6 +19,12 @@ class MineForTeacher : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         configLogOutButton()
+        updateProfile()
+    }
+
+    private fun updateProfile(){
+        val profileView = view?.findViewById<SuperTextView>(R.id.mine_info_for_teacher)
+        profileView?.setLeftString(TeacherActivity.teacherName)
     }
 
     private fun configLogOutButton() {

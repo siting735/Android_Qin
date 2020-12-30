@@ -42,13 +42,14 @@
                 android:layout_marginRight="10dp"
                 app:sDividerLineType="both"
                 app:sLeftBottomTextString="东莞理工学院"
-                app:sLeftIconHeight="80dp"
-                app:sLeftIconRes="@drawable/round"
-                app:sUseShape="true"
-                app:sShapeCornersRadius="10dp"
-                app:sLeftIconWidth="80dp"
+                app:sLeftIconHeight="55dp"
+                app:sLeftIconRes="@drawable/profile_head_icon"
+                app:sLeftIconWidth="5dp"
+                app:sLeftIconPadding="5dp"
                 app:sLeftTextIsBold="true"
-                app:sLeftTextString="陈浪杰" />
+                app:sLeftTextString="陈浪杰"
+                app:sShapeCornersRadius="10dp"
+                app:sUseShape="true" />
 
             <com.xuexiang.xui.widget.textview.supertextview.SuperTextView
                 android:layout_width="match_parent"
@@ -59,9 +60,9 @@
                 android:paddingLeft="10dp"
                 app:sDividerLineType="both"
                 app:sLeftTextIsBold="true"
-                app:sUseShape="true"
+                app:sLeftTextString="账号管理"
                 app:sShapeCornersRadius="10dp"
-                app:sLeftTextString="账号管理" />
+                app:sUseShape="true" />
 
             <com.xuexiang.xui.widget.textview.supertextview.SuperTextView
                 android:layout_width="match_parent"
@@ -72,9 +73,9 @@
                 android:paddingLeft="10dp"
                 app:sDividerLineType="both"
                 app:sLeftTextIsBold="true"
-                app:sUseShape="true"
+                app:sLeftTextString="关于"
                 app:sShapeCornersRadius="10dp"
-                app:sLeftTextString="关于" />
+                app:sUseShape="true" />
 
             <com.xuexiang.xui.widget.textview.supertextview.SuperTextView
                 android:id="@+id/log_out_btn_for_student"
@@ -85,10 +86,10 @@
                 android:layout_marginRight="10dp"
                 android:textAlignment="center"
                 app:sCenterTextIsBold="true"
-                app:sUseShape="true"
-                app:sShapeCornersRadius="10dp"
                 app:sCenterTextString="退出登录"
-                app:sDividerLineType="both" />
+                app:sDividerLineType="both"
+                app:sShapeCornersRadius="10dp"
+                app:sUseShape="true" />
         </LinearLayout>
     </LinearLayout>
 

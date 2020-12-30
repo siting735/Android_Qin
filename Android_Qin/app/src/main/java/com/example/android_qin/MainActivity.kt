@@ -84,19 +84,14 @@ class MainActivity : Activity() {
 
     private fun checkAutoLogin() {
         val accessIp = getAccessIp()
-        Log.i("accessIp", accessIp)
         if (accessIp == null.toString()) {
             return Unit
         }
         buildDataForCheckLocalAccount()
-        Log.i("phoneIp", phoneIp.toString())
-        Log.i("accessIp", accessIp)
         if (phoneIp.equals(accessIp)) {
             configLoadingProgress()
-            Log.i("phoneIp", "equal accessIp")
             getAccountInfoFromSharePreference()
             buildUrlForLogin()
-            Log.i("UrlForLogin",urlForLogin.toString())
             Thread{
                 getDataByRequest()
                 dealWithResponse()
@@ -229,7 +224,6 @@ class MainActivity : Activity() {
     private fun dealWithResponse() {
         val loginInfo = JSONObject(ConnectionUtil.response.toString())
         val loginState = loginInfo["loginState"] as Int
-        Log.i("loginState",loginInfo.toString())
         connectingServer = false
         when (loginState) {
             STUDENT -> {
@@ -359,12 +353,11 @@ class MainActivity : Activity() {
         const val WRONG_PASSWORD = 4
         var LOG_OUT = false
         const val ip = "10.60.0.13"
-
         // const val ip = "192.168.3.195"
         var identity = STUDENT
         var alphaAnimation: AlphaAnimation? = null
         var cancelAnimation = false
         var loginView: LinearLayout? = null
-
     }
+
 }

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".mine.MineForTeacher">
 
     <LinearLayout
@@ -42,9 +42,10 @@
                 android:layout_marginRight="10dp"
                 app:sDividerLineType="both"
                 app:sLeftBottomTextString="东莞理工学院"
-                app:sLeftIconHeight="80dp"
-                app:sLeftIconRes="@drawable/round"
-                app:sLeftIconWidth="80dp"
+                app:sLeftIconHeight="55dp"
+                app:sLeftIconRes="@drawable/profile_head_icon"
+                app:sLeftIconWidth="55dp"
+                app:sLeftIconPadding="5dp"
                 app:sLeftTextIsBold="true"
                 app:sLeftTextString="陈浪杰" />
 
@@ -55,11 +56,11 @@
                 android:layout_marginTop="20dp"
                 android:layout_marginRight="10dp"
                 android:paddingLeft="10dp"
-                app:sUseShape="true"
-                app:sShapeCornersRadius="10dp"
                 app:sDividerLineType="both"
                 app:sLeftTextIsBold="true"
-                app:sLeftTextString="账号管理" />
+                app:sLeftTextString="账号管理"
+                app:sShapeCornersRadius="10dp"
+                app:sUseShape="true" />
 
             <com.xuexiang.xui.widget.textview.supertextview.SuperTextView
                 android:layout_width="match_parent"
@@ -68,11 +69,11 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginRight="10dp"
                 android:paddingLeft="10dp"
-                app:sUseShape="true"
-                app:sShapeCornersRadius="10dp"
                 app:sDividerLineType="both"
                 app:sLeftTextIsBold="true"
-                app:sLeftTextString="关于" />
+                app:sLeftTextString="关于"
+                app:sShapeCornersRadius="10dp"
+                app:sUseShape="true" />
 
             <com.xuexiang.xui.widget.textview.supertextview.SuperTextView
                 android:id="@+id/log_out_btn_for_teacher"
@@ -83,10 +84,10 @@
                 android:layout_marginRight="10dp"
                 android:textAlignment="center"
                 app:sCenterTextIsBold="true"
-                app:sUseShape="true"
-                app:sShapeCornersRadius="10dp"
                 app:sCenterTextString="退出登录"
-                app:sDividerLineType="both" />
+                app:sDividerLineType="both"
+                app:sShapeCornersRadius="10dp"
+                app:sUseShape="true" />
         </LinearLayout>
     </LinearLayout>
 

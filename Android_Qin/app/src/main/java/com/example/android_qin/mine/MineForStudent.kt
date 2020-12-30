@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.fragment.findNavController
 import com.example.android_qin.MainActivity
 import com.example.android_qin.R
 import com.example.android_qin.StudentActivity
@@ -20,6 +21,12 @@ class MineForStudent : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         configLogOutButton()
+        updateProfile()
+    }
+
+    private fun updateProfile(){
+        val profileView = view?.findViewById<SuperTextView>(R.id.mine_info_for_student)
+        profileView?.setLeftString(StudentActivity.studentName)
     }
 
     private fun configLogOutButton() {

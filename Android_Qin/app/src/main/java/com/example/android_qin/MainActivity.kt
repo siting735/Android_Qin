@@ -109,7 +109,6 @@ class MainActivity : Activity() {
     private fun login() {
         requestThread = Thread {
             buildRequestForLogin()
-            Log.i("UrlForLogin",urlForLogin.toString())
             configLoadingProgress()
             getDataByRequest()
             dealWithResponse()
@@ -226,6 +225,7 @@ class MainActivity : Activity() {
             Thread.currentThread().join()
         }
     }
+
     private fun dealWithResponse() {
         val loginInfo = JSONObject(ConnectionUtil.response.toString())
         val loginState = loginInfo["loginState"] as Int
@@ -277,7 +277,9 @@ class MainActivity : Activity() {
                 Manifest.permission.READ_PHONE_STATE,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE,
                 Manifest.permission.ACCESS_LOCATION_EXTRA_COMMANDS,
-                Manifest.permission.ACCESS_WIFI_STATE
+                Manifest.permission.ACCESS_WIFI_STATE,
+                Manifest.permission.CHANGE_WIFI_STATE,
+                Manifest.permission.WAKE_LOCK
             ),
             10
         )
@@ -286,6 +288,7 @@ class MainActivity : Activity() {
     private fun buildDataForCheckLocalAccount() {
         wifi = applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
         wifiInfo = wifi?.connectionInfo
+        Log.i("wifiInfo",wifiInfo.toString())
         phoneIp = wifiInfo?.ipAddress.toString()
     }
 

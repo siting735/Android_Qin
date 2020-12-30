@@ -54,9 +54,7 @@ class OptionListener(val activity: FragmentActivity?, val context: Context?, val
             confirmDialogForLaunch?.setPositiveButton("确定") { dialog, id ->
                 launchActivity()
             }
-            confirmDialogForLaunch?.setNegativeButton("取消") { dialog, id ->
-                {}
-            }
+            confirmDialogForLaunch?.setNegativeButton("取消") { dialog, id -> {} }
         }
     }
 
@@ -89,7 +87,6 @@ class OptionListener(val activity: FragmentActivity?, val context: Context?, val
             activity?.runOnUiThread {
                 Toast.makeText(context, "发布成功", Toast.LENGTH_LONG).show()
             }
-
         }
 
     }
@@ -139,8 +136,8 @@ class OptionListener(val activity: FragmentActivity?, val context: Context?, val
         )
     }
 
-
     private var newActivityTitle: String? = null
+    private var activityTitleTextView: SuperTextView? = null
     var teacherLatitude: String? = null
     var teacherLongitude: String? = null
     var urlForLaunchActivity: URL? = null
@@ -148,5 +145,5 @@ class OptionListener(val activity: FragmentActivity?, val context: Context?, val
     var classInfo: JSONObject? = null
     var activityState: String? = null
     var classList: JSONArray? = null
-    private var activityTitleTextView: SuperTextView? = null
+
 }

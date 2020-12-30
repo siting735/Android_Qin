@@ -40,9 +40,7 @@ class MineForStudent : Fragment() {
             NavUtil.navController?.navigate(R.id.mainActivity)
             AccountInfoUtil.clearAccountInfo()
         }
-        dialog.setNegativeButton("取消") { dialog, id ->
-            {}
-        }
+        dialog.setNegativeButton("取消") { dialog, id -> {} }
         dialog.show()
     }
 
@@ -52,9 +50,5 @@ class MineForStudent : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         return inflater.inflate(R.layout.fragment_mine_for_student, container, false)
-    }
-
-    companion object {
-
     }
 }

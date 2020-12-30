@@ -16,6 +16,7 @@ import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.amap.api.location.AMapLocationClient
 import com.amap.api.location.AMapLocationClientOption
 import com.amap.api.location.AMapLocationListener
@@ -44,9 +45,25 @@ class LocationFragmentForStudent : Fragment() {
         configSwipeRefresh()
     }
 
+    private fun configSignBtn() {
+        val signBtn = view?.findViewById<Button>(R.id.sign_btn_for_student)
+        NavUtil.buildNavHost(activity?.supportFragmentManager)
+        signBtn?.setOnClickListener {
+            if (currentActivityTitle != null){
+                sign()
+                NavUtil.navController?.navigate(R.id.signStateForStudent)
+            }
+            else{
+                activity?.runOnUiThread{
+                    Toast.makeText(requireContext(),"暂无活动", Toast.LENGTH_LONG).show()
+                }
+            }
+        }
+    }
+
     private fun configSwipeRefresh() {
         val swipe =
-            view?.findViewById<androidx.swiperefreshlayout.widget.SwipeRefreshLayout>(R.id.location_swipe_for_student)
+            view?.findViewById<SwipeRefreshLayout>(R.id.location_swipe_for_student)
         swipe?.setOnRefreshListener {
             MapUtil.mLocationClient?.startLocation()
             refreshActivity()
@@ -57,15 +74,8 @@ class LocationFragmentForStudent : Fragment() {
     private fun refreshActivity() {
         Thread {
             buildRequestForRefreshActivity()
-            try {
-                ConnectionUtil.getDataByUrl(urlForRefreshActivity)
-            } catch (e: Exception) {
-                e.printStackTrace()
-                ConnectionUtil.buildConnectFailDialog(requireContext())
-                activity?.runOnUiThread {
-                    ConnectionUtil.connectFailDialog?.show()
-                }
-                Thread.currentThread().join()
+            if (context != null){
+                ConnectionUtil.getDataByRequest(requireActivity(),requireContext(),urlForRefreshActivity)
             }
             dealWithResponseForRefreshActivity()
         }.start()
@@ -73,25 +83,16 @@ class LocationFragmentForStudent : Fragment() {
 
     private fun dealWithResponseForRefreshActivity() {
         buildDataForRefreshActivity()
-        if (activityTitle == NULL) {
+        if (currentActivityTitle == NULL) {
             activity?.runOnUiThread {
                 activityTitleTextView?.setLeftString("暂无活动")
                 activityTitleTextView?.setRightIcon(R.drawable.no_activity)
             }
         } else {
             activity?.runOnUiThread {
-                activityTitleTextView?.setLeftString(activityTitle.toString())
+                activityTitleTextView?.setLeftString(currentActivityTitle.toString())
                 activityTitleTextView?.setRightIcon(R.drawable.activity_running)
             }
-        }
-    }
-
-    private fun configSignBtn() {
-        val signBtn = view?.findViewById<Button>(R.id.sign_btn_for_student)
-        NavUtil.buildNavHost(activity?.supportFragmentManager)
-        signBtn?.setOnClickListener {
-            sign()
-            NavUtil.navController?.navigate(R.id.signStateForStudent)
         }
     }
 
@@ -199,33 +200,29 @@ class LocationFragmentForStudent : Fragment() {
     }
 
     private fun buildDataForRefreshActivity() {
-        activityTitle = ConnectionUtil.responseJson!!["activityTitle"].toString()
+        currentActivityTitle = ConnectionUtil.responseJson!!["activityTitle"].toString()
         if (activityTitleTextView == null) {
             activityTitleTextView = view?.findViewById(R.id.activity_title_for_student)
         }
-
     }
 
     private fun buildRequestForSign() {
         if (deviceId == null) {
             deviceId = getDeviceId()
         }
-        studentLongitude = locationInfo["studentLongitude"].toString()
-        studentLatitude = locationInfo["studentLatitude"].toString()
-        studentId = arguments?.get("studentId").toString()
+        studentLongitude = MapUtil.locationInfo["studentLongitude"].toString()
+        studentLatitude = MapUtil.locationInfo["studentLatitude"].toString()
         urlForSign =
-            URL("http://${MainActivity.ip}:8080/sign/studentSign?studentId=$studentId&studentLongitude=$studentLongitude&studentLatitude=$studentLatitude&deviceId=$deviceId")
+            URL("http://${MainActivity.ip}:8080/sign/studentSign?studentId=${StudentActivity.studentId}&studentLongitude=$studentLongitude&studentLatitude=$studentLatitude&deviceId=$deviceId")
     }
 
     private var deviceId: String? = null
-    var activityTitle: String? = null
+    var currentActivityTitle: String? = null
     var activityTitleTextView: SuperTextView? = null
     var studentLongitude: String? = null
     var studentLatitude: String? = null
-    var studentId: String? = null
     var urlForRefreshActivity: URL? = null
     var urlForSign: URL? = null
-    private val locationInfo = ArrayMap<String, String>()
 
     companion object {
         const val NULL = "null"

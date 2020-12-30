@@ -1,15 +1,32 @@
 package com.example.android_qin.util
 
+import android.app.Activity
 import android.content.Context
 import androidx.appcompat.app.AlertDialog
 import org.json.JSONObject
 import java.io.BufferedReader
 import java.io.InputStream
+import java.lang.Exception
 import java.net.HttpURLConnection
 import java.net.URL
 
 class ConnectionUtil {
     companion object {
+
+        fun getDataByRequest(activity:Activity, context:Context, urlForLogin:URL?) {
+            try {
+                getDataByUrl(urlForLogin)
+            } catch (e: Exception) {
+                e.printStackTrace()
+                buildConnectFailDialog(context)
+                activity?.runOnUiThread {
+                    connectFailDialog = connectFailDialogBuilder?.create()
+                    connectFailDialog?.show()
+                }
+                Thread.currentThread().join()
+            }
+        }
+
         fun getDataByUrl(url: URL?){
             connection = url?.openConnection() as HttpURLConnection
             connection?.requestMethod = "GET"
@@ -26,13 +43,11 @@ class ConnectionUtil {
         }
 
         fun buildConnectFailDialog(context: Context?) {
-            if (connectFailDialog == null) {
-                connectFailDialog = AlertDialog.Builder(context!!)
-                connectFailDialog?.setTitle("提示信息")
-                connectFailDialog?.setMessage("连接服务器失败")
-                connectFailDialog?.setPositiveButton("确定") { dialog, id ->
-                    {}
-                }
+            if (connectFailDialogBuilder == null) {
+                connectFailDialogBuilder = AlertDialog.Builder(context!!)
+                connectFailDialogBuilder?.setTitle("提示信息")
+                connectFailDialogBuilder?.setMessage("连接服务器失败")
+                connectFailDialogBuilder?.setPositiveButton("确定") { dialog, id -> {} }
             }
         }
 
@@ -41,6 +56,7 @@ class ConnectionUtil {
         var reader: BufferedReader? = null
         var response: StringBuilder? = null
         var responseJson: JSONObject? = null
-        var connectFailDialog: AlertDialog.Builder? = null
+        var connectFailDialogBuilder: AlertDialog.Builder? = null
+        var connectFailDialog: AlertDialog? = null
     }
 }

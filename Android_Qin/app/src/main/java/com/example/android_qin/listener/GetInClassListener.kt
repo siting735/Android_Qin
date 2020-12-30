@@ -6,7 +6,7 @@ import androidx.navigation.NavController
 import com.example.android_qin.R
 import com.example.android_qin.util.NavUtil
 
-class GetInClassListener(var classId: String?, var className: String?): View.OnClickListener {
+class GetInClassListener(var classId: String?, var className: String?) : View.OnClickListener {
     override fun onClick(v: View?) {
         val classInfoBundle = buildBundleForClassInfo(classId, className)
         NavUtil.navController?.popBackStack()
@@ -20,7 +20,8 @@ class GetInClassListener(var classId: String?, var className: String?): View.OnC
         bundle.putString("className", className)
         return bundle
     }
-    companion object{
+
+    companion object {
         var pageState = 0
     }
 }

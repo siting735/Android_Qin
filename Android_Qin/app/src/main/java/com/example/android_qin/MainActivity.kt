@@ -305,10 +305,9 @@ class MainActivity : Activity() {
     }
 
     override fun onPause() {
-        super.onPause()
         tempUserName = userNameEditText?.text.toString()
         tempPasswordString = passwordEditText?.text.toString()
-
+        super.onPause()
     }
 
     private fun configIdentity() {

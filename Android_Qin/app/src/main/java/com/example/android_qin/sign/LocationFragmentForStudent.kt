@@ -49,13 +49,8 @@ class LocationFragmentForStudent : Fragment() {
         val signBtn = view?.findViewById<Button>(R.id.sign_btn_for_student)
         NavUtil.buildNavHost(activity?.supportFragmentManager)
         signBtn?.setOnClickListener {
-            if (currentActivityTitle != null ) {
-                if (signState == ALREADY_SIGN){
-                    Toast.makeText(requireContext(), "已成功打卡", Toast.LENGTH_LONG).show()
-                }
-                else if (signState == UNSIGN){
-                    sign()
-                }
+            if (currentActivityTitle != null) {
+                sign()
             } else {
                 activity?.runOnUiThread {
                     Toast.makeText(requireContext(), "暂无活动", Toast.LENGTH_LONG).show()
@@ -122,15 +117,28 @@ class LocationFragmentForStudent : Fragment() {
 
     private fun dealWithResponseForSign() {
         signState = ConnectionUtil.responseJson!!["signState"] as Int
+        Log.i("signState", signState.toString())
         NavUtil.buildNavHost(activity?.supportFragmentManager)
-        if (signState == UNSIGN) {
-            activity?.runOnUiThread {
-                Toast.makeText(context, "签到失败", Toast.LENGTH_LONG).show()
+        when (signState) {
+            UNSIGN -> {
+                activity?.runOnUiThread {
+                    Toast.makeText(context, "签到失败", Toast.LENGTH_LONG).show()
+                }
             }
-        } else {
-            activity?.runOnUiThread {
-                signState = 1
-                NavUtil.navController?.navigate(R.id.signStateForStudent)
+            ALREADY_SIGN -> {
+                activity?.runOnUiThread {
+                    Toast.makeText(requireContext(), "已签到", Toast.LENGTH_LONG).show()
+                }
+            }
+            DEVICE_LIMIT -> {
+                activity?.runOnUiThread {
+                    Toast.makeText(requireContext(), "一部设备只能签到一次", Toast.LENGTH_LONG).show()
+                }
+            }
+            SUCCESS -> {
+                activity?.runOnUiThread {
+                    NavUtil.navController?.navigate(R.id.signStateForStudent)
+                }
             }
         }
     }
@@ -233,9 +241,10 @@ class LocationFragmentForStudent : Fragment() {
     var signState: Int? = 0
 
     companion object {
-        const val SUCCESS = 1
         const val UNSIGN = 0
+        const val SUCCESS = 1
         const val ALREADY_SIGN = 2
+        const val DEVICE_LIMIT = 3
         const val NULL = "null"
     }
 }

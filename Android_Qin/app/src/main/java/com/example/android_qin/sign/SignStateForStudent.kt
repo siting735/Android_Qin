@@ -10,6 +10,7 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import com.example.android_qin.R
 import com.example.android_qin.StudentActivity
+import com.example.android_qin.sign_data.SignDataForStudent
 import com.example.android_qin.util.NavUtil
 
 class SignStateForStudent : Fragment() {
@@ -22,6 +23,7 @@ class SignStateForStudent : Fragment() {
     private fun configBackButton(){
         val backBtn = view?.findViewById<Toolbar>(R.id.tool_bar_for_student_signState)
         backBtn?.setNavigationOnClickListener {
+            SignDataForStudent.DISPLAY_TYPE = SignDataForStudent.DISPLAY_SIGN_FIRST
             StudentActivity.tabSegment?.selectTab(1)
             NavUtil.navController?.popBackStack()
             NavUtil.navController?.navigate(R.id.signDataForStudent)

@@ -2,6 +2,7 @@ package com.example.android_qin.sign_data
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -47,11 +48,37 @@ class SignDataForStudent : Fragment() {
 
     private fun dealWithResponse() {
         buildDataForSignList()
+        Log.i("signDataList",signDataJsonList.toString())
         updateSignRito()
         val listLength = signDataJsonList!!.length()
-        for (index in listLength - 1 downTo 0) {
-            addSignDataToLayout(signDataJsonList!![index] as JSONObject)
+        if(DISPLAY_TYPE == DISPLAY_UNSIGN_FIRST){
+            for (index in 0 until listLength) {
+                addSignDataToLayout(signDataJsonList!![index] as JSONObject)
+            }
         }
+        else if (DISPLAY_TYPE == DISPLAY_SIGN_FIRST){
+            DISPLAY_TYPE = DISPLAY_UNSIGN_FIRST
+            val signHeadIndex = getSignHeadIndex(listLength)
+            Log.i("DISPLAY_SIGN_FIRST","+1")
+            Log.i("signHeadIndex", signHeadIndex.toString())
+            for (index in signHeadIndex until listLength){
+                addSignDataToLayout(signDataJsonList!![index] as JSONObject)
+            }
+            for (index in 0 until signHeadIndex) {
+                addSignDataToLayout(signDataJsonList!![index] as JSONObject)
+            }
+        }
+    }
+
+    private fun getSignHeadIndex(listLength: Int): Int{
+        var signData: JSONObject? = null
+        for (index in 0 until listLength) {
+            signData = signDataJsonList!![index] as JSONObject
+            if (signData["signState"].toString().equals(SIGN)){
+                return index
+            }
+        }
+        return 0
     }
 
     private fun updateSignRito() {
@@ -150,5 +177,8 @@ class SignDataForStudent : Fragment() {
     companion object {
         const val UNSIGN = "0"
         const val SIGN = "1"
+        const val DISPLAY_SIGN_FIRST = 1
+        private const val DISPLAY_UNSIGN_FIRST = 0
+        var DISPLAY_TYPE = DISPLAY_UNSIGN_FIRST
     }
 }

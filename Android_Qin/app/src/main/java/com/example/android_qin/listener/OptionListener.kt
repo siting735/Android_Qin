@@ -46,6 +46,7 @@ class OptionListener(val activity: FragmentActivity?, val context: Context?, val
     fun buildConfirmDialogForLaunch(option: Int) {
         classList = TeacherActivity.classList
         classInfo = classList?.get(option) as JSONObject
+        LocationFragmentForTeacher.currentClassId = classInfo!!["classId"].toString()
         if (confirmDialogForLaunch == null) {
             confirmDialogForLaunch = AlertDialog.Builder(context)
             confirmDialogForLaunch?.setTitle("提示")

@@ -33,9 +33,7 @@ class TeacherActivity : AppCompatActivity() {
         if (tabBarState == 0) {
             TabBarUtil.configTabBar(tabSegment, TabBarUtil.TEACHER)
             tabBarState = 1
-            toDefaultPage()
         }
-
     }
 
     override fun onBackPressed() {
@@ -45,11 +43,6 @@ class TeacherActivity : AppCompatActivity() {
             GetInClassListener.pageState = 0
         }
     }
-
-    private fun toDefaultPage() {
-        NavUtil.navController?.navigate(R.id.locationFragmentForTeacher)
-    }
-
 
     companion object {
         const val CLASS_INFO = 1

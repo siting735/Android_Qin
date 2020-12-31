@@ -24,13 +24,7 @@ class StudentActivity : AppCompatActivity() {
         if (tabBarState == 0) {
             TabBarUtil.configTabBar(tabSegment, TabBarUtil.STUDENT)
             tabBarState = 1
-            toDefaultPage()
         }
-    }
-
-    private fun toDefaultPage() {
-        NavUtil.navController?.popBackStack()
-        NavUtil.navController?.navigate(R.id.locationFragmentForStudent)
     }
 
     companion object {

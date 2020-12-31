@@ -190,20 +190,20 @@ class MainActivity : Activity() {
     }
 
     private fun toTeacherPage(loginInfo: JSONObject) {
-        val intent = Intent(this, TeacherActivity::class.java).apply {}
         TeacherActivity.teacherId = loginInfo["teacherId"].toString()
         TeacherActivity.teacherName = loginInfo["teacherName"].toString()
         TeacherActivity.classesInfoString = loginInfo["classesInfo"].toString()
         TeacherActivity.classList = loginInfo["classesInfo"] as JSONArray
+        val intent = Intent(this, TeacherActivity::class.java).apply {}
         startActivity(intent)
     }
 
     private fun toStudentPage(loginInfo: JSONObject) {
-        val intent = Intent(this, StudentActivity::class.java).apply {}
         StudentActivity.studentId = loginInfo["studentId"].toString()
         StudentActivity.studentName = loginInfo["studentName"].toString()
         StudentActivity.classId = loginInfo["classId"].toString()
         StudentActivity.className = loginInfo["className"].toString()
+        val intent = Intent(this, StudentActivity::class.java).apply {}
         startActivity(intent)
     }
 

@@ -352,8 +352,9 @@ class MainActivity : Activity() {
         const val NO_USER = 3
         const val WRONG_PASSWORD = 4
         var LOG_OUT = false
+        // Lang Jie Ip
+        // const val ip = "10.61.233.123"
         const val ip = "10.60.0.13"
-        // const val ip = "192.168.3.195"
         var identity = STUDENT
         var alphaAnimation: AlphaAnimation? = null
         var cancelAnimation = false

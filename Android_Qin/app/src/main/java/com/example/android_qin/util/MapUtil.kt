@@ -10,6 +10,7 @@ import com.amap.api.location.AMapLocationClient
 import com.amap.api.location.AMapLocationClientOption
 import com.amap.api.location.AMapLocationListener
 import com.amap.api.maps2d.AMap
+import com.amap.api.maps2d.CameraUpdateFactory
 import com.amap.api.maps2d.MapView
 import com.amap.api.maps2d.model.MyLocationStyle
 import com.example.android_qin.MainActivity
@@ -75,6 +76,7 @@ class MapUtil {
             if (aMap == null) {
                 aMap = mMapView?.map
             }
+            aMap?.moveCamera(CameraUpdateFactory.zoomTo(18f))
             myLocationStyle =
                 MyLocationStyle()
             myLocationStyle?.interval(2000)

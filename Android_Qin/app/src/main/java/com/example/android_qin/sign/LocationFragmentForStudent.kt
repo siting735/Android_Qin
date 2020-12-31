@@ -122,7 +122,7 @@ class LocationFragmentForStudent : Fragment() {
         when (signState) {
             UNSIGN -> {
                 activity?.runOnUiThread {
-                    Toast.makeText(context, "签到失败", Toast.LENGTH_LONG).show()
+                    Toast.makeText(context, "超出范围，签到失败", Toast.LENGTH_LONG).show()
                 }
             }
             ALREADY_SIGN -> {

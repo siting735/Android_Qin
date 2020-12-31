@@ -1,6 +1,7 @@
 package com.example.android_qin.util
 
 import android.content.Context
+import android.graphics.Color
 import android.util.ArrayMap
 import android.util.Log
 import android.view.View
@@ -79,6 +80,8 @@ class MapUtil {
             aMap?.moveCamera(CameraUpdateFactory.zoomTo(18f))
             myLocationStyle =
                 MyLocationStyle()
+            myLocationStyle?.strokeColor(Color.argb(0, 0, 0, 0))
+            myLocationStyle?.radiusFillColor(Color.argb(0, 0, 0, 0))
             myLocationStyle?.interval(2000)
             myLocationStyle?.showMyLocation(true)
             aMap!!.setMyLocationStyle(myLocationStyle)

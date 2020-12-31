@@ -48,7 +48,6 @@ class SignDataForStudent : Fragment() {
 
     private fun dealWithResponse() {
         buildDataForSignList()
-        Log.i("signDataList",signDataJsonList.toString())
         updateSignRito()
         val listLength = signDataJsonList!!.length()
         if(DISPLAY_TYPE == DISPLAY_UNSIGN_FIRST){
@@ -59,8 +58,6 @@ class SignDataForStudent : Fragment() {
         else if (DISPLAY_TYPE == DISPLAY_SIGN_FIRST){
             DISPLAY_TYPE = DISPLAY_UNSIGN_FIRST
             val signHeadIndex = getSignHeadIndex(listLength)
-            Log.i("DISPLAY_SIGN_FIRST","+1")
-            Log.i("signHeadIndex", signHeadIndex.toString())
             for (index in signHeadIndex until listLength){
                 addSignDataToLayout(signDataJsonList!![index] as JSONObject)
             }

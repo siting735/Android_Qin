@@ -353,7 +353,7 @@ class MainActivity : Activity() {
         var LOG_OUT = false
         // Lang Jie Ip
         // const val ip = "10.61.233.123"
-        const val ip = "10.60.0.13"
+        const val ip = "10.60.2.195"
         var identity = STUDENT
         var alphaAnimation: AlphaAnimation? = null
         var cancelAnimation = false
